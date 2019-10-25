@@ -1,5 +1,9 @@
 import Helpers from '../common/util';
 
+/**
+ * @class
+ * @description - defines a new Address object
+ */
 export class Address {
     /**
      * @constructor
@@ -20,6 +24,7 @@ export class Address {
         || typeof zip !== 'string' || zip === '') {
             return null;
         }
+
         //set address details
         this.line1 = line1;
         this.line2 = (typeof line2 === 'string') ? line2 : null;
@@ -28,6 +33,8 @@ export class Address {
         this.county = (typeof county === 'string') ? county : null;
         this.zip = zip;
         this.country = country;
-        this.addressFormatted = Helpers.formatAddress(this);
+
+        //build a formatted address string
+        this.addressFormatted = (new Helpers).formatAddress(this);
     }
 }
