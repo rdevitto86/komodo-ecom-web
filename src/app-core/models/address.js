@@ -1,4 +1,4 @@
-import Helpers from '../common/util';
+import Helpers from '../common/util/helpers';
 
 /**
  * @class
@@ -8,6 +8,7 @@ export class Address {
     /**
      * @constructor
      * @param {string} line1 - address line 1 [MANDATORY]
+     * @param {string} line1 - address line 1 [MANDATORY]
      * @param {string} line2 - address line 2 [OPTIONAL]
      * @param {string} city - city/town [MANDATORY]
      * @param {string} state - state/region/province [MANDATORY]
@@ -15,15 +16,22 @@ export class Address {
      * @param {string} zip - postal code [MANDATORY]
      * @param {string} country - country [MANDATORY]
      */
-    constructor(line1, line2, city, state, county, zip, country) {
+    constructor(type, line1, line2, city, state, county, zip, country) {
         //validate mandatory fields
-        if(typeof line1 !== 'string' || line1 === '' 
-        || typeof city !== 'string' || city === '' 
-        || typeof state !== 'string' || state === ''
-        || typeof country !== 'string' || country === '' 
+        if(typeof line1 !== 'string' || line1 === '' || typeof city !== 'string' || city === '' 
+        || typeof state !== 'string' || state === '' || typeof country !== 'string' || country === '' 
         || typeof zip !== 'string' || zip === '') {
             return null;
         }
+
+        const STANDARD_TYPES = {
+            'GENERIC': 0,
+            'SHIPPING': 1,
+            'BILLING': 2
+        }
+
+        //set address type (i.e shipping, billing, etc)
+        this.type = (typeof type === 'string' && STANDARD_TYPES[type]) ? type : 0;
 
         //set address details
         this.line1 = line1;
