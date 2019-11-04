@@ -1,19 +1,18 @@
-import ServiceError from '../common/errors/service-error.js';
-import config from '../resources/config/app-config.js';
+
 
 /**
  * @class
- * @description - collection of API operations of the User service
+ * @description - collection of API operations of the auth service
  */
-export class UserService {
+class UserService {
     /**
      * @constructor
-     * @description - defines a new UserService object
+     * @description - defines a new AuthService object
      */
     constructor() {
-        /**
-         * @function UserService~sendServiceRequest
-         * @description - utilizes a http client to send a request to the user service
+                /**
+         * @function AuthService~sendServiceRequest
+         * @description - helper function that utilizes a http client to send a request to the user service
          * @param {string} body - server path for request
          * @param {Object} params - request hbody
          * @returns {JSON}
@@ -24,27 +23,33 @@ export class UserService {
             return new Promise((resolve, reject) => {
                 try {
                     if (config.ALLOWED_HTTP_METHODS.indexOf(method) === -1) {
-                        throw new ServiceError(400, 'unable to process HTTP request - unrecognized method', 'UserService');
+                        throw new ServiceError(400, 'unable to process HTTP request - unrecognized method', 'AuthService');
                     }
                     if (typeof path !== 'string' || path.charAt(0) !== '/') {
-                        throw new ServiceError(400, 'unable to process HTTP request - operation path invalid', 'UserService');
+                        throw new ServiceError(400, 'unable to process HTTP request - operation path invalid', 'AuthService');
                     }
 
-                    //TODO add session and CSRF tokens
+                    //construct the service operation URL
                     const url = (JSON.stringify(process.env.USER_SERVICE_ENDPOINT)).concat(path);
-                    // const response = await fetch(url, {
-                    //     method: method,
-                    //     mode: 'cors',
-                    //     credentials: 'include', //reference this
-                    //     headers: {
-                    //         'Content-Type': 'application/json',
-                    //         'authorization': JSON.stringify(process.env.USER_SERVICE_KEY)
 
-                    //     },
-                    //     body: (method !== 'GET') 
-                    //         ? JSON.stringify((typeof body === 'object') ? body : '')
-                    //         : undefined
-                    // });
+                    //add HTTP request params
+                    const params = {
+                        method: method,
+                        mode: 'cors',
+                        credentials: 'include', //reference this
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'authorization': JSON.stringify(process.env.USER_SERVICE_KEY)
+                        }
+                    }
+
+                    //add HTTP body (if applicable)
+                    if(method !== 'GET' && typeof body === 'object') {
+                        params.body = JSON.stringify(body);
+                    }
+
+                    //send http request
+                    // const response = await fetch(url, params);
 
                     const response = {
                         status: '200'
@@ -53,25 +58,12 @@ export class UserService {
                     if (response.status === '200') {
                         resolve(response);
                     } else {
-                        throw new ServiceError(response.status, response.message, 'UserService');
+                        throw new ServiceError(response.status, response.message, 'AuthService');
                     }
                 } catch (error) {
                     //TODO - log error
                     reject(error);
                 }
-            });
-        };
-
-        /**
-         * @function UserService#executeLogin
-         * @description - submits a login request to validate a user
-         * @param {string} username
-         * @param {string} password
-         */
-        this.executeLogin = (username = '', password = '') => {
-            sendServiceRequest('POST', '/login', { 
-                username: username, 
-                password: password 
             });
         };
     }
