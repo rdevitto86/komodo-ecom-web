@@ -1,5 +1,5 @@
 import React from 'react';
-import UserService from '../../../services/user-service.js';
+import AuthService from '../../../services/auth-service.js';
 import config from '../../../resources/config/app-config.js';
 
 /**
@@ -15,7 +15,7 @@ export class LoginComponent extends React.Component {
         super(props);
         this.state = {
             rememberLogin: false,
-            userName: '',
+            username: '',
             password: ''
         };
     }
@@ -26,13 +26,23 @@ export class LoginComponent extends React.Component {
      * @see UserService#executeLogin
      */
     submitLoginRequest() {
-        UserService.executeLogin(this.state.userName, this.state.password)
-            .then(response => {
-                //TODO
-            })
-            .catch(response => {
-                //TODO
-            });
+        try {
+            const loginResponse = AuthService.executeLogin(
+                this.state.userName, this.state.password
+            );
+
+            if(loginResponse.status === '200') {
+                const validationResponse = AuthService.validateLoginAttempt(
+                    loginResponse.valPasscode
+                );
+
+                //TODO - create local user object + 
+            } else {
+                //TODO - render login error UI
+            }
+        } catch(error) {
+            //TODO - render login error UI
+        }
     }
 
     /**

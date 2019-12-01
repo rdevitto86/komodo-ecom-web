@@ -9,106 +9,101 @@ export class AuthService {
     /**
      * @constructor
      * @description - defines a new AuthService object
-     * @param {function} preValidationCallback
-     * @param {function} postValidationCallback
      */
-    constructor(preValidationCallback, postValidationCallback) {
-        const publicKeys = {}; 
-
+    constructor() {
         /**
-         * @function AuthService~sendServiceRequest
-         * @description - helper function that utilizes a http client to send a request to the auth service
-         * @param {string} body - server path for request
-         * @param {Object} params - request hbody
-         * @returns {JSON}
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-         * @throws {ServiceError}
-         */
-        const sendServiceRequest = async (method = '', operationPath = '', body = {}) => {
-            return new Promise((resolve, reject) => {
-                try {
-                    if (config.ALLOWED_HTTP_METHODS.indexOf(method) === -1) {
-                        throw new ServiceError(400, 'unable to process HTTP request - unrecognized method', 'AuthService');
-                    }
-                    if (typeof operationPath !== 'string' || operationPath.charAt(0) !== '/') {
-                        throw new ServiceError(400, 'unable to process HTTP request - operation path invalid', 'AuthService');
-                    }
-
-                    //construct the service operation URL
-                    const url = (JSON.stringify(process.env.AUTH_SERVICE_ENDPOINT)).concat(operationPath);
-
-                    //add HTTP request params
-                    const params = {
-                        method: method,
-                        mode: 'cors',
-                        credentials: 'include', //reference this
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'authorization': JSON.stringify(process.env.AUTH_SERVICE_KEY)
-                        }
-                    }
-
-                    //add HTTP body (if applicable)
-                    if(method === 'GET' && typeof body === 'object') {
-                        params.body = JSON.stringify(body);
-                    }
-
-                    //send http request
-                    // const response = await fetch(url, params);
-
-                    const response = {
-                        status: '200'
-                    };
-
-                    if (response.status === '200') {
-                        resolve(response);
-                    } else {
-                        throw new ServiceError(response.status, response.message, 'AuthService');
-                    }
-                } catch (error) {
-                    //TODO - log error
-                    reject(error);
-                }
-            });
-        };
-
-        /**
+         * @public
          * @function UserService#executeLogin
          * @description - submits a login request to validate a user
          * @param {string} username
          * @param {string} password
+         * @returns {Object}
+         * @throws ServiceError
          */
-        this.executeLogin = (username = '', password = '') => {
-            const authResponse = await sendServiceRequest('POST', '/login', { 
+        this.executeLogin = (username, password) => {
+            if(typeof username !== 'string' || typeof password !== 'string') {
+                throw new ServiceError(500, 'failed to send login request - params invalid', 'AuthService');
+            }
+
+            return sendServiceRequest('/login', { 
                 username: username, 
                 password: password 
             });
-
-            //inform login component that the user needs to validate via OTP
-            preValidationCallback();
-
-            const validationResponse = await sendServiceRequest('GET', '/login/validation/687');
-
-            //inform login component that the OTP validation has occured
-            postValidationCallback();
         };
 
         /**
+         * @public
+         * @function UserService#validateLoginAttempt
+         * @description - verifies the user logging in is the correct account owner
+         * @param {string} passcode - 6-digit generated key returned by login success
+         * @returns {Object}
+         * @throws ServiceError
+         */
+        this.validateLoginAttempt = (passcode) => {
+            if(typeof passcode !== 'string' || passcode.length !== 6) {
+                throw new ServiceError(500, 'failed to send login validtion request - params invalid', 'AuthService');
+            }
+
+            return sendServiceRequest('/otp', {
+                passcode: passcode
+            });
+        };
+
+        /**
+         * @public
          * @function UserService#executeLogin
          * @description - submits a logoff request for a given user
          * @param {string} username
+         * @returns {Object}
          */
         this.executeLogoff = (username = '') => {
-            sendServiceRequest('POST', '/login', { username: username });
+            return sendServiceRequest('/logoff', { 
+                username: username 
+            });
         };
 
         /**
-         * @function UserService#getOTPKey
-         * @description - submits a logoff request for a given user
-         * @returns {string}
+         * @private
+         * @function AuthService~sendServiceRequest
+         * @description - helper function that utilizes a http client to send a request to the auth service
+         * @param {string} path - server path for request
+         * @param {Object} body - request body
+         * @returns {Object}
+         * @throws {ServiceError}
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
          */
-        this.getOTPKey = () => {
-            return publicKeys.otp;
-        }
+        const sendServiceRequest = async (path = '', body = {}) => {
+            if (config.ALLOWED_HTTP_METHODS.indexOf(method) === -1) {
+                throw new ServiceError(500, 'unable to process HTTP request - unrecognized method', 'AuthService');
+            }
+            if (typeof path !== 'string' || path.charAt(0) !== '/') {
+                throw new ServiceError(500, 'unable to process HTTP request - operation path invalid', 'AuthService');
+            }
+
+            // //add HTTP request params
+            // const params = {
+            //     method: 'POST,
+            //     mode: 'cors',
+            //     credentials: 'include', //TODO - reference this
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'authorization': JSON.stringify(process.env.AUTH_SERVICE_KEY)
+            //     },
+            //     body: JSON.stringify(body)
+            // };
+
+            // // construct the service operation URL
+            // const url = (JSON.stringify(process.env.AUTH_SERVICE_ENDPOINT)).concat(path);
+
+            // // send http request
+            // return await fetch(url, params);
+
+            const response = {
+                status: '200',
+                session_token: 'xcdjhw730dbamjsgStg239jn',
+                valPasscode: '123456'
+            };
+            return response;
+        };
     }
 }
