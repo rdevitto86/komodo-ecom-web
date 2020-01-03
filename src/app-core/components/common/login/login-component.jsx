@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import AuthService from '../../../services/auth-service.js';
 import config from '../../../resources/config/app-config.js';
 
@@ -6,7 +6,7 @@ import config from '../../../resources/config/app-config.js';
  * @class
  * @description - UI component that allows users to login/logout of the application
  */
-export class LoginComponent extends React.Component {
+export class LoginComponent extends Component {
     /**
      * @constructor
      * @param {Object} props 
