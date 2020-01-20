@@ -3,6 +3,8 @@ A client-side eCommerce application using the React/Redux Javascript stack along
 
 > Release Version: 0.1.4 (alpha) <br/>
 > React Version: 16.10.2
+> Redux Version: TBD
+> TypeScript Version: TBD
 
 ## Modules
   - LandingPageDesktop
