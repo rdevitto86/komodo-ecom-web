@@ -1,8 +1,7 @@
 # Komodo Future Solutions Web App Repo
 A client-side eCommerce application using the React/Redux Javascript stack along with various other web technologies. Built using the MVVM, Module, and Observer design patterns. 
 
-> Release Version: 0.1.4 (alpha) <br/>
-<br/>
+> Release Version: 0.1.4 (alpha) <br/><br/>
 > React Version: 16.10.2 <br/>
 > Redux Version: TBD <br/>
 > TypeScript Version: TBD <br/>
