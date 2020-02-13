@@ -167,10 +167,8 @@ export class DateUtil {
         }
 
         const milliseconds = recent - previous;
-        const convertedUnits = (this.convertMillisecToTimeUnits(milliseconds));
         const years = recent.getFullYear() - previous.getFullYear();
 
-        //ex. Jan 31st 2019 thru Nov 11th 2020 => 
         const months = Math.floor(
             (years * 12) + (recent.getMonth() - previous.getMonth())
         );
@@ -178,7 +176,7 @@ export class DateUtil {
         //ms, sec, min, hr, day, week, month,
         return {
             milliseconds: milliseconds,
-            ...convertedUnits,
+            ...(this.convertMillisecToTimeUnits(milliseconds)),
             months: (months > 0) ? months : 0,
             years: years
         };

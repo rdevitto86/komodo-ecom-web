@@ -12,11 +12,11 @@ import HeaderLandingDesktop
     from '../../components/headers';
 
 /**
- * @class LandingRootModuleDesktop
+ * @class LandingPageModuleDesktop
  * @description - module that renders all the components/UI elements tied to
  * the landing page on desktop browsers.
  */
-export class LandingRootModuleDesktop extends Component {
+export class LandingPageModuleDesktop extends Component {
     /**
      * @function LandingRootModuleDesktop#render
      * @description - renders the landing page modules using 

@@ -8,7 +8,7 @@ import LandingRootModuleDesktop from '../landing-page-desktop/landing-root-modul
  * @description - module that renders all the components/UI elements tied to
  * the landing page on desktop browsers.
  */
-class AppRootDesktop extends Component {
+class AppDesktop extends Component {
     /**
      * @function AppRootDesktop#render
      * @description - renders the main desktop browser application
@@ -16,6 +16,7 @@ class AppRootDesktop extends Component {
      * @see LandingRootModuleDesktop
      */
     render() {
+        //TODO - pre-render UI elements before sending to client
         return (
             <div class='app-root-desktop'>
                 <LandingRootModuleDesktop />
@@ -26,5 +27,5 @@ class AppRootDesktop extends Component {
 
 //renders the root application module to the browser
 ReactDOM.render(
-    <AppRootDesktop/>, document.getElementById('root')
+    <AppDesktop/>, document.getElementById('root')
 );

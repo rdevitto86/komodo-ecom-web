@@ -51,52 +51,59 @@ export class ValidationUtil {
 
     /**
      * @public
-     * @function Validators#validateVarType
+     * @function Validators#validateType
      * @description - validates a variable type matches the targeted one
-     * @param {Any} typeTarget - variable type to verify 
-     * @param {String} value - variable to validate
+     * @param {Any} target - variable type to verify 
+     * @param {Any} data - variable to validate
      * @returns {Boolean}
      */
-    validateTypeSingle(typeTarget, value = undefined) {
-        switch(typeTarget) {
-            case 'array':
-                return value instanceof Array;
-            case 'null':
-            case null:
-                return (value === 'null' || value === null);
-            case 'undefined':
-            case undefined:
-                return (value === 'undefined' || value === undefined);
-            case 'object':
-                return (value !== null && typeof value === 'object');
-            default:
-                return typeof value === typeTarget;
+    validateType(target, data = undefined) {
+        if(data instanceof Array) {
+            let i = data.length;
+            while(i--) {
+                if(!this.validateType(data[i])) {
+                    return false; //array item(s) has invalid type
+                }
+            }
+            return true; //item(s) type valid
+        } else {
+            //matches target type to value type
+            switch(target) {
+                case 'array':
+                    return data instanceof Array;
+                case 'null':
+                case null:
+                    return (data === 'null' || data === null);
+                case 'undefined':
+                case undefined:
+                    return (data === 'undefined' || data === undefined);
+                case 'object':
+                    return (data !== null && typeof data === 'object');
+                default:
+                    return typeof data === target;
+            }
         }
-    }
-
+    } 
+    
     /**
      * @public
-     * @function Validators#validateTypeMulti
-     * @description - validates multiple variable types against the targeted one
-     * @param {Any} typeTarget - variable type to verify 
-     * @param {Array || Object} values - map of values to validate
+     * @function Validators#areValuesEqual
+     * @description - checks if multiple variables are equal to the targeted one
+     * @param {Any} target - variable type to verify 
+     * @param {Any} values - value(s) to compare
      * @returns {Boolean}
      */
-    validateTypeMulti(typeTarget, values = undefined) {
-        if(!values) {
-            return false;
-        } else if(values !== null && typeof values === 'object') {
-            values = Object.keys(values).map(key => values[key]);
-        } else if(!(values instanceof Array)) {
-            return false
-        } else {
-            //validate properties
-            values.forEach(element => {
-                if(!this.validateTypeSingle(typeTarget, element)) {
-                    return false;
-                }
-            });
-            return true;
+    areValuesEqual(target, values = undefined) {
+        if(!(values instanceof Array)) {
+            return values === target;
         }
-    }   
+        
+        let i = values.length;
+        while(i--) {
+            if(values[i] !== target) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

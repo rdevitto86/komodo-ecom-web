@@ -1,48 +1,107 @@
-import Helpers from '../common/util/helpers';
+import ValidationUtil from '../../app-supplemental/utility/validation-util';
 
 /**
- * @class
+ * @class Address
  * @description - defines a new Address object
  */
 export class Address {
     /**
      * @constructor
-     * @param {string} line1 - address line 1 [MANDATORY]
-     * @param {string} line1 - address line 1 [MANDATORY]
-     * @param {string} line2 - address line 2 [OPTIONAL]
-     * @param {string} city - city/town [MANDATORY]
-     * @param {string} state - state/region/province [MANDATORY]
-     * @param {string} county - state county/district [OPTIONAL]
-     * @param {string} zip - postal code [MANDATORY]
-     * @param {string} country - country [MANDATORY]
+     * @param {String} line1 - primary street address
+     * @param {String} line2 - secondary street/building address
+     * @param {String} city - name of city
+     * @param {String} region - name of region (state, province, etc)
+     * @param {String} subRegion - name of sub-region (county, parish, etc)
+     * @param {String} postalCode - postal code
+     * @param {String} country - country of residence
      */
-    constructor(type, line1, line2, city, state, county, zip, country) {
+    constructor(line1, line2, city, region, subRegion, mailingCode, country) {
+        //cache model data locally
+        this.data = this.createAddress(
+            line1, line2, city, region, subRegion, mailingCode, country
+        );
+    }
+
+    /**
+     * @public
+     * @property
+     * @description - gets the model data
+     * @returns {Address}
+     */
+    get data() {
+        return this._address;
+    }
+
+    /**
+     * @public
+     * @property
+     * @description - sets the model data
+     * @param {Address} address
+     */
+    set data(address = undefined) {
+        if(address instanceof Address) {
+            this._address = address;
+        }
+    }
+
+    /**
+     * @public
+     * @function Address#createAddress
+     * @description - creates a new Address object
+     * @param {String} line1 - primary street address [MANDATORY]
+     * @param {String} line2 - secondary street/building address [OPTIONAL]
+     * @param {String} city - name of city [MANDATORY]
+     * @param {String} region - name of region (state, province, etc) [MANDATORY]
+     * @param {String} subRegion - name of sub-region (county, parish, etc) [OPTIONAL]
+     * @param {String} postalCode - postal code [MANDATORY]
+     * @param {String} country - country of residence [MANDATORY]
+     * @returns {Address}
+     */
+    createAddress(line1, line2, city, region, subRegion, postalCode, country) {
+        //generic address object
+        const template = {
+            line1: '',
+            line2: '',
+            city: '',
+            region: '',
+            subRegion: '',
+            postalCode: '',
+            country: '',
+        };
+
+        const validator = new ValidationUtil();
+
         //validate mandatory fields
-        if(typeof line1 !== 'string' || line1 === '' || typeof city !== 'string' || city === '' 
-        || typeof state !== 'string' || state === '' || typeof country !== 'string' || country === '' 
-        || typeof zip !== 'string' || zip === '') {
-            return null;
+        if(validator.validateType('string', [
+            line1, city, region, postalCode, subRegion, country
+        ])) {
+            //set address details
+            template.line1 = line1;
+            template.line2 = validator.validateType('string', line2) ? line2 : null;
+            template.city = city;
+            template.region = region;
+            template.subRegion = validator.validateType('string', subRegion) ? subRegion : null;
+            template.postalCode = postalCode;
+            template.country = country;
         }
+        return template;
+    }
 
-        const STANDARD_TYPES = {
-            'GENERIC': 0,
-            'SHIPPING': 1,
-            'BILLING': 2
-        }
-
-        //set address type (i.e shipping, billing, etc)
-        this.type = (typeof type === 'string' && STANDARD_TYPES[type]) ? type : 0;
-
-        //set address details
-        this.line1 = line1;
-        this.line2 = (typeof line2 === 'string') ? line2 : null;
-        this.city = city;
-        this.state = state;
-        this.county = (typeof county === 'string') ? county : null;
-        this.zip = zip;
-        this.country = country;
-
-        //build a formatted address string
-        this.addressFormatted = (new Helpers).formatAddress(this);
+    /**
+     * @public
+     * @function Address#toString
+     * @description - converts an address to standardized format
+     * @returns {String} -- Example: One Apple Park Way, Cupertino, CA 95014 US
+     */
+    toString() {
+        const props = this.data;
+        return (
+            props.line1 
+            + ((props.line2) ? (' ' + props.line2) : '')
+            + (', ' + props.city) 
+            + (', ' + props.region) 
+            + (' ' + props.postalCode)
+            + ((props.country) ? (' ' + props.country) : '')
+        );
     }
 }
