@@ -12,7 +12,7 @@ export class ValidationUtil {
      */
     validateEmail(email = '') {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    }
+    };
 
     /**
      * @public
@@ -23,7 +23,7 @@ export class ValidationUtil {
      */
     validatePhoneNumber(phoneNum = '') {
         return /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(phoneNum);
-    }
+    };
 
     /**
      * @public
@@ -35,7 +35,7 @@ export class ValidationUtil {
      */
     validatePassword(password = '') {
         return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password);
-    }
+    };
 
     /**
      * @public
@@ -47,7 +47,7 @@ export class ValidationUtil {
      */
     validateUsername(username = '') {
         return /^(?=.{3,22}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/.test(username);
-    }
+    };
 
     /**
      * @public
@@ -83,7 +83,7 @@ export class ValidationUtil {
                     return typeof data === target;
             }
         }
-    } 
+    };
     
     /**
      * @public
@@ -105,5 +105,16 @@ export class ValidationUtil {
             }
         }
         return true;
-    }
+    };
+
+    /**
+     * @public
+     * @function Validators#isNullish
+     * @description - determines if a value is null, undefined, or empty
+     * @param {Any} value - value(s) to check
+     * @returns {Boolean}
+     */
+    isNullish(value) {
+        return !(Boolean(value));
+    };
 }

@@ -13,7 +13,7 @@ export class StringUtil {
      * @returns {String}
      */
     truncateString(string = undefined, maxLength = -1, addElipses = false) {
-        //ABC 3
+        //return current string if processing not needed
         if(typeof string !== 'string' || typeof maxLength !== 'number' || string.length <= maxLength) {
             return string;
         }
@@ -23,5 +23,16 @@ export class StringUtil {
         return (addElipses === true)
             ? (string.substring(0, maxLength - 3) + '...') //with elipses
             : string.substring(0, maxLength); //without elipses
+    };
+
+    /**
+     * @public
+     * @function StringUtil#stringify
+     * @description - converts any value to a string
+     * @param {Any} val - vakue to convert to 
+     * @returns {String}
+     */
+    stringify(val) {
+        return String(val);
     };
 }

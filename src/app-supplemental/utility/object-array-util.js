@@ -20,7 +20,7 @@ export class ObjectArrayUtil {
             cloned[key] = this.deepCopy(obj[key]);
         }  
         return cloned;
-    }
+    };
 
     /**
      * @public
@@ -31,11 +31,8 @@ export class ObjectArrayUtil {
      */
     shallowCopy(obj = undefined) {
         const isArray = obj instanceof Array;
-
-        if(obj && (typeof obj === 'object' || isArray)) {
-            return (isArray) ? [ ...obj ] : { ...obj };
-        } else {
-            return obj;
-        }
-    }
+        return (obj && (typeof obj === 'object' || isArray))
+            ? (isArray) ? [ ...obj ] : { ...obj} //return array or object
+            : obj; //return non-object
+    };
 }
