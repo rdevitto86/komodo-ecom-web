@@ -1,40 +1,43 @@
+import UserModel from '../../app-core/models/user';
+import BrowserUtil from '../../app-supplemental/utility/browser-util';
+
 const LOG_PROPS = {
     'FATAL': {
         priority: 6,
-        console: 'error'
+        output: 'error'
     },
     'ERROR': {
         priority: 5,
-        console: 'error'
+        output: 'error'
     },
     'WARN': {
         priority: 4,
-        console: 'warn'
+        output: 'warn'
     },
     'INFO': {
         priority: 3,
-        console: 'info'
+        output: 'info'
     },
     'CONFIG': {
         priority: 2,
-        console: 'log'
+        output: 'log'
     },
     'DEBUG': {
         priority: 1,
-        console: 'debug'
+        output: 'debug'
     },
     'OFF': {
         priority: 0,
-        console: 'null'
+        output: 'null'
     }
 };
 Object.freeze(LOG_PROPS);
 
-const _defaultLevel = process.env.LOG_LEVEL;
+const _defaultLevel = String(process.env.LOG_LEVEL);
 const _defaultPriority = ((LOG_PROPS[_defaultLevel] || {}).priority) || 5;
 
 //TODO - allow option for business-enabled flag in PROD
-const _allowConsole = process.env.ENABLE_CONSOLE && console && console.log; 
+const _allowConsole = process.env.ENABLE_CONSOLE && Boolean(console) && Boolean(console.log); 
 const _allowService = process.env.ENABLE_LOGGING_SERVICE;
 
 /**
@@ -51,12 +54,16 @@ class RuntimeLogger {
      * @param {Object} error - object containing error properties
      */
     log(level = undefined, message = undefined, error = undefined) {
+        const logProps = LOG_PROPS[String(level)] || {
+            priority: -1
+        };
+
         //check if log type is allowed
-        if((LOG_PROPS[String(level)].priority || -1) < _defaultPriority) {
+        if(logProps.priority >= _defaultPriority) {
             return;
         }
 
-        const isError = LOG_PROPS[String(level)] >= LOG_PROPS['ERROR'];
+        const isError = logProps.priority >= LOG_PROPS['ERROR'].priority;
 
         //check if console logging is available
         if(_allowConsole) {
@@ -78,32 +85,36 @@ class RuntimeLogger {
 
                 @see https://developer.mozilla.org/en-US/docs/Web/API/console
             */
-            (console[LOG_PROPS[level].console] || console.log)(
-                '[' + level + ']' //ex. [ERROR]
-                + error.http ? ('[' + error.http + '] ') : ' ' //ex. [500]
-                + String(new Date()) + //ex. Fri Mar 06 2020 19:41:40 ...
-                + (isError)
-                    //ex. 0xvm1lp001 OR generic exception when no error code is found
-                    ? ' | ' + (error.code || 'Unhandled Exception') + ' | ' + (error instanceof Error) 
-                        ? error.message
-                            //ex. Uncaught ReferenceError: ...
-                            ? ' | ' + error.message + (
-                                //ex. console.trace() or Error.stack
-                                (error.stack || console.trace) 
-                                    ? '\n.......\n' + (error.stack) 
-                                        ? error.stack : console.trace()
-                                    : ''
-                                )
-                            : ''
-                        : ''
-                    : message
+            let log = '[' + level + ']'; //ex. [ERROR]
 
-            );
-        } //##end console
+            log += (isError && error.http) ? ('[' + error.http + '] ') : ' '; //ex. [500]
+            log += String(new Date()); //ex. Fri Mar 06 2020 19:41:40 ...
+
+            if(isError && error instanceof Error) {
+                //ex. 0xvd1lp001 || Unhandled Exception
+                log += (' | ' + (error.code || 'Unhandled Exception') + ' | ');
+                log += (error.message) 
+                    //ex. Uncaught ReferenceError: ...
+                    ? (' | ' + error.message + (
+                        /** @see console.trace */
+                        (error.stack || console.trace) 
+                            ? '\n.......\n' + (Boolean(error.stack)) 
+                                ? error.stack : console.trace()
+                            : ''
+                    )) : message;
+            } else {
+                log += message;
+            }
+
+            //print console log message 
+            (console[logProps.output] || console.log)(log);
+        }
 
         //check if service logging is available
         if(_allowService) {
             //TODO - fire and forget request
+            //TODO - worker thread service logger
+
             fetch(process.env.URL_RUNLOG, {
                 method: 'POST',
                 //TODO - headers 
@@ -111,24 +122,23 @@ class RuntimeLogger {
                   'Content-Type': 'application/json',
                 },
                 //TODO - body
-                body: JSON.stringify({
-                    level: level,
-                    message: (isError)
+                body: {
+                    'level': level,
+                    'message': (isError)
                         ? error.message : (message || null),
-                    error: (isError) ? {
+                    'error': (isError) ? {
                         code: error.code || null,
                         message: error.message || null,
                         stack: error.stack || null
                     } : null,
-                    meta: {
-                        sessionID: '',
-                        custID: '',
-                        custName: '',
-                        region: ''
+                    'meta': {
+                        custID: UserModel.custID,
+                        custName: UserModel.custName,
+                        region: BrowserUtil.region
                     }
-                })
+                }
             });
-        } //##end service
+        }
     }
 
     /**
@@ -265,8 +275,10 @@ class RuntimeLogger {
 const instance = new RuntimeLogger();
 Object.freeze(instance);
 
-console.log(
-    `TODO - print warning/developer information on start-up (like Facebook)`
-);
+if(_allowConsole) {
+    console.log(
+        `TODO - print warning/developer information on start-up (like Facebook)`
+    );
+}
 
 export default instance;
