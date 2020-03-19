@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import WebAppRoot from './app-root';
-import './index.scss';
+import AppDesktop from './app-root';
+// import './index.scss';
 
 //renders the root application module to the browser
-ReactDOM.render(
-    <WebAppRoot/>, document.getElementById('root')
-);
+ReactDOM.render(<AppDesktop />, document.getElementById('root'));
