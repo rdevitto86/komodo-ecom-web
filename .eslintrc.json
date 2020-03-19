@@ -1,0 +1,53 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        // "eslint:recommended",
+        "airbnb",
+        // "prettier",
+        "plugin:react/recommended"
+        // "plugin:@typescript-eslint/eslint-recommended"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    // "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+        // "@typescript-eslint",
+        // "prettier"
+    ],
+    "rules": {
+        // "prettier/prettier": "warn",
+        "no-unused-vars": "error",
+        "no-console": "off",
+        "func-names": "off",
+        "no-process-exit": "off",
+        "no-underscore-dangle": "off",
+        "object-shorthand": "off",
+        "class-methods-use-this": "off",
+        "spaced-comment": "off", 
+        "indent": "off",
+        "comma-dangle": "off",
+        "no-trailing-spaces": "warn",
+        "max-len": "warn",
+        "react/jsx-indent": "off",
+        "react/jsx-filename-extension": [1, {
+            "extensions": [
+                ".js",
+                ".jsx"
+            ]
+        }]
+    }
+}

@@ -1,32 +1,32 @@
 import UserModel from '../../app-core/models/user';
-import BrowserUtil from '../../app-supplemental/utility/browser-util';
+import BrowserUtil from '../utility/browser-util';
 
 const LOG_PROPS = {
-    'FATAL': {
+    FATAL: {
         priority: 6,
         output: 'error'
     },
-    'ERROR': {
+    ERROR: {
         priority: 5,
         output: 'error'
     },
-    'WARN': {
+    WARN: {
         priority: 4,
         output: 'warn'
     },
-    'INFO': {
+    INFO: {
         priority: 3,
         output: 'info'
     },
-    'CONFIG': {
+    CONFIG: {
         priority: 2,
         output: 'log'
     },
-    'DEBUG': {
+    DEBUG: {
         priority: 1,
         output: 'debug'
     },
-    'OFF': {
+    OFF: {
         priority: 0,
         output: 'null'
     }
@@ -37,7 +37,7 @@ const _defaultLevel = String(process.env.LOG_LEVEL);
 const _defaultPriority = ((LOG_PROPS[_defaultLevel] || {}).priority) || 5;
 
 //TODO - allow option for business-enabled flag in PROD
-const _allowConsole = process.env.ENABLE_CONSOLE && Boolean(console) && Boolean(console.log); 
+const _allowConsole = process.env.ENABLE_CONSOLE && Boolean(console) && Boolean(console.log);
 const _allowService = process.env.ENABLE_LOGGING_SERVICE;
 
 /**
@@ -59,17 +59,17 @@ class RuntimeLogger {
         };
 
         //check if log type is allowed
-        if(logProps.priority >= _defaultPriority) {
+        if (logProps.priority >= _defaultPriority) {
             return;
         }
 
-        const isError = logProps.priority >= LOG_PROPS['ERROR'].priority;
+        const isError = logProps.priority >= (LOG_PROPS.ERROR).priority;
 
         //check if console logging is available
-        if(_allowConsole) {
+        if (_allowConsole) {
             /**
-                Prints a formatted console message to the client browser using the console interface. Example: 
-                
+                Example:
+
                 [ERROR][500] Fri Mar 06 2020 19:41:40 GMT-0600 (Central Standard Time) | 0xvd1lp001 | Uncaught ReferenceError: foo is not defined
                 ......
                 @https://www.samplewesbite.com/javascript-tester.html line 46 > eval:4:11
@@ -81,57 +81,55 @@ class RuntimeLogger {
                 vd || vm - view desktop/mobile
                 1 - component
                 lp - landing page
-                001 - runtime error 
+                001 - runtime error
 
                 @see https://developer.mozilla.org/en-US/docs/Web/API/console
             */
-            let log = '[' + level + ']'; //ex. [ERROR]
+            let log = `[${level}]`; //ex. [ERROR]
 
-            log += (isError && error.http) ? ('[' + error.http + '] ') : ' '; //ex. [500]
+            log += (isError && error.http) ? `['${error.http}] ` : ' '; //ex. [500]
             log += String(new Date()); //ex. Fri Mar 06 2020 19:41:40 ...
 
-            if(isError && error instanceof Error) {
+            if (isError && error instanceof Error) {
                 //ex. 0xvd1lp001 || Unhandled Exception
-                log += (' | ' + (error.code || 'Unhandled Exception') + ' | ');
-                log += (error.message) 
+                log += ` | ${error.code || 'Unhandled Exception'} | `;
+                log += (error.message)
                     //ex. Uncaught ReferenceError: ...
-                    ? (' | ' + error.message + (
-                        /** @see console.trace */
-                        (error.stack || console.trace) 
-                            ? '\n.......\n' + (Boolean(error.stack)) 
-                                ? error.stack : console.trace()
+                    ? ` | ${error.message}  ${
+                        (error.stack || console.trace)
+                            ? `\n.......\n ${error.stack || console.trace()}`
                             : ''
-                    )) : message;
+                    }` : message;
             } else {
                 log += message;
             }
 
-            //print console log message 
+            //print console log message
             (console[logProps.output] || console.log)(log);
         }
 
         //check if service logging is available
-        if(_allowService) {
+        if (_allowService) {
             //TODO - fire and forget request
             //TODO - worker thread service logger
 
             fetch(process.env.URL_RUNLOG, {
                 method: 'POST',
-                //TODO - headers 
+                //TODO - headers
                 headers: {
-                  'Content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                 },
                 //TODO - body
                 body: {
-                    'level': level,
-                    'message': (isError)
+                    level: level,
+                    message: (isError)
                         ? error.message : (message || null),
-                    'error': (isError) ? {
+                    error: (isError) ? {
                         code: error.code || null,
                         message: error.message || null,
                         stack: error.stack || null
                     } : null,
-                    'meta': {
+                    meta: {
                         custID: UserModel.custID,
                         custName: UserModel.custName,
                         region: BrowserUtil.region
@@ -144,7 +142,7 @@ class RuntimeLogger {
     /**
      * @public
      * @function Logger#fatal
-     * @description - logs a fatal message 
+     * @description - logs a fatal message
      * @param {Object} error - log message
      */
     fatal(error = undefined) {
@@ -154,7 +152,7 @@ class RuntimeLogger {
     /**
      * @public
      * @function Logger#error
-     * @description - logs a error message 
+     * @description - logs a error message
      * @param {Object} error - log message
      */
     error(error = undefined) {
@@ -164,7 +162,7 @@ class RuntimeLogger {
     /**
      * @public
      * @function Logger#warn
-     * @description - logs a warning message 
+     * @description - logs a warning message
      * @param {String} message - log message
      */
     warn(message = undefined) {
@@ -174,7 +172,7 @@ class RuntimeLogger {
     /**
      * @public
      * @function Logger#info
-     * @description - logs a info message 
+     * @description - logs a info message
      * @param {String} message - log message
      */
     info(message = undefined) {
@@ -184,7 +182,7 @@ class RuntimeLogger {
     /**
      * @public
      * @function Logger#config
-     * @description - logs a configuration message 
+     * @description - logs a configuration message
      * @param {String} message - log message
      */
     config(message = undefined) {
@@ -194,7 +192,7 @@ class RuntimeLogger {
     /**
      * @public
      * @function Logger#debug
-     * @description - logs a debug message 
+     * @description - logs a debug message
      * @param {String} message - log message
      */
     debug(message = undefined) {
@@ -275,9 +273,9 @@ class RuntimeLogger {
 const instance = new RuntimeLogger();
 Object.freeze(instance);
 
-if(_allowConsole) {
+if (_allowConsole) {
     console.log(
-        `TODO - print warning/developer information on start-up (like Facebook)`
+        'TODO - print warning/developer information on start-up (like Facebook)'
     );
 }
 
