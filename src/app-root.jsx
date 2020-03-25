@@ -5,9 +5,9 @@ import './app-root.scss';
 
 const AppDesktop = () => (
     <div>
-        <text className="sampleText">
+        <p className="sampleText">
             Hello World. This is as basic as this app will ever get. Charish it.
-        </text>
+        </p>
     </div>
 );
 

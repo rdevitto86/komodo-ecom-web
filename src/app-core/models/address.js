@@ -1,107 +1,199 @@
-import ValidationUtil from '../../app-supplemental/utility/validation-util';
+import ValidationUtil from '../../app-plugins/utility/validation-util';
 
 /**
  * @class Address
  * @description - defines a new Address object
  */
-export class Address {
+export default class Address {
     /**
      * @constructor
-     * @param {String} line1 - primary street address
-     * @param {String} line2 - secondary street/building address
-     * @param {String} city - name of city
-     * @param {String} region - name of region (state, province, etc)
-     * @param {String} subRegion - name of sub-region (county, parish, etc)
-     * @param {String} postalCode - postal code
-     * @param {String} country - country of residence
+     * @param {Object} details - object containing address details
      */
-    constructor(line1, line2, city, region, subRegion, mailingCode, country) {
-        //cache model data locally
-        this.data = this.createAddress(
+    constructor(details = undefined) {
+        if (!ValidationUtil.isObject(details)) {
+            return this;
+        }
+
+        const {
             line1, line2, city, region, subRegion, mailingCode, country
-        );
+        } = details;
+
+        this.line1 = line1 || '';
+        this.line2 = line2 || '';
+        this.city = city || '';
+        this.region = region || '';
+        this.subRegion = subRegion || '';
+        this.mailingCode = mailingCode || '';
+        this.country = country || '';
     }
 
     /**
      * @public
-     * @property
-     * @description - gets the model data
-     * @returns {Address}
+     * @property line1
+     * @description - gets the primary street address
+     * @returns {String}
      */
-    get data() {
-        return this._address;
+    get line1() {
+        return this._line1 || '';
     }
 
     /**
      * @public
-     * @property
-     * @description - sets the model data
-     * @param {Address} address
+     * @property line1
+     * @description - sets the primary street address
+     * @param {String} line1
      */
-    set data(address = undefined) {
-        if(address instanceof Address) {
-            this._address = address;
+    set line1(line1 = undefined) {
+        if (ValidationUtil.isString(line1)) {
+            this._line1 = line1;
         }
     }
 
     /**
      * @public
-     * @function Address#createAddress
-     * @description - creates a new Address object
-     * @param {String} line1 - primary street address [MANDATORY]
-     * @param {String} line2 - secondary street/building address [OPTIONAL]
-     * @param {String} city - name of city [MANDATORY]
-     * @param {String} region - name of region (state, province, etc) [MANDATORY]
-     * @param {String} subRegion - name of sub-region (county, parish, etc) [OPTIONAL]
-     * @param {String} postalCode - postal code [MANDATORY]
-     * @param {String} country - country of residence [MANDATORY]
-     * @returns {Address}
+     * @property line2v
+     * @description - gets the secondary street address (apartment, floor, etc.)
+     * @returns {String}
      */
-    createAddress(line1, line2, city, region, subRegion, postalCode, country) {
-        //generic address object
-        const template = {
-            line1: '',
-            line2: '',
-            city: '',
-            region: '',
-            subRegion: '',
-            postalCode: '',
-            country: '',
-        };
+    get line2() {
+        return this._line2 || '';
+    }
 
-        const validator = new ValidationUtil();
-
-        //validate mandatory fields
-        if(validator.validateType('string', [
-            line1, city, region, postalCode, subRegion, country
-        ])) {
-            //set address details
-            template.line1 = line1;
-            template.line2 = validator.validateType('string', line2) ? line2 : null;
-            template.city = city;
-            template.region = region;
-            template.subRegion = validator.validateType('string', subRegion) ? subRegion : null;
-            template.postalCode = postalCode;
-            template.country = country;
+    /**
+     * @public
+     * @property line2
+     * @description - sets the secondary street address (apartment, floor, etc.)
+     * @param {String} line2
+     */
+    set line2(line2 = undefined) {
+        if (ValidationUtil.isString(line2)) {
+            this._line1 = line2;
         }
-        return template;
+    }
+
+    /**
+     * @public
+     * @property city
+     * @description - gets the city
+     * @returns {String}
+     */
+    get city() {
+        return this._city || '';
+    }
+
+    /**
+     * @public
+     * @property city
+     * @description - sets the city
+     * @param {String} city
+     */
+    set city(city = undefined) {
+        if (ValidationUtil.isString(city)) {
+            this._line1 = city;
+        }
+    }
+
+    /**
+     * @public
+     * @property region
+     * @description - gets the address region (state, province, etc.)
+     * @returns {String}
+     */
+    get region() {
+        return this._region || '';
+    }
+
+    /**
+     * @public
+     * @property region
+     * @description - sets the address region (state, province, etc.)
+     * @param {String} region
+     */
+    set region(region = undefined) {
+        if (ValidationUtil.isString(region)) {
+            this._line1 = region;
+        }
+    }
+
+    /**
+     * @public
+     * @property subRegion
+     * @description - gets the address sub-region (county, parish, etc.)
+     * @returns {String}
+     */
+    get subRegion() {
+        return this._subRegion || '';
+    }
+
+    /**
+     * @public
+     * @property subRegion
+     * @description - sets the address sub-region (county, parish, etc.)
+     * @param {String} subRegion
+     */
+    set subRegion(subRegion = undefined) {
+        if (ValidationUtil.isString(subRegion)) {
+            this._line1 = subRegion;
+        }
+    }
+
+    /**
+     * @public
+     * @property mailingCode
+     * @description - gets the mailing code (zip)
+     * @returns {String}
+     */
+    get mailingCode() {
+        return this._mailingCode || '';
+    }
+
+    /**
+     * @public
+     * @property mailingCode
+     * @description - sets mailing code
+     * @param {String} mailingCode
+     */
+    set mailingCode(mailingCode = undefined) {
+        if (ValidationUtil.isString(mailingCode)) {
+            this._line1 = mailingCode;
+        }
+    }
+
+    /**
+     * @public
+     * @property country
+     * @description - gets the country
+     * @returns {String}
+     */
+    get country() {
+        return this._country || '';
+    }
+
+    /**
+     * @public
+     * @property country
+     * @description - sets the country
+     * @param {String} country
+     */
+    set country(country = undefined) {
+        if (ValidationUtil.isString(country)) {
+            this._line1 = country;
+        }
     }
 
     /**
      * @public
      * @function Address#toString
      * @description - converts an address to standardized format
-     * @returns {String} -- Example: One Apple Park Way, Cupertino, CA 95014 US
+     * @returns {String} - Example: One Apple Park Way, Cupertino, CA 95014 US
      */
     toString() {
-        const props = this.data;
-        return (
-            props.line1 
-            + ((props.line2) ? (' ' + props.line2) : '')
-            + (', ' + props.city) 
-            + (', ' + props.region) 
-            + (' ' + props.postalCode)
-            + ((props.country) ? (' ' + props.country) : '')
-        );
+        let addressString = this.line1;
+        addressString += (this.line2) ? ` ${this.line2}` : '';
+        addressString += `, ${this.city}, ${this.region}`;
+        addressString += ` ${this.mailingCode}`;
+        addressString += ` ${this.country}`;
+
+        return addressString;
     }
 }

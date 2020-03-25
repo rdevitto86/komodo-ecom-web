@@ -1,103 +1,111 @@
-import ServiceError from '../common/errors/service-error.js';
-import config from '../resources/config/app-config.js';
+import HTTPClient from './http-client';
+
+import User from '../models/user';
+import Address from '../models/address';
+import Billing from '../models/billing';
+
+import ValidationUtil from '../../app-plugins/utility/validation-util';
+
+import ServiceError from '../errors/service-error';
+
+import appConfig from '../resources/config/app-config.json';
+import userConfig from '../resources/config/user-config.json';
+
+import LOGGER from '../../app-plugins/loggers/runtime-logger';
 
 /**
  * @class
  * @description - collection of API operations of the auth service
  */
-class UserService {
-    /**
-     * @constructor
-     * @description - defines a new AuthService object
-     */
-    constructor() {
-        this.user = {}; //set the default user object
-
-        /**
-         * @public
-         * @function UserService~updateUserAccount
-         * @description - sends a request to update a user's account information
-         * @param {User} user - updated user object
-         * @returns {Object}
-         * @throws ServiceError
-         */
-        this.updateUserAccount = (user = {}) => {
-            if(typeof user !== 'object' || (!user.details && !user.billing && !user.address)) {
-                throw new ServiceError(500, 'failed to update user information - params invalid', 'UserService');
-            }
-
-            return sendServiceRequest('PUT', 'userDetailsUpdate', details);
-        };
-
-        /**
-         * @private
-         * @function UserService~sendServiceRequest
-         * @description - helper function that utilizes a http client to send a request to the user service
-         * @param {string} method - HTTP method (GET, POST, PUT, DELETE)
-         * @param {string} path - server path for request
-         * @param {Object} body - request body
-         * @returns {Object}
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-         * @throws {ServiceError}
-         */
-        const sendServiceRequest = async (method = '', path = '', body = {}) => {
-            if (config.ALLOWED_HTTP_METHODS.indexOf(method) === -1) {
-                throw new ServiceError(500, 'unable to process HTTP request - unrecognized method', 'UserService');
-            }
-            if (typeof path !== 'string' || path.charAt(0) !== '/') {
-                throw new ServiceError(500, 'unable to process HTTP request - operation path invalid', 'UserService');
-            }
-
-            //add HTTP request params
-            const params = {
-                method: method,
-                mode: 'cors',
-                credentials: 'include', //reference this
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': JSON.stringify(process.env.USER_SERVICE_KEY)
-                }
-            };
-
-            //TODO - see if the body can be null/{} instead of adding body after
-
-            //add HTTP body (if applicable)
-            if (method !== 'GET' && typeof body === 'object') {
-                params.body = JSON.stringify(body);
-            }
-
-            // //construct the service operation URL
-            // const url = (JSON.stringify(process.env.USER_SERVICE_ENDPOINT)).concat(path);
-
-            //send http request
-            // return await fetch(url, params);
-
-            const response = {
-                status: '200'
-            };
-            return response;
-        };
-    }
-
+export default class UserService extends HTTPClient {
     /**
      * @public
-     * @function UserService#userCache
-     * @description - gets the locally cached user object
-     * @returns {User}
+     * @function UserService#createUser
+     * @description - creates a new user account
+     * @throws ServiceError
+     * @see HTTPClient#POST
      */
-    get userCache() {
-        return this.user;
-    }
-
-    /**
-     * @public
-     * @function UserService#userCache
-     * @description - sets the locally cached user object
-     * @param {User} user
-     */
-    set userCache(user) {
-        if(user && user instanceof User) {
-            this.userCache = user;
+    createUser(data = undefined) {
+        if (!ValidationUtil.isObject(data)) {
+            LOGGER.warn('unable to create new user - invalid form data');
+            LOGGER.debug(`data: ${String(data)}`);
+            return;
         }
+
+        super.POST(`${appConfig.URL_USER_SERVICE}/create`, data)
+            .then((response) => {
+                //TODO - set session (WeakMap w/ User object)
+                userConfig.session = response.session;
+
+                const { details, type, address } = data;
+
+                //TODO - set user object (in state or other location)
+                User(details, type, new Address(address), null);
+
+                //TODO - fire user creation event
+            }).catch((response) => {
+                throw new ServiceError(response);
+            });
+    }
+
+    /**
+     * @public
+     * @function UserService#updateUser
+     * @description - updates an exsisting user account
+     * @throws ServiceError
+     * @see HTTPClient#PUT
+     */
+    updateUser(data = undefined) {
+        if (!ValidationUtil.isObject(data)) {
+            LOGGER.warn('unable to update exsisting user - invalid form data');
+            LOGGER.debug(`data: ${String(data)}`);
+            return;
+        }
+
+        super.PUT(`${appConfig.URL_USER_SERVICE}/update`, data)
+            .then(() => {
+                //TODO - update user object (Object.keys?)
+                //TODO - set user object (in state or other location)
+
+                //TODO - fire user update event
+            }).catch((response) => {
+                throw new ServiceError(response);
+            });
+    }
+
+    /**
+     * @public
+     * @function UserService#deleteUser
+     * @description - deletes an exsisting user account
+     * @throws ServiceError
+     * @see HTTPClient#DELETE
+     */
+    deleteUser() {
+        super.DELETE(`${appConfig.URL_USER_SERVICE}/delete`, {
+            email: '' //TODO - user model
+        }).then(() => {
+            //TODO - set user object (in state or other location)
+            //TODO - fire user deletion event
+        }).catch((response) => {
+            throw new ServiceError(response);
+        });
+    }
+
+    /**
+     * @public
+     * @function UserService#resetPassword
+     * @description - sends a password reset request
+     * @throws ServiceError
+     * @see HTTPClient#DELETE
+     */
+    resetPassword() {
+        super.POST(`${appConfig.URL_USER_SERVICE}/reset`, {
+            email: '' ////TODO - user model
+        }).then(() => {
+            //TODO - inform user to check their email for the password
+            //TODO - navigate to login screen / open login modal
+        }).catch((response) => {
+            throw new ServiceError(response);
+        });
     }
 }

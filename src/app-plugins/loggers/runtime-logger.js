@@ -195,7 +195,7 @@ class RuntimeLogger {
      * @description - logs a debug message
      * @param {String} message - log message
      */
-    debug(message = undefined) {
+    debug(message = undefined, data = undefined) {
         this.log('DEBUG', message);
     }
 
