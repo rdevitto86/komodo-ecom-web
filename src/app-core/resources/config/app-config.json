@@ -16,6 +16,12 @@
 
     "URL_AUTH_SERVICE": "",
     "URL_USER_SERVICE": "",
+    "URL_PAYMENT_SERVICE": "",
+
+    "ALLOW_VISA": true,
+    "ALLOW_MASTERCARD": true,
+    "ALLOW_AMEX": true,
+    "ALLOW_DISCOVER": true,
 
     "MINUTE_IN_MS": 60000,
     "HOUR_IN_MS": 3600000,

@@ -1,10 +1,6 @@
 import HTTPService from './http-client';
 
 import User from '../models/user';
-import Address from '../models/address';
-import Billing from '../models/billing';
-
-import ServiceError from '../errors/service-error';
 
 import appConfig from '../resources/config/app-config.json';
 
@@ -19,10 +15,11 @@ export default class AuthService extends HTTPService {
      * @description - executes a login request for a user
      * @param {String} username
      * @param {String} password
-     * @throws ServiceError
+     * @param {Function} success - success callback
+     * @param {Function} error - error callback
      * @see HTTPService#POST
      */
-    login(username = undefined, password = undefined) {
+    login(username = undefined, password = undefined, success = undefined, error = undefined) {
         super.POST(`${appConfig.URL_AUTH_SERVICE}/login`, {
             username: username,
             password: password
@@ -31,12 +28,18 @@ export default class AuthService extends HTTPService {
                 sessionStorage.setItem(appConfig.SESSION_KEY_CLIENT, response.session);
             }
 
-            const { details, type, address, billing } = response.data;
-
             //TODO - set user object (in state or other location)
-            User(details, type, new Address(address), new Billing(billing));
+            User.setUserDetails(response.data);
+
+            if (typeof success === 'function') {
+                success();
+            }
         }).catch((response) => {
-            throw new ServiceError(response);
+            //TODO - LOGGER.error()
+
+            if (typeof error === 'function') {
+                error();
+            }
         });
     }
 
@@ -45,17 +48,26 @@ export default class AuthService extends HTTPService {
      * @function AuthService#logoff
      * @description - logs a user off
      * @param {String} email
-     * @throws ServiceError
+     * @param {Function} success
+     * @param {Function} error
      * @see HTTPService#POST
      */
-    logoff(email = undefined) {
+    logoff(email = undefined, success = undefined, error = undefined) {
         super.POST(`${appConfig.URL_AUTH_SERVICE}/logoff`, {
             email: email,
             session: sessionStorage.getItem(appConfig.SESSION_KEY_CLIENT)
         }).then(() => {
             sessionStorage.removeItem(appConfig.SESSION_KEY_CLIENT);
+
+            if (typeof success === 'function') {
+                success();
+            }
         }).catch((response) => {
-            throw new ServiceError(response);
+            //TODO - LOGGER.error()
+
+            if (typeof error === 'function') {
+                error();
+            }
         });
     }
 
@@ -63,7 +75,6 @@ export default class AuthService extends HTTPService {
      * @public
      * @function AuthService#validateSession
      * @description - validates a user's session
-     * @throws ServiceError
      * @see HTTPService#POST
      */
     validateSession() {
@@ -71,10 +82,10 @@ export default class AuthService extends HTTPService {
             session: sessionStorage.getItem(appConfig.SESSION_KEY_CLIENT)
         }).then((response) => {
             if (!response.valid) {
-                //TODO - show login flow
+                //TODO - navigate user to login screen
             }
         }).catch((response) => {
-            throw new ServiceError(response);
+            //TODO - LOGGER.error()
         });
     }
 }
