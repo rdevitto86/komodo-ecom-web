@@ -8,8 +8,8 @@ type Merchandise = Product | ContractedService;
  * @description - defines a new Invoice model
  */
 export default class Invoice {
-    private totalCost = 0.00;
-    private lineItems: Merchandise[] = [];
+    private _totalCost = 0.00;
+    private _lineItems: Merchandise[] = [];
 
     public totalItems = 0;
     public meta: object = {};
@@ -20,10 +20,10 @@ export default class Invoice {
      * @description - adds a new line item to the order
      * @param {Object} lineItem - line item to add
      */
-    public addLineItem(lineItem: Merchandise = undefined): void {
-        if (lineItem && 'getCost' in lineItem) {
-            this.updateTotalCost(lineItem.getCost());
-            this.lineItems.push(lineItem);
+    addLineItem(lineItem: Merchandise): void {
+        if (lineItem && 'cost' in lineItem) {
+            this.updateTotalCost(lineItem.cost);
+            this._lineItems.push(lineItem);
         }
     }
 
@@ -33,7 +33,7 @@ export default class Invoice {
      * @description - adds an array of line items
      * @param {Array} items - array of line items to add
      */
-    public addLineItems(items: Merchandise[] = []): void {
+    addLineItems(items: Merchandise[] = []): void {
         if (items && items instanceof Array) {
             for (let i = 0, len = items.length; i < len; i++) {
                 try {
@@ -50,10 +50,10 @@ export default class Invoice {
      * @function Invoice#clearInvoice
      * @description - resets the current invoice to an empty state
      */
-    public clearInvoice(): void {
-        this.totalCost = 0.00;
+    clearInvoice(): void {
+        this._totalCost = 0.00;
+        this._lineItems = [];
         this.totalItems = 0;
-        this.lineItems = [];
         this.meta = {};
     }
 
@@ -63,8 +63,8 @@ export default class Invoice {
      * @description - gets invoice total cost
      * @returns {Number}
      */
-    public getCost(): number {
-        return this.totalCost;
+    get getCost(): number {
+        return this._totalCost;
     }
 
     /**
@@ -73,8 +73,8 @@ export default class Invoice {
      * @description - gets invoice line items
      * @returns {Array}
      */
-    public getLineItems(): Merchandise[] {
-        return this.lineItems;
+    get getLineItems(): Merchandise[] {
+        return this._lineItems;
     }
 
     /**
@@ -84,6 +84,6 @@ export default class Invoice {
      * @param {Number} value - merchandise value to add
      */
     private updateTotalCost(value: number | string = 0): void {
-        this.totalCost += Number.parseFloat((Number(value)).toFixed(2));
+        this._totalCost += Number.parseFloat((Number(value)).toFixed(2));
     }
 }

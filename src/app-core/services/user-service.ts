@@ -1,12 +1,10 @@
 import HTTPClient from './http-client';
 
-import User from '../models/user';
-
-import ValidationUtil from '../../app-plugins/utility/validation-util';
+import { User } from '../models/user';
+import { UserResponse } from '../models/service-responses/user-response';
+import { ErrorResponse } from '../models/service-responses/error-response';
 
 import appConfig from '../resources/config/app-config.json';
-import userConfig from '../resources/config/user-config.json';
-
 import LOGGER from '../../app-plugins/loggers/runtime-logger';
 
 /**
@@ -23,28 +21,31 @@ export default class UserService extends HTTPClient {
      * @param {Function} error - error callback
      * @see HTTPClient#POST
      */
-    createUser(data = undefined, success = undefined, error = undefined) {
-        if (!ValidationUtil.isObject(data)) {
+    createUser(data: UserResponse, success?: Function, error?: Function): void {
+        if (!data || typeof data !== 'object') {
             LOGGER.warn('unable to create new user - invalid form data');
             LOGGER.debug(`data: ${String(data)}`);
             return;
         }
 
         super.POST(`${appConfig.URL_USER_SERVICE}/create`, data)
-            .then((response) => {
-                //TODO - set session (WeakMap w/ User object)
-                userConfig.session = response.session;
+            .then((response: UserResponse) => {
+                if (response && typeof response === 'object') {
+                    if (response.sessionToken) {
+                        sessionStorage.setItem(appConfig.SESSION_KEY_CLIENT, response.sessionToken);
+                    } else {
+                        //TODO - handle missing session token error
+                        return;
+                    }
 
-                //TODO - set user object (in state or other location)
-                User.setUserDetails(data);
+                    User.getInstance().setUserDetails(data);
 
-                //TODO - fire user creation event
-
-                if (typeof success === 'function') {
-                    success();
+                    if (typeof success === 'function') {
+                        success();
+                    }
                 }
-            }).catch((response) => {
-                //LOGGER.error()
+            }).catch((response: ErrorResponse) => {
+                LOGGER.error(response);
 
                 if (typeof error === 'function') {
                     error();
@@ -61,8 +62,8 @@ export default class UserService extends HTTPClient {
      * @param {Function} error - error callback
      * @see HTTPClient#PUT
      */
-    updateUser(data = undefined, success = undefined, error = undefined) {
-        if (!ValidationUtil.isObject(data)) {
+    updateUser(data: UserResponse, success?: Function, error?: Function): void {
+        if (!data || typeof data !== 'object') {
             LOGGER.warn('unable to update exsisting user - invalid form data');
             LOGGER.debug(`data: ${String(data)}`);
             return;
@@ -70,16 +71,13 @@ export default class UserService extends HTTPClient {
 
         super.PUT(`${appConfig.URL_USER_SERVICE}/update`, data)
             .then(() => {
-                //TODO - update user object (Object.keys?)
-                //TODO - set user object (in state or other location)
-
-                //TODO - fire user update event
+                User.getInstance().setUserDetails(data);
 
                 if (typeof success === 'function') {
                     success();
                 }
-            }).catch((response) => {
-                //LOGGER.error()
+            }).catch((response: ErrorResponse) => {
+                LOGGER.error(response);
 
                 if (typeof error === 'function') {
                     error();
@@ -91,20 +89,21 @@ export default class UserService extends HTTPClient {
      * @public
      * @function UserService#deleteUser
      * @description - deletes an exsisting user account
+     * @param {Function} success - success callback
+     * @param {Function} error - error callback
      * @see HTTPClient#DELETE
      */
-    deleteUser(success = undefined, error = undefined) {
+    deleteUser(success?: Function, error?: Function): void {
         super.DELETE(`${appConfig.URL_USER_SERVICE}/delete`, {
-            email: '' //TODO - user model
+            email: User.getInstance().email
         }).then(() => {
-            //TODO - set user object (in state or other location)
-            //TODO - fire user deletion event
+            User.getInstance().clearData();
 
             if (typeof success === 'function') {
                 success();
             }
-        }).catch((response) => {
-            //LOGGER.error()
+        }).catch((response: ErrorResponse) => {
+            LOGGER.error(response);
 
             if (typeof error === 'function') {
                 error();
@@ -116,16 +115,25 @@ export default class UserService extends HTTPClient {
      * @public
      * @function UserService#resetPassword
      * @description - sends a password reset request
+     * @param {Function} success - success callback
+     * @param {Function} error - error callback
      * @see HTTPClient#DELETE
      */
-    resetPassword() {
+    resetPassword(success: Function, error: Function): void {
         super.POST(`${appConfig.URL_USER_SERVICE}/reset`, {
-            email: '' ////TODO - user model
+            email: User.getInstance().email
         }).then(() => {
             //TODO - inform user to check their email for the password
-            //TODO - navigate to login screen / open login modal
-        }).catch((response) => {
-            //LOGGER.error()
+
+            if (typeof success === 'function') {
+                success();
+            }
+        }).catch((response: ErrorResponse) => {
+            LOGGER.error(response);
+
+            if (typeof error === 'function') {
+                error();
+            }
         });
     }
 }

@@ -6,24 +6,27 @@ export default class HTTPClient {
     /**
      * @public
      * @async
+     * @static
      * @function HTTPClient#GET
      * @description - sends a GET request
      * @param {String} url - service endpoint
-     * @param {Object} body - http parameters
+     * @returns {Promise}
      */
-    async GET(url = undefined) {
+    async GET(url = ''): Promise<any> {
         return fetch(url);
     }
 
     /**
      * @public
      * @async
+     * @static
      * @function HTTPClient#POST
      * @description - sends a POST request
      * @param {String} url - service endpoint
      * @param {Object} body - http parameters
+     * @returns {Promise}
      */
-    async POST(url = undefined, body = undefined) {
+    async POST(url = '', body = {}): Promise<any> {
         return fetch(url, {
             method: 'POST',
             mode: 'no-cors',
@@ -38,12 +41,14 @@ export default class HTTPClient {
     /**
      * @public
      * @async
+     * @static
      * @function HTTPClient#PUT
      * @description - sends a POST request
      * @param {String} url - service endpoint
      * @param {Object} body - http parameters
+     * @returns {Promise}
      */
-    async PUT(url = undefined, body = undefined) {
+    async PUT(url = '', body = {}): Promise<any> {
         return fetch(url, {
             method: 'PUT',
             mode: 'no-cors',
@@ -58,12 +63,14 @@ export default class HTTPClient {
     /**
      * @public
      * @async
+     * @static
      * @function HTTPClient#DELETE
      * @description - sends a DELETE request
      * @param {String} url - service endpoint
      * @param {Object} body - http parameters
+     * @returns {Promise}
      */
-    async DELETE(url = undefined, body = undefined) {
+    async DELETE(url = '', body = {}): Promise<any> {
         return fetch(url, {
             method: 'DELETE',
             mode: 'no-cors',

@@ -13,13 +13,10 @@ export default class StringUtil {
      * @param {Boolean} addElipses - adds optional '...' to end of string
      * @returns {String}
      */
-    static truncate(string = undefined, maxLength = -1, addElipses = false) {
+    public static truncate(string: string = undefined, maxLength = -1, addElipses = false): string {
         //return current string if processing not needed
         if (typeof string !== 'string' || typeof maxLength !== 'number' || string.length <= maxLength) {
             return string;
-        }
-        if (typeof addElipses !== 'boolean') {
-            addElipses = false;
         }
         return (addElipses === true)
             ? (`${string.slice(0, maxLength - 3)}...`) //with elipses
@@ -31,10 +28,10 @@ export default class StringUtil {
      * @static
      * @function StringUtil#stringify
      * @description - converts any value to a string
-     * @param {Any} val - vakue to convert to
+     * @param {Any} val - value to convert to String
      * @returns {String}
      */
-    static stringify(val) {
+    public static stringify(val): string {
         return String(val);
     }
 }

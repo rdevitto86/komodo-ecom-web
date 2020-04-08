@@ -11,7 +11,7 @@ export default class ValidationUtil {
      * @param {String} email
      * @returns {Boolean}
      */
-    static validateEmail(email = '') {
+    public static validateEmail(email = ''): boolean {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
@@ -23,7 +23,7 @@ export default class ValidationUtil {
      * @param {String} phoneNum
      * @returns {Boolean}
      */
-    static validatePhoneNumber(phoneNum = '') {
+    public static validatePhoneNumber(phoneNum = ''): boolean {
         return /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im.test(phoneNum);
     }
 
@@ -36,22 +36,9 @@ export default class ValidationUtil {
      * @param {String} phoneNum
      * @returns {Boolean}
      */
-    static validatePassword(password = '') {
+    public static validatePassword(password = ''): boolean {
         return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password);
     }
-
-    // /**
-    //  * @public
-    //  * @static
-    //  * @function Validators#validateUsername
-    //  * @description - performs a regex on a user name
-    //  * VALID = 3 to 22 characters | no . OR _ at start/end | no __ _. .. inside
-    //  * @param {String} username
-    //  * @returns {Boolean}
-    //  */
-    // static validateUsername(username = '') {
-    //     return /^(?=.{3,22}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/.test(username);
-    // }
 
     /**
      * @public
@@ -61,7 +48,7 @@ export default class ValidationUtil {
      * @param {Any} value - value(s) to check
      * @returns {Boolean}
      */
-    static isNullish(value) {
+    public static isNullish(value): boolean {
         return !value;
     }
 
@@ -72,7 +59,7 @@ export default class ValidationUtil {
      * @param {String} value - value to validate
      * @returns {Boolean}
      */
-    static isString(value) {
+    public static isString(value): boolean {
         return typeof value === 'string' || value instanceof String;
     }
 
@@ -83,7 +70,7 @@ export default class ValidationUtil {
      * @param {Number} value - value to validate
      * @returns {Boolean}
      */
-    static isNumber(value) {
+    public static isNumber(value): boolean {
         return typeof value === 'number' && Number.isFinite(value);
     }
 
@@ -94,7 +81,7 @@ export default class ValidationUtil {
      * @param {Array} value - value to validate
      * @returns {Boolean}
      */
-    static isArray(value) {
+    public static isArray(value): boolean {
         return value && typeof value === 'object' && value.constructor === Array;
     }
 
@@ -105,7 +92,7 @@ export default class ValidationUtil {
      * @param {Object} value - value to validate
      * @returns {Boolean}
      */
-    static isObject(value) {
+    public static isObject(value): boolean {
         return value && typeof value === 'object' && value.constructor === Object;
     }
 
@@ -116,7 +103,7 @@ export default class ValidationUtil {
      * @param {Function} value - value to validate
      * @returns {Boolean}
      */
-    static isFunction(value) {
+    public static isFunction(value): boolean {
         return typeof value === 'function';
     }
 
@@ -127,7 +114,7 @@ export default class ValidationUtil {
      * @param {Date} value - value to validate
      * @returns {Boolean}
      */
-    static isDate(value) {
+    public static isDate(value): boolean {
         return value instanceof Date;
     }
 
@@ -138,7 +125,7 @@ export default class ValidationUtil {
      * @param {Error} value - value to validate
      * @returns {Boolean}
      */
-    static isError(value) {
-        return value instanceof Error && value.message;
+    public static isError(value): boolean {
+        return value instanceof Error;
     }
 }

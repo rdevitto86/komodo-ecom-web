@@ -1,31 +1,27 @@
 /**
+ * @interface
+ * @description - defines a new abstract class for Payment Accounts
+ */
+export interface PaymentAccount {
+    provider: string;
+}
+
+/**
  * @class PaymentAccount
  * @description - defines a new Payment Account model
  */
-export default class PaymentAccount {
-    private provider = -1;
+export class PaymentAccount {
+    public provider = '';
 
     /**
      * @constructor
      * @param {Object} details - payment account details
      */
-    constructor(details = undefined) {
+    constructor(details: PaymentAccount) {
         const { provider } = details;
 
-        if (typeof provider === 'number' && provider > 0) {
-            this.provider = provider;
-        }
+        this.provider = provider;
     }
-
-    /**
-     * @public
-     * @funtion PaymentAccount#getProvider
-     * @description - returns the account provider number
-     * @returns {Number}
-     */
-    public getProvider(): number {
-        return this.provider;
-    }
-
-    //TODO - fill out getters/setters
 }
+
+export type PaymentAccountType = PaymentAccount | null;

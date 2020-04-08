@@ -11,7 +11,7 @@ export default class ObjectArrayUtil {
      * @param {Object} obj - object to clone
      * @returns {Object}
      */
-    static deepCopy(obj) {
+    public static deepCopy(obj): object {
         if (!obj || typeof obj !== 'object') {
             return obj;
         }
@@ -32,8 +32,8 @@ export default class ObjectArrayUtil {
      * @param {Object} obj - object to clone
      * @returns {Object}
      */
-    static shallowCopy(obj) {
-        if (obj === null || typeof obj !== 'object') {
+    public static shallowCopy(obj): object {
+        if (!obj || typeof obj !== 'object') {
             return obj;
         }
         return (obj instanceof Array) ? [...obj] : { ...obj };

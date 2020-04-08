@@ -3,7 +3,7 @@
  * @description - collection of utlity functions that assists with browser info
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Navigator
  */
-const BrowserUtil = (function () {
+const BrowserUtil = Object.freeze(function () {
     //check if navigator is unavailable in current browser
     if (!navigator) {
         return {
@@ -115,5 +115,4 @@ const BrowserUtil = (function () {
     };
 }());
 
-Object.freeze(BrowserUtil);
 export default BrowserUtil;

@@ -1,5 +1,3 @@
-import ValidationUtil from './validation-util';
-
 /**
  * @class MathUtil
  * @description - collection of utlity functions that assists with mathmatical operations
@@ -10,17 +8,13 @@ export default class MathUtil {
      * @static
      * @function MathUtil#formatDollars
      * @description - converts a number into a dollar amount
-     * @param {Number} sum - currency value
+     * @param {Number || String} sum - currency value
      * @returns {String}
      */
-    static formatDollars(sum) {
-        if (!ValidationUtil.isNumber(sum)) {
-            return '$0.00';
-        }
-        if (!Number.isInteger(sum)) {
-            sum = sum.toFixed(2);
-        }
-        return `$${sum}`;
+    public static formatDollars(sum: number | string): string {
+        const paramType = typeof sum;
+        return (paramType === 'number' || paramType === 'string')
+            ? `$${Number(sum).toFixed(2)}` : '$0.00';
     }
 
     /**
@@ -29,13 +23,20 @@ export default class MathUtil {
      * @function MathUtil#convertMillisecToTimeUnits
      * @description - converts milliseconds into various higher time measurements
      * such as: seconds, hours, minutes, hours, days, and weeks.
-     * @param {Number} milliseconds
+     * @param {Number || String} milliseconds
      * @returns {Object}
      */
-    static convertMillisecToTimeUnits(milliseconds) {
-        if (ValidationUtil.isNumber(milliseconds)) {
-            return {};
+    public static convertMillisecToTimeUnits(milliseconds: number | string): object {
+        if (typeof milliseconds !== 'number') {
+            if (typeof milliseconds === 'string') {
+                milliseconds = Number.parseFloat(milliseconds);
+            } else {
+                return {};
+            }
         }
+
+        //TODO - see if generic number can be calculated into units
+        //i.e 60000 can be converted to MS then converted into other units
 
         const seconds = Math.floor(milliseconds / 1000);
         const minutes = Math.floor(seconds / 60);
@@ -61,12 +62,14 @@ export default class MathUtil {
      * @param {Date} previous - past date
      * @returns {Object}
      */
-    static calculateTimeDifference(recent = undefined, previous = undefined) {
-        if (!ValidationUtil.isDate(recent) || !ValidationUtil.isDate(previous)) {
+    public static calculateTimeDifference(
+        recent: Date = undefined, previous: Date = undefined
+    ): object {
+        if (!(recent instanceof Date) || !(previous instanceof Date)) {
             return {};
         }
 
-        const milliseconds = recent - previous;
+        const milliseconds = recent.getTime() - previous.getTime();
         const years = recent.getFullYear() - previous.getFullYear();
 
         const months = Math.floor(
