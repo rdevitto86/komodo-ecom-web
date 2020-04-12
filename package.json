@@ -1,8 +1,9 @@
 {
   "name": "komodo-solutions-website-react",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "dependencies": {
+    "@types/node": "^13.11.1",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "node-sass": "^4.13.1",

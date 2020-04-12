@@ -2,48 +2,49 @@ import HTTPService from './http-client';
 import { User } from '../models/user';
 
 import { LoginResponse, SessionValidResponse } from '../models/service-responses/auth-response';
-import { ErrorResponse } from '../models/service-responses/error-response';
+import { ServiceError } from '../models/service-responses/service-error';
 
-import appConfig from '../resources/config/app-config.json';
+import AppConfig from '../resources/config/app-config';
 import LOGGER from '../../app-plugins/loggers/runtime-logger';
 
 /**
  * @class
- * @description - collection of API operations of the auth service
+ * @extends HTTPService
+ * @description collection of operations used in the authorization service
  */
 export default class AuthService extends HTTPService {
     /**
      * @public
      * @function AuthService#login
-     * @description - executes a login request for a user
-     * @param {String} username
-     * @param {String} password
-     * @param {Function} success - success callback
-     * @param {Function} error - error callback
+     * @description executes a login request for a user
+     * @param {String} email entered user email
+     * @param {String} password entered password
+     * @param {Function} success success callback
+     * @param {Function} error error callback
      * @see HTTPService#POST
      */
-    login(username: string, password: string, success?: Function, error?: Function): void {
-        super.POST(`${appConfig.URL_AUTH_SERVICE}/login`, {
-            username: username,
+    login(email: string, password: string, success?: Function, error?: Function): void {
+        super.POST(`${process.env.AUTH_SERVICE_URL}/login`, {
+            username: email,
             password: password
         }).then((response: LoginResponse) => {
-            if (response && typeof response === 'object') {
-                if (response.sessionToken) {
-                    sessionStorage.setItem(appConfig.SESSION_KEY_CLIENT, response.sessionToken);
-                } else {
-                    //TODO - handle missing session token error
-                    return;
-                }
+            //check if response contains valid session token
+            if (response && typeof response === 'object' && response.sessionToken) {
+                sessionStorage.setItem(
+                    AppConfig.SESSION_KEY_CLIENT, response.sessionToken
+                );
 
                 //TODO - set user object (in state or other location)
-                User.getInstance().setUserDetails(response.data);
-            }
+                User.setUserDetails(response.data);
 
-            //execute callback function
-            if (typeof success === 'function') {
-                success();
+                //execute callback function
+                if (typeof success === 'function') {
+                    success();
+                }
+            } else {
+                //TODO - handle missing session token error
             }
-        }).catch((response: ErrorResponse) => {
+        }).catch((response: ServiceError) => {
             LOGGER.error(response);
 
             if (typeof error === 'function') {
@@ -55,23 +56,23 @@ export default class AuthService extends HTTPService {
     /**
      * @public
      * @function AuthService#logoff
-     * @description - logs a user off
-     * @param {String} email
-     * @param {Function} success
-     * @param {Function} error
+     * @description logs a user off the application
+     * @param {String} email user email
+     * @param {Function} success success callback
+     * @param {Function} error error callback
      * @see HTTPService#POST
      */
     logoff(email: string, success?: Function, error?: Function): void {
-        super.POST(`${appConfig.URL_AUTH_SERVICE}/logoff`, {
+        super.POST(`${process.env.AUTH_SERVICE_URL}/logoff`, {
             email: email,
-            session: sessionStorage.getItem(appConfig.SESSION_KEY_CLIENT)
+            session: sessionStorage.getItem(AppConfig.SESSION_KEY_CLIENT)
         }).then(() => {
-            sessionStorage.removeItem(appConfig.SESSION_KEY_CLIENT);
+            sessionStorage.removeItem(AppConfig.SESSION_KEY_CLIENT);
 
             if (typeof success === 'function') {
                 success();
             }
-        }).catch((response: ErrorResponse) => {
+        }).catch((response: ServiceError) => {
             LOGGER.error(response);
 
             if (typeof error === 'function') {
@@ -83,18 +84,19 @@ export default class AuthService extends HTTPService {
     /**
      * @public
      * @function AuthService#validateSession
-     * @description - validates a user's session
+     * @description validates a session token
      * @see HTTPService#POST
      */
     validateSession(): void {
-        super.POST(`${appConfig.URL_AUTH_SERVICE}/validate`, {
-            session: sessionStorage.getItem(appConfig.SESSION_KEY_CLIENT)
+        super.POST(`${process.env.AUTH_SERVICE_URL}/validate`, {
+            session: sessionStorage.getItem(AppConfig.SESSION_KEY_CLIENT)
         }).then((response: SessionValidResponse) => {
             if (!response.valid) {
                 //TODO - navigate user to login screen
             }
-        }).catch((response: ErrorResponse) => {
+        }).catch((response: ServiceError) => {
             LOGGER.error(response);
+            //TODO - failed session validation check
         });
     }
 }

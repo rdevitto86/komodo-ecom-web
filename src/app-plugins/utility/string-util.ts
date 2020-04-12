@@ -13,7 +13,7 @@ export default class StringUtil {
      * @param {Boolean} addElipses - adds optional '...' to end of string
      * @returns {String}
      */
-    public static truncate(string: string = undefined, maxLength = -1, addElipses = false): string {
+    static truncate(string: string, maxLength = -1, addElipses = false): string {
         //return current string if processing not needed
         if (typeof string !== 'string' || typeof maxLength !== 'number' || string.length <= maxLength) {
             return string;
@@ -31,7 +31,7 @@ export default class StringUtil {
      * @param {Any} val - value to convert to String
      * @returns {String}
      */
-    public static stringify(val): string {
+    static stringify(val: any): string {
         return String(val);
     }
 }

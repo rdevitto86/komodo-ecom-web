@@ -1,23 +1,54 @@
 /**
- * @class BrowserUtil
+ * @interface
+ * @description - defines the data object used to access browser meta data
+ */
+export interface BrowserUtil {
+    osName: string;
+    osVer: number | string;
+    browserName: string;
+    browserVer: number | string;
+    userAgent: string;
+    appVersion: string;
+    platform: string;
+    region: string;
+    vendor: string;
+    language: string;
+    cookieEnabled: boolean;
+}
+
+/**
+ * @singleton
+ * @constant BrowserUtil
  * @description - collection of utlity functions that assists with browser info
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Navigator
  */
-const BrowserUtil = Object.freeze(function () {
+export const BrowserUtil = Object.freeze(() => {
     //check if navigator is unavailable in current browser
     if (!navigator) {
         return {
             osName: 'Unknown',
-            osVer: 'Unknown',
+            osVer: -1,
             browserName: 'Unknown',
-            browserVer: 'Unknown',
+            browserVer: -1,
             userAgent: 'Unknown',
             appVersion: 'Unknown',
             platform: 'Unknown',
             vendor: 'Unknown',
+            region: 'Unknown',
             language: 'Unknown',
-            hasCookies: 'Unknown'
+            cookieEnabled: false
         };
+    }
+
+    /**
+     * @private
+     * @interface
+     * @description - defines a browser data map object
+     */
+    interface BrowserDataMap {
+        name: string;
+        value?: string;
+        version: number | string;
     }
 
     /**
@@ -26,13 +57,15 @@ const BrowserUtil = Object.freeze(function () {
      * @param {Array} agent - browser agent information
      * @param {Array} dataMap - os/browser data mapping
      */
-    const matchData = (agent, dataMap) => {
+    const matchData = (agent: string, dataMap: BrowserDataMap[]): BrowserDataMap => {
         //default browser/os information
         for (let i = 0, dLen = dataMap.length; i < dLen; i++) {
-            if ((new RegExp(dataMap[i].value, 'i')).test(agent)) {
+            const map: BrowserDataMap = dataMap[i];
+
+            if ((new RegExp(map.value || '', 'i')).test(agent)) {
                 //matches the current device to the equivalent mapping
                 let matches = agent.match(
-                    new RegExp(`${dataMap[i].version}[- /:;]([\\d._]+)`, 'i')
+                    new RegExp(`${map.version}[- /:;]([\\d._]+)`, 'i')
                 );
 
                 let ver = '0'; //os/browser version
@@ -46,7 +79,7 @@ const BrowserUtil = Object.freeze(function () {
                 }
 
                 return {
-                    name: dataMap[i].name,
+                    name: map.name,
                     version: parseFloat(ver)
                 };
             }
@@ -68,8 +101,7 @@ const BrowserUtil = Object.freeze(function () {
         navPlatform,
         navAgent,
         navVersion,
-        navVendor,
-        window.opera
+        navVendor
     ]).join(' ');
 
     //map of known operating systems (desktop/mobile)
@@ -109,10 +141,9 @@ const BrowserUtil = Object.freeze(function () {
         userAgent: navAgent,
         appVersion: navVersion,
         platform: navPlatform,
+        region: 'TODO',
         vendor: navVendor,
         language: navigator.language,
-        hasCookies: navigator.hasCookies
+        cookieEnabled: navigator.cookieEnabled
     };
-}());
-
-export default BrowserUtil;
+})();

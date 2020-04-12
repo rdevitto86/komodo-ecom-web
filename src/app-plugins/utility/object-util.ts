@@ -8,10 +8,10 @@ export default class ObjectArrayUtil {
      * @static
      * @function ObjectUtil#deepCopy
      * @description - creates a unique (deep) object copy
-     * @param {Object} obj - object to clone
-     * @returns {Object}
+     * @param {Any} obj - object to clone
+     * @returns {Any}
      */
-    public static deepCopy(obj): object {
+    static deepCopy(obj: any): any {
         if (!obj || typeof obj !== 'object') {
             return obj;
         }
@@ -29,10 +29,10 @@ export default class ObjectArrayUtil {
      * @static
      * @function ObjectUtil#shallowCopy
      * @description - creates a shallow object copy
-     * @param {Object} obj - object to clone
-     * @returns {Object}
+     * @param {Any} obj - object to clone
+     * @returns {Any}
      */
-    public static shallowCopy(obj): object {
+    static shallowCopy(obj: any): any {
         if (!obj || typeof obj !== 'object') {
             return obj;
         }

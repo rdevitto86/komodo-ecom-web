@@ -1,6 +1,6 @@
 /**
  * @interface
- * @description - defines a new abstract class for Payment Accounts
+ * @description defines a new abstract class for Payment Accounts
  */
 export interface PaymentAccount {
     provider: string;
@@ -8,7 +8,7 @@ export interface PaymentAccount {
 
 /**
  * @class PaymentAccount
- * @description - defines a new Payment Account model
+ * @description defines a new Payment Account model
  */
 export class PaymentAccount {
     public provider = '';

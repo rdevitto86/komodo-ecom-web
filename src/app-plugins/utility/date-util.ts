@@ -11,7 +11,7 @@ export default class DateUtil {
      * @returns {String}
      * @see convertToUTCString
      */
-    public static getCurrentTimeUTC(): string {
+    static getCurrentTimeUTC(): string {
         return this.convertToUTCString((new Date()));
     }
 
@@ -23,7 +23,7 @@ export default class DateUtil {
      * @returns {String}
      * @see convertToISOString
      */
-    public static getCurrentTimeISO(): string {
+    static getCurrentTimeISO(): string {
         return this.convertToISOString((new Date()));
     }
 
@@ -34,7 +34,7 @@ export default class DateUtil {
      * @description - returns the current date in milliseconds
      * @returns {Number}
      */
-    public static getCurrentUTCTimeInMillisec(): number {
+    static getCurrentUTCTimeInMillisec(): number {
         return Date.now();
     }
 
@@ -46,7 +46,7 @@ export default class DateUtil {
      * @param {Date} date - date object to analyze
      * @returns {Number}
      */
-    public static getUTCTimeZoneOffset(date: Date = undefined): number {
+    static getUTCTimeZoneOffset(date: Date): number {
         return (date instanceof Date) ? date.getTimezoneOffset() : -1;
     }
 
@@ -58,7 +58,7 @@ export default class DateUtil {
      * @param {Date} date - date to convert to UTC
      * @returns {String}
      */
-    public static convertToUTCString(date: Date = undefined): string {
+    static convertToUTCString(date: Date): string {
         return (date instanceof Date) ? date.toUTCString() : '';
     }
 
@@ -70,7 +70,7 @@ export default class DateUtil {
      * @param {Date} date - date to convert to ISO
      * @returns {String}
      */
-    public static convertToISOString(date: Date = undefined): string {
+    static convertToISOString(date: Date): string {
         return (date instanceof Date) ? date.toISOString() : '';
     }
 
@@ -82,7 +82,7 @@ export default class DateUtil {
      * @param {Any} date - date to convert
      * @returns {Date}
      */
-    static convertDateToLocalTime(date = undefined): Date {
+    static convertDateToLocalTime(date: Date | number | string): Date {
         switch (typeof date) {
             case 'string':
             case 'number':
@@ -114,7 +114,7 @@ export default class DateUtil {
      * @param {Any} date - date in local time zone
      * @returns {Date}
      */
-    public static convertDateToUTC(date: Date | number | string = undefined): Date {
+    static convertDateToUTC(date: Date | number | string): Date {
         //convert string/number to local date
         if (typeof date === 'string' || typeof date === 'number') {
             date = new Date(date);

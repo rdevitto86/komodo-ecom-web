@@ -4,19 +4,11 @@ import { Address } from './address';
 import { UserResponse, UserType } from './service-responses/user-response';
 
 /**
- * @interface
- * @description - defines the structure of the ACCOUNT_TYPES map
- */
-interface AccountTypes {
-    [key: number]: UserType;
-}
-
-/**
  * @readonly
  * @constant ACCOUNT_TYPES
- * @description - map of known account types
+ * @description map of known account types
  */
-const ACCOUNT_TYPES: AccountTypes = Object.freeze({
+const ACCOUNT_TYPES: { [key: number]: UserType } = Object.freeze({
     1: {
         name: 'GUEST',
         value: 1
@@ -41,23 +33,23 @@ const ACCOUNT_TYPES: AccountTypes = Object.freeze({
 
 /**
  * @interface
- * @description - defines an abstract Billing object
+ * @description defines an abstract Billing object
  */
 export interface User {
     //user account type
-    type: UserType;
+    type?: UserType;
 
     //user name information
     prefix?: string;
-    firstName: string;
+    firstName?: string;
     initial?: string;
-    lastName: string;
+    lastName?: string;
     suffix?: string;
 
     //contact information
-    email: string;
-    cell: string;
-    contactPrimary: string;
+    email?: string;
+    cell?: string;
+    contactPrimary?: string;
     contactSecondary?: string;
 
     //address and/or company details
@@ -69,56 +61,35 @@ export interface User {
 }
 
 /**
- * @class User
- * @description - defines a new User singleton
+ * @singleton
+ * @constant User
+ * @class UserModel
+ * @description defines a new User singleton
  */
-export class User {
-    private static instance: User;
+export const User = new class UserModel {
+    public type: UserType = {
+        ...ACCOUNT_TYPES[1]
+    };
 
-    /**
-     * @private
-     * @constructor
-     * @description - creates a new User singleton
-     */
-    private constructor() {
-        this.type = {
-            ...ACCOUNT_TYPES[1]
-        };
+    public prefix = '';
+    public firstName = '';
+    public initial = '';
+    public lastName = '';
+    public suffix = '';
+    public email = '';
+    public cell = '';
+    public contactPrimary = '';
+    public contactSecondary = '';
 
-        this.prefix = '';
-        this.firstName = '';
-        this.initial = '';
-        this.lastName = '';
-        this.suffix = '';
-        this.email = '';
-        this.cell = '';
-        this.contactPrimary = '';
-        this.contactSecondary = '';
-
-        this.address = null;
-        this.billing = null;
-        this.company = null;
-    }
-
-    /**
-     * @public
-     * @static
-     * @function Billing#getInstance
-     * @description - gets the singleton instance for billing
-     * @returns {User}
-     */
-    static getInstance(): User {
-        if (!User.instance) {
-            User.instance = new User();
-        }
-        return User.instance;
-    }
+    public address: Address | null = null;
+    public billing: Billing | null = null;
+    public company: Company | null = null;
 
     /**
      * @public
      * @function User#setUserDetails
-     * @description - sets user details based
-     * @param {Object} details - object containing user details
+     * @description sets user details based
+     * @param {Object} details object containing user details
      */
     setUserDetails(details: UserResponse): void {
         //user profile information
@@ -131,7 +102,7 @@ export class User {
             billingInfo
         } = details;
 
-        //user account type
+        //set user account type
         if (type && typeof type === 'object') {
             this.type = ACCOUNT_TYPES[type.value];
         }
@@ -141,21 +112,41 @@ export class User {
             prefix, firstName, initial, lastName, suffix
         } = nameInfo;
 
-        this.prefix = prefix;
-        this.firstName = firstName;
-        this.initial = initial;
-        this.lastName = lastName;
-        this.suffix = suffix;
+        //set user name information
+        if (typeof prefix === 'string') {
+            this.prefix = prefix;
+        }
+        if (typeof firstName === 'string') {
+            this.firstName = firstName;
+        }
+        if (typeof initial === 'string') {
+            this.initial = initial;
+        }
+        if (typeof lastName === 'string') {
+            this.lastName = lastName;
+        }
+        if (typeof suffix === 'string') {
+            this.suffix = suffix;
+        }
 
         //user contact information
         const {
             email, cell, contactPrimary, contactSecondary
         } = contactInfo;
 
-        this.email = email;
-        this.cell = cell;
-        this.contactPrimary = contactPrimary;
-        this.contactSecondary = contactSecondary;
+        //set user contact information
+        if (typeof email === 'string') {
+            this.email = email;
+        }
+        if (typeof cell === 'string') {
+            this.cell = cell;
+        }
+        if (typeof contactPrimary === 'string') {
+            this.contactPrimary = contactPrimary;
+        }
+        if (typeof contactSecondary === 'string') {
+            this.contactSecondary = contactSecondary;
+        }
 
         //set the address info
         if (addressInfo && typeof addressInfo === 'object') {
@@ -173,10 +164,51 @@ export class User {
 
     /**
      * @public
-     * @function User#clearData
-     * @description - resets all local data to the default state
+     * @function User#formatDefaultName
+     * @description formats the standard name for the current user
+     * @returns {String}
      */
-    clearData(): void {
-        User.instance = new User();
+    formatDefaultName(): string {
+        return `${this.firstName} ${this.lastName}`;
     }
-}
+
+    /**
+     * @public
+     * @function User#formatFullName
+     * @description formats the full name for the current user
+     * @returns {String}
+     */
+    formatFullName(): string {
+        const prefix = (this.prefix) ? `${this.prefix} ` : '';
+        const initial = (this.initial) ? `${this.initial} ` : '';
+        const suffix = (this.suffix) ? this.suffix : '';
+
+        return (prefix + this.firstName + initial + this.lastName + suffix);
+    }
+
+    /**
+     * @public
+     * @function User#reset
+     * @description resets all local data to the default state
+     */
+    reset(): void {
+        this.type = {
+            ...ACCOUNT_TYPES[1]
+        };
+
+        this.prefix = '';
+        this.firstName = '';
+        this.initial = '';
+        this.lastName = '';
+        this.suffix = '';
+
+        this.email = '';
+        this.cell = '';
+        this.contactPrimary = '';
+        this.contactSecondary = '';
+
+        this.address = null;
+        this.billing = null;
+        this.company = null;
+    }
+}();

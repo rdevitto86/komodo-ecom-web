@@ -11,7 +11,7 @@ export default class MathUtil {
      * @param {Number || String} sum - currency value
      * @returns {String}
      */
-    public static formatDollars(sum: number | string): string {
+    static formatDollars(sum: number | string): string {
         const paramType = typeof sum;
         return (paramType === 'number' || paramType === 'string')
             ? `$${Number(sum).toFixed(2)}` : '$0.00';
@@ -26,7 +26,7 @@ export default class MathUtil {
      * @param {Number || String} milliseconds
      * @returns {Object}
      */
-    public static convertMillisecToTimeUnits(milliseconds: number | string): object {
+    static convertMillisecToTimeUnits(milliseconds: number | string): object {
         if (typeof milliseconds !== 'number') {
             if (typeof milliseconds === 'string') {
                 milliseconds = Number.parseFloat(milliseconds);
@@ -62,9 +62,7 @@ export default class MathUtil {
      * @param {Date} previous - past date
      * @returns {Object}
      */
-    public static calculateTimeDifference(
-        recent: Date = undefined, previous: Date = undefined
-    ): object {
+    static calculateTimeDifference(recent: Date, previous: Date): object {
         if (!(recent instanceof Date) || !(previous instanceof Date)) {
             return {};
         }
@@ -83,5 +81,49 @@ export default class MathUtil {
             months: (months > 0) ? months : 0,
             years: years
         };
+    }
+
+    /**
+     * @public
+     * @static
+     * @property MINUTE_IN_MS
+     * @description gets the number of milliseconds in 1min
+     * @returns {Number}
+     */
+    static get MINUTE_IN_MS(): number {
+        return 60000;
+    }
+
+    /**
+     * @public
+     * @static
+     * @property MINUTE_IN_MS
+     * @description gets the number of milliseconds in 1hr
+     * @returns {Number}
+     */
+    static get HOUR_IN_MS(): number {
+        return 3600000;
+    }
+
+    /**
+     * @public
+     * @static
+     * @property MINUTE_IN_MS
+     * @description gets the number of milliseconds in 1 week
+     * @returns {Number}
+     */
+    static get WEEK_IN_MS(): number {
+        return 604800000;
+    }
+
+    /**
+     * @public
+     * @static
+     * @property MINUTE_IN_MS
+     * @description gets the number of milliseconds in 1 month
+     * @returns {Number}
+     */
+    static get MONTH_IN_MS(): number {
+        return 2419200000;
     }
 }
