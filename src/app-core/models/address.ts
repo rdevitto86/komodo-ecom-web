@@ -1,6 +1,6 @@
 /**
  * @interface
- * @description - abstract template for new Address objects
+ * @description defines a new abstract class for Address
  */
 export interface Address {
     line1: string;
@@ -13,8 +13,8 @@ export interface Address {
 }
 
 /**
- * @class Address
- * @description - defines a new Address object
+ * @class
+ * @description defines a new Address model
  */
 export class Address {
     public line1 = '';
@@ -27,7 +27,7 @@ export class Address {
 
     /**
      * @constructor
-     * @param {Address} details - object containing address details
+     * @param {Address} details object containing address details
      */
     constructor(details?: Address) {
         if (!details || details.constructor !== Object) {
@@ -56,10 +56,10 @@ export class Address {
     /**
      * @public
      * @function Address#printAddress
-     * @description - converts an address to standardized format
-     * @returns {String} - Example: One Apple Park Way, Cupertino, CA 95014 US
+     * @description converts an address to standardized format
+     * @returns {String} Example: One Apple Park Way, Cupertino, CA 95014 US
      */
-    public printAddress(): string {
+    printAddress(): string {
         let addressString = this.line1;
         addressString += (this.line2) ? ` ${this.line2}` : '';
         addressString += `, ${this.city}, ${this.region}`;

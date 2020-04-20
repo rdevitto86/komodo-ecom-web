@@ -15,9 +15,14 @@ Built using the Flux, Module/Component, and Observer design patterns.
 
 ## Components
   - common
-    - HeaderDesktop
-    - SideMenuNavDesktop
-    - FooterDesktop
+    - footers
+    - headers
+    - login
+    - menus
+    - popups
+    - ui
+      - buttons
+        - ButtonGeneric
     
   - ui_library
     - MediaTriangleVertical
@@ -25,14 +30,33 @@ Built using the Flux, Module/Component, and Observer design patterns.
 
 ## Services
   - AuthService
-  - UserService
-  - ProductService
   - CartService
-  - PaymentService
-  - OrderService
+  - CustSupportService
+  - HTTPClient
   - MarketingService
   - NewsBlogService
-  - CustSupportService
+  - OrderService
+  - PaymentService
+  - ProductService
+  - UserService
+
+## Models
+  - Address
+  - Billing
+  - Company
+  - ContractService
+  - Invoice
+  - PaymentAccount
+  - Product
+  - User
+  - Service Responses
+    - AuthResponse
+    - PaymentResponse
+    - ServiceError
+    - UserResponse
+  - Errors
+    - AccessError
+    - ActionError
 
 ## Supplemental
   - BrowserUtil

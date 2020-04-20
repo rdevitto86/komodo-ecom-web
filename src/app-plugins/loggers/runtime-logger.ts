@@ -54,8 +54,8 @@ const _defaultPriority = ((LOG_LEVELS[_defaultLevel] || {}).priority) || 5;
 
 /**
  * @singleton
- * @constant LOGGER
- * @class RuntimeLogger
+ * @constant RuntimeLogger
+ * @class
  * @version 0.1.2
  * @description creates a runtime logger that records errors and client-side activity
  */

@@ -1,0 +1,33 @@
+@import "../../../styling-global.scss";
+
+.navbar_primary {
+    background-color: white;
+    align-content: center;
+    // z-index: 2;
+    width: 100px;
+    height: 90vh;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.button_visibility {
+    color: green;
+}
+
+.button_nav {
+    color: $TEXT_KOMODO_BLUE;
+    background-color: $BG_PRIMARY;
+    font-family: $FONT_KOMODO_PRIMARY;
+    font-size: 100%;
+    text-align: center;
+    margin-top: 120px;
+    padding: 12px 12px;
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
+    cursor: pointer;
+}

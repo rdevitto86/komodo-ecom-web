@@ -37,14 +37,21 @@ module.exports = {
         }
     },
     rules: {
-        //react properties
+        //react rules
         'react/jsx-indent': 'off',
+        'react/jsx-indent-props': 'off',
+        'react/jsx-boolean-value': 'off',
+        'react/destructuring-assignment': 'off',
+        'react/jsx-closing-tag-location': 'off',
+        'react/jsx-one-expression-per-line': 'off',
         'react/jsx-filename-extension': [2, { 
             extensions: ['.js', '.jsx', '.ts', '.tsx'] 
         }],
 
-        //typescript properties
+        //typescript rules
         '@typescript-eslint/indent': 'off',
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
         // 'import/no-extraneous-dependencies': [2, { 
         //     devDependencies: ['**/test.tsx', '**/test.ts'] 
         // }],
@@ -71,10 +78,7 @@ module.exports = {
         'prefer-template': 'warn',
         'lines-between-class-members': 'off',
         'import/extensions': 'off',
-
-        //typescript rules
-        '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/no-explicit-any': 'off'
+        'max-classes-per-file': 'off',
     }, overrides: [{
         files: ['*.ts', '*.tsx'],
         rules: {

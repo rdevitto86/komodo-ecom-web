@@ -30,11 +30,12 @@ export default class AuthService extends HTTPService {
         }).then((response: LoginResponse) => {
             //check if response contains valid session token
             if (response && typeof response === 'object' && response.sessionToken) {
+                //set the session token
                 sessionStorage.setItem(
                     AppConfig.SESSION_KEY_CLIENT, response.sessionToken
                 );
 
-                //TODO - set user object (in state or other location)
+                //set the user details
                 User.setUserDetails(response.data);
 
                 //execute callback function
