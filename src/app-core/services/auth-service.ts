@@ -1,5 +1,6 @@
 import HTTP from './wrappers/http';
 import ValidationUtil from '../../app-supplementary/util/validation-util';
+import { LoginResponse } from './responses/auth-response';
 
 /**
  * @class
@@ -25,7 +26,7 @@ export default class AuthService extends HTTP {
      * @param {String} username user login ID
      * @param {String} password account password
      * @returns {Promise<Object | Undefined>} account information
-     * @see HTTP.post
+     * @see HTTP.POST
      */
     static async login(username: string, password: string): Promise<Object | undefined> {
         if (!ValidationUtil.isString([username, password])) {
@@ -36,7 +37,7 @@ export default class AuthService extends HTTP {
             username, password
         });
 
-        const data = response.json();
+        const data: LoginResponse = response.json();
 
         // TODO - determine if token should be set here or in login component
         if (response.ok) {
@@ -53,7 +54,7 @@ export default class AuthService extends HTTP {
      * @description logs-out a user and invalidates session token
      * @param {String} username user login ID
      * @returns {Promise<Boolean>} log-out status (true/false)
-     * @see HTTP.post
+     * @see HTTP.POST
      */
     static async logout(username: string): Promise<boolean> {
         if (!ValidationUtil.isString(username)) {
@@ -76,15 +77,11 @@ export default class AuthService extends HTTP {
      * @async
      * @function AuthService.valididateSession
      * @description checks if a session token is valid
-     * @returns {Promise<Boolean | Undefined>} session validity (true/false/undefined)
-     * @see HTTP.post
+     * @returns {Promise<Boolean>} session validity (true/false/undefined)
+     * @see HTTP.POST
      */
-    static async valididateSession(): Promise<Boolean | undefined> {
-        const response = await this.POST(this._SERVICE_URL, {
-
-        });
-
-        // @ts-ignore
-        return (response.ok) ? (response.json()).isValid : undefined;
+    static async valididateSession(): Promise<boolean> {
+        const response = await this.POST(this._SERVICE_URL, {});
+        return response.ok || false;
     }
 }

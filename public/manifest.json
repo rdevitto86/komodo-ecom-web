@@ -1,0 +1,18 @@
+{
+    "short_name": "Komodo Solutions",
+    "name": "Komodo Future Solutions",
+    "icons": [
+      {
+        "src": "favicon.ico",
+        "sizes": "64x64 32x32 24x24 16x16",
+        "type": "image/x-icon"
+      }
+    ],
+    "start_url": ".",
+    "display": "browser",
+    "theme_color": "#000000",
+    "background_color": "#1C1C1C",
+    "screenshots": [],
+    "shortcuts": []
+  }
+  

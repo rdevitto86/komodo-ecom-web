@@ -1,6 +1,6 @@
-@import "./styling-global.scss";
+@import '../app-core/assets/styles/styling-global.scss';
 
-.landing-desktop-bootstrap {
+#app-root-react {
     color: $BG_PRIMARY;
     height: 100%;
     width: 100%;
