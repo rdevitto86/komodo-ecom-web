@@ -12,6 +12,7 @@ export default class WorkerThread {
     /**
      * @public
      * @readonly
+     * @property {String | Undefined} id
      * @description thread indentifier
      */
     public readonly id?: string;
@@ -19,43 +20,51 @@ export default class WorkerThread {
     /**
      * @public
      * @readonly
+     * @property {String | Undefined} filepath
      * @description thread executable filepath
      */
     public readonly filepath?: string;
 
     /**
      * @public
+     * @readonly
+     * @property {Function | Undefined} listener
+     * @description parent-thread listener function
+     */
+    public readonly listener?: Function;
+
+    /**
+     * @public
+     * @property {Boolean} isActive
+     * @description timestamp of thread termination
+     */
+    public isActive: boolean = false;
+
+    /**
+     * @public
+     * @property {String | Undefined} createdTimestamp
      * @description timestamp of thread creation
      */
     public createdTimestamp?: string;
 
     /**
      * @public
+     * @property {String | Undefined} terminatedTimestamp
      * @description timestamp of thread termination
      */
     public terminatedTimestamp?: string;
 
     /**
      * @private
+     * @property {Worker | Undefined} _thread
      * @description web worker thread instance
      */
     private _thread?: Worker;
 
     /**
      * @private
-     * @description messenge handler callback (parent thread)
-     */
-    private _msgCallback: Function = () => {};
-
-    /**
-     * @private
-     * @description error callback (parent thread)
-     */
-    private _errCallback: Function = () => {};
-
-    /**
-     * @private
-     * @description prevents thread creation
+     * @property {Boolean} _enabled
+     * @description enables/disables thread creation
      */
     private _enabled: boolean = !!(window.Worker);
 
@@ -66,20 +75,14 @@ export default class WorkerThread {
      * @param {Function} msgCallback workerthread message handler
      * @param {Function} errCallback workerthread message handler
      */
-    constructor(id: string, filepath: string, msgCallback?: Function, errCallback?: Function) {
+    constructor(id: string, filepath: string, listener?: Function) {
         // validate and set thread properties
         this.id = id;
         this.filepath = filepath;
-
-        if (typeof msgCallback === 'function') {
-            this._msgCallback = msgCallback;
-        }
-        if (typeof errCallback === 'function') {
-            this._errCallback = errCallback;
-        }
+        this.listener = listener;
 
         // start new thread
-        this.start();
+        this.run();
     }
 
     /**
@@ -99,12 +102,12 @@ export default class WorkerThread {
 
     /**
      * @public
-     * @function WorkerThread.start
+     * @function WorkerThread.run
      * @description builds and starts a webworker thread
      * @throws {Error}
      * @see Worker
      */
-    start() {
+    run() {
         const { filepath, terminatedTimestamp, _enabled } = this;
 
         if (!_enabled) {
@@ -118,26 +121,27 @@ export default class WorkerThread {
 
         const thread = new Worker(filepath);
 
-        // handles messages sent from child thread
-        thread.onmessage = (event: any) => {
-            if (event && event.data) {
-                this._msgCallback(event.data);
-            }
-        };
+        // // handles messages sent from child thread
+        // thread.onmessage = (event: any) => {
+        //     if (event && event.data) {
+        //         this._msgCallback(event.data);
+        //     }
+        // };
 
-        // handles fatal errors thrown by child thread
-        thread.onerror = (event) => {
-            this._errCallback(event);
-            // this.terminate();
-        };
+        // // handles fatal errors thrown by child thread
+        // thread.onerror = (event) => {
+        //     this._errCallback(event);
+        //     // this.terminate();
+        // };
 
-        // handles message errors thrown by child thread
-        thread.onmessageerror = (event) => {
-            this._errCallback(event);
-        };
+        // // handles message errors thrown by child thread
+        // thread.onmessageerror = (event) => {
+        //     this._errCallback(event);
+        // };
 
         // set local thread
         this._thread = thread;
+        this.isActive = true;
 
         // reset last terminated time (if not previously)
         if (terminatedTimestamp) {
@@ -155,6 +159,7 @@ export default class WorkerThread {
             this.terminatedTimestamp = String((new Date()).getTime());
             this._thread.terminate();
             this._thread = undefined;
+            this.isActive = false;
         }
     }
 
@@ -165,7 +170,7 @@ export default class WorkerThread {
      */
     restart() {
         this.terminate();
-        this.start();
+        this.run();
     }
 
     /**
@@ -174,7 +179,6 @@ export default class WorkerThread {
      */
     get timeActive() {
         return (this.createdTimestamp)
-            ? (Date.now() - new Date(this.createdTimestamp).getTime())
-            : 0;
+            ? (Date.now() - new Date(this.createdTimestamp).getTime()) : 0;
     }
 }
