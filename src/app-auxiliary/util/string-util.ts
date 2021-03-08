@@ -1,6 +1,6 @@
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @description utility class containing string functions
  */
 export default class StringUtil {
@@ -11,10 +11,10 @@ export default class StringUtil {
      * @description truncates a string to a given length
      * @param {String} value string to truncate
      * @param {Number} maxLength maximum number of characters
-     * @param {Boolean?} addElipses adds optional '...' to end of string
+     * @param {Boolean} [addElipses] adds optional '...' to end of string
      * @returns {String} shortened value with/without added ...
      */
-    static truncate(value, maxLength, addElipses = false) {
+    static truncate(value: string, maxLength: number, addElipses: boolean = false) {
         // return current param if not string
         if (typeof value !== 'string' || typeof maxLength !== 'number' || value.length <= maxLength) {
             return value;
@@ -32,7 +32,7 @@ export default class StringUtil {
      * @param {String} value string to add elipses to
      * @returns {String} value with added ...
      */
-    static addElipses(value) {
+    static addElipses(value: string) {
         return (typeof value === 'string') ? `${value.slice(0, value.length)}...` : value;
     }
 
@@ -44,7 +44,7 @@ export default class StringUtil {
      * @param {Any} value value to convert to String
      * @returns {String} string of passed value
      */
-    static stringify(value) {
+    static stringify(value: string) {
         return JSON.stringify(value);
     }
 
@@ -56,7 +56,7 @@ export default class StringUtil {
      * @param {String} value string to trim
      * @returns {String}
      */
-    static trimWhitespace(value) {
+    static trimWhitespace(value: string) {
         return value.trim();
     }
 
@@ -68,7 +68,7 @@ export default class StringUtil {
      * @param {String} value string to trim
      * @returns {String}
      */
-    static removeWhitespace(value) {
+    static removeWhitespace(value: string) {
         return value.replaceAll(/\s/g, '');
     }
 
@@ -80,7 +80,7 @@ export default class StringUtil {
      * @param {Number | String} sum value to format
      * @returns {String} format value to $xx.xx
      */
-    static toDollars(sum) {
+    static toDollars(sum: number | string) {
         const paramType = typeof sum;
         return (paramType === 'number' || paramType === 'string')
             ? `$${Number(sum).toFixed(2)}` : '$0.00';

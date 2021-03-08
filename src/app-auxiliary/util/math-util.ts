@@ -1,6 +1,6 @@
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @description collection of utlity functions that assists with mathmatical operations
  */
 export default class MathUtil {
@@ -13,7 +13,7 @@ export default class MathUtil {
      * @param {Number} b value 2
      * @returns {Number} result
      */
-    static add(a, b) {
+    static add(a: number, b: number) {
         if (typeof a !== 'number' || typeof b !== 'number') {
             return undefined;
         }
@@ -29,7 +29,7 @@ export default class MathUtil {
      * @param {Number} b value 2
      * @returns {Number} result
      */
-    static subtract(a, b) {
+    static subtract(a: number, b: number) {
         if (typeof a !== 'number' || typeof b !== 'number') {
             return undefined;
         }
@@ -45,7 +45,7 @@ export default class MathUtil {
      * @param {Number} b value 2
      * @returns {Number} result
      */
-    static multiply(a, b) {
+    static multiply(a: number, b: number) {
         if (typeof a !== 'number' || typeof b !== 'number') {
             return undefined;
         }
@@ -61,7 +61,7 @@ export default class MathUtil {
      * @param {Number} b denominator
      * @returns {Number} result
      */
-    static divide(a, b) {
+    static divide(a: number, b: number) {
         if (typeof a !== 'number' || typeof b !== 'number') {
             return undefined;
         }
@@ -77,7 +77,7 @@ export default class MathUtil {
      * @param {Number} b numerator
      * @returns {Number} percentage
      */
-    static percentDecimal(a, b) {
+    static percentDecimal(a: number, b: number) {
         if (typeof a !== 'number' || typeof b !== 'number') {
             return undefined;
         }
@@ -93,7 +93,7 @@ export default class MathUtil {
      * @param {Number} b numerator
      * @returns {Number} percentage
      */
-    static percentWhole(a, b) {
+    static percentWhole(a: number, b: number) {
         if (typeof a !== 'number' || typeof b !== 'number') {
             return undefined;
         }
@@ -105,38 +105,66 @@ export default class MathUtil {
      * @static
      * @function MathUtil#fraction
      * @description converts a number into a fraction
-     * @param {Number} num number to convert
-     * @returns {String} fraction representation
+     * @param {Number | String} value number to convert
+     * @returns {String | Undefined} fractional representation
+     * TODO - add enhanced functionality for repeating decimals 1/3, 2/3, etc.
      */
-    static fraction(num) {
-        if (Number.parseFloat(num) === Number.parseInt(num, 10)) {
-            return num;
+    static fraction(value: number | string) {
+        // validate input for type and whole numbers
+        switch (typeof value) {
+            case 'number':
+                if (Number.isInteger(value)) {
+                    return `${value}`;
+                }
+                break;
+            case 'string':
+                if (Number.parseFloat(value) === Number.parseInt(value, 10)) {
+                    return value;
+                }
+                value = Number.parseFloat(value);
+                break;
+            default:
+                // invalid type
+                return undefined;
         }
 
         /**
-         * @closure
-         * @description finds the greatest common divisor
+         * @private
+         * @function gcd
+         * @description calculates the greatest common devisor
          * @param {Number} a numerator
          * @param {Number} b denominator
-         * @returns {Number} common divisor
+         * @returns {Number} greatest common divisor
          */
-        const gcd = (a, b) => ((b < 0) ? gcd(b, (a % b)) : a);
+        const gcd = (a: number, b: number): any => (
+            // handle float precision and calculate gcd
+            (b < 0.0000001) ? a : gcd(b, Math.floor(a % b))
+        );
 
-        let denominator = 10 ** (num.toString().length - 2);
-        let numerator = num * denominator;
+        // bottom of fraction
+        let denominator = 10 ** (value.toString().length - 2);
+
+        // top of fraction
+        let numerator = value * denominator;
 
         const divisor = gcd(numerator, denominator);
 
-        denominator /= divisor;
         numerator /= divisor;
+        denominator /= divisor;
 
-        let base = 0;
+        // leftover from mixed fraction
+        let wholeRemainder = 0;
+
+        // check for mixed fraction and calculate remainder
         if (numerator > denominator) {
-            base = Math.floor(numerator / denominator);
-            numerator -= base * denominator;
+            wholeRemainder = Math.floor(numerator / denominator);
+            numerator -= wholeRemainder * denominator;
         }
 
-        return (base) ? `${base} ${num}` : `${Math.floor(numerator)}/${Math.floor(denominator)}`;
+        // convert to fraction notation
+        value = `${Math.floor(numerator)}/${Math.floor(denominator)}`;
+
+        return (wholeRemainder) ? `${wholeRemainder} ${value}` : value;
     }
 
     /**
@@ -148,7 +176,7 @@ export default class MathUtil {
      * @param {Number} p power of value
      * @returns {Number} eponentiated number
      */
-    static power(a, p) {
+    static power(a: number, p: number) {
         if (typeof a !== 'number' || typeof p !== 'number') {
             return a;
         }
@@ -163,7 +191,7 @@ export default class MathUtil {
      * @param {Number} maxVal maximum random number. Default is 0 - 9.
      * @returns {Number} random number
      */
-    static random(maxVal) {
+    static random(maxVal: number) {
         if (typeof maxVal !== 'number' || maxVal < 1) {
             maxVal = 9;
         }
@@ -178,9 +206,9 @@ export default class MathUtil {
      * @param {Array<Number>} arr array of numbers
      * @returns {Number | undefined} sum of all array numbers
      */
-    static reduce(arr) {
+    static reduce(arr: Array<number>) {
         if (arr.constructor === Array) {
-            return arr.reduce((a, b) => a + Number.parseFloat(b), 0);
+            return arr.reduce((a, b) => a + b, 0);
         }
         return undefined;
     }
@@ -194,7 +222,7 @@ export default class MathUtil {
      * @param {Number | String} milliseconds number of milliseconds
      * @returns {Object} calculated time units
      */
-    static tranformMilliseconds(milliseconds) {
+    static tranformMilliseconds(milliseconds: number | string) {
         if (typeof milliseconds !== 'number') {
             if (typeof milliseconds === 'string') {
                 milliseconds = Number.parseFloat(milliseconds);
@@ -230,9 +258,9 @@ export default class MathUtil {
      * @param {Number | String} days number of days
      * @returns {Object} calculated time units
      */
-    static tranformDays(days) {
+    static tranformDays(days: number | string) {
         if (typeof days !== 'number') {
-            if (typeof milliseconds === 'string') {
+            if (typeof days === 'string') {
                 days = Number.parseFloat(days);
             } else {
                 return {};
@@ -266,7 +294,7 @@ export default class MathUtil {
      * @param {Date} previous past date
      * @returns {Object} difference between dates
      */
-    static calcTimeDifference(recent, previous) {
+    static calcTimeDifference(recent: Date, previous: Date) {
         if (!(recent instanceof Date) || !(previous instanceof Date)) {
             return {};
         }

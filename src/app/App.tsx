@@ -15,6 +15,7 @@ import './App.scss';
 
 /**
  * @class
+ * @version 1.0.0
  * @description root react module for the website applicaiton
  */
 function App() {

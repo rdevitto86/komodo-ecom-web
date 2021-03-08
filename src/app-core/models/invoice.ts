@@ -12,6 +12,7 @@ type LineItemData = {
 
 /**
  * @interface
+ * @version 1.0.0
  * @description defines an abstract Invoice object
  */
 export interface InvoiceAbstract {

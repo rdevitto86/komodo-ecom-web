@@ -5,6 +5,7 @@
 
 /**
  * @class
+ * @version 1.0.0
  * @description
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers
  */
@@ -15,7 +16,7 @@ export default class WorkerThread {
      * @property {String | Undefined} id
      * @description thread indentifier
      */
-    public readonly id?: string;
+    public readonly id: string;
 
     /**
      * @public
@@ -23,15 +24,15 @@ export default class WorkerThread {
      * @property {String | Undefined} filepath
      * @description thread executable filepath
      */
-    public readonly filepath?: string;
+    public readonly filepath: string;
 
     /**
      * @public
      * @readonly
-     * @property {Function | Undefined} listener
+     * @property {Function | Function[] | Undefined} listener
      * @description parent-thread listener function
      */
-    public readonly listener?: Function;
+    public readonly listener?: Function | Function[];
 
     /**
      * @public
@@ -62,41 +63,26 @@ export default class WorkerThread {
     private _thread?: Worker;
 
     /**
-     * @private
-     * @property {Boolean} _enabled
-     * @description enables/disables thread creation
-     */
-    private _enabled: boolean = !!(window.Worker);
-
-    /**
      * @constructor
      * @param {String} id thread identifier
-     * @param {String} filepath workerthread executable filepath
-     * @param {Function} msgCallback workerthread message handler
-     * @param {Function} errCallback workerthread message handler
+     * @param {String} filepath thread executable filepath
+     * @param {Function | Function[] | Undefined} [listener] workerthread message handler
      */
-    constructor(id: string, filepath: string, listener?: Function) {
+    constructor(id: string, filepath: string, listener?: Function | Function[]) {
         // validate and set thread properties
         this.id = id;
         this.filepath = filepath;
         this.listener = listener;
 
-        // start new thread
-        this.run();
-    }
-
-    /**
-     * @public
-     * @function WorkerThread.postMessage
-     * @description sends information to child thread
-     * @param {any} message data to send to child thread
-     * @throws {Error}
-     */
-    postMessage(message: any) {
-        if (this._thread) {
-            this._thread.postMessage(message);
+        // disable functionality if web workers not supported
+        if (window.Worker) {
+            // start new thread
+            this.run();
         } else {
-            throw Error('failed to post message - worker thread non-exsistant');
+            this.run = () => false;
+            this.postMessage = () => false;
+            this.terminate = () => false;
+            this.restart = () => false;
         }
     }
 
@@ -104,15 +90,13 @@ export default class WorkerThread {
      * @public
      * @function WorkerThread.run
      * @description builds and starts a webworker thread
+     * @returns {Boolean} success/failure
      * @throws {Error}
      * @see Worker
      */
     run() {
-        const { filepath, terminatedTimestamp, _enabled } = this;
+        const { filepath, terminatedTimestamp } = this;
 
-        if (!_enabled) {
-            throw new Error('failed to start worker thread - web workers not supported');
-        }
         if (!filepath) {
             throw new Error('failed to start worker thread - missing filepath');
         }
@@ -147,34 +131,55 @@ export default class WorkerThread {
         if (terminatedTimestamp) {
             this.terminatedTimestamp = undefined;
         }
+        return true;
+    }
+
+    /**
+     * @public
+     * @function WorkerThread.postMessage
+     * @description sends information to child thread
+     * @param {any} message data to send to child thread
+     * @returns {Boolean} success/failure
+     * @throws {Error}
+     */
+    postMessage(message: any): boolean {
+        if (!this._thread) {
+            throw Error('failed to post message - worker thread non-exsistant');
+        }
+        this._thread.postMessage(message);
+        return true;
     }
 
     /**
      * @public
      * @function WorkerThread.terminate
      * @description terminates/ends the current thread
+     * @returns {Boolean} success/failure
      */
-    terminate() {
+    terminate(): boolean {
         if (this._thread) {
             this.terminatedTimestamp = String((new Date()).getTime());
             this._thread.terminate();
             this._thread = undefined;
             this.isActive = false;
+            return true;
         }
+        return false;
     }
 
     /**
      * @public
      * @function WorkerThread.restart
      * @description restarts the worker thread
+     * @returns {Boolean} success/failure
      */
-    restart() {
-        this.terminate();
-        this.run();
+    restart(): boolean {
+        return (this.terminate()) ? this.run() : false;
     }
 
     /**
      * @public
+     * @property {Number} timeActive
      * @description returns the total time (in milliseconds) since thread start
      */
     get timeActive() {

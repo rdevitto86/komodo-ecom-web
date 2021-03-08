@@ -1,6 +1,6 @@
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @description collection of utlity functions that assists with dates/time
  */
 export default class DateUtil {
@@ -47,7 +47,7 @@ export default class DateUtil {
      * @param {Date} date date object to analyze
      * @returns {Number}
      */
-    static getUTCTimeZoneOffset(date) {
+    static getUTCTimeZoneOffset(date: Date) {
         return (date instanceof Date) ? date.getTimezoneOffset() : -1;
     }
 
@@ -59,7 +59,7 @@ export default class DateUtil {
      * @param {Date} date date to convert to UTC
      * @returns {String}
      */
-    static convertToUTCString(date) {
+    static convertToUTCString(date: Date) {
         return (date instanceof Date) ? date.toUTCString() : '';
     }
 
@@ -71,7 +71,7 @@ export default class DateUtil {
      * @param {Date} date date to convert to ISO
      * @returns {String}
      */
-    static convertToISOString(date) {
+    static convertToISOString(date: Date) {
         return (date instanceof Date) ? date.toISOString() : '';
     }
 
@@ -83,7 +83,7 @@ export default class DateUtil {
      * @param {Date | Number| String} date date to convert
      * @returns {Date}
      */
-    static convertDateToLocalTime(date) {
+    static convertDateToLocalTime(date: Date) {
         switch (typeof date) {
             case 'string':
             case 'number':
@@ -115,7 +115,7 @@ export default class DateUtil {
      * @param {Date | Number| String} date date in local time zone
      * @returns {Date}
      */
-    static convertDateToUTC(date) {
+    static convertDateToUTC(date: Date) {
         // convert string/number to local date
         if (typeof date === 'string' || typeof date === 'number') {
             date = new Date(date);

@@ -1,5 +1,6 @@
 /**
  * @class
+ * @version 1.0.0
  * @description service wrapper for REST HTTP operations
  */
 export default class HTTP {

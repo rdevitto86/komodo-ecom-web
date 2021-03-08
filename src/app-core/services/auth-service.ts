@@ -1,9 +1,10 @@
 import HTTP from './wrappers/http';
-import ValidationUtil from '../../app-supplementary/util/validation-util';
+import ValidationUtil from '../../app-auxiliary/util/validation-util';
 import { LoginResponse } from './responses/auth-response';
 
 /**
  * @class
+ * @version 1.0.0
  * @extends {HTTP}
  * @description handles requests/responses for the Authorization service
  */

@@ -1,5 +1,5 @@
 import HTTP from './wrappers/http';
-import ValidationUtil from '../../app-supplementary/util/validation-util';
+import ValidationUtil from '../../app-auxiliary/util/validation-util';
 import { CatalogItem, CatalogItemAbstract } from '../models/catalog-item';
 
 // /**
@@ -13,6 +13,7 @@ import { CatalogItem, CatalogItemAbstract } from '../models/catalog-item';
 
 /**
  * @class
+ * @version 1.0.0
  * @description handles requests/responses for the Catalog service
  */
 export default class CatalogService extends HTTP {

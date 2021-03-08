@@ -13,6 +13,7 @@ export interface CatalogItemAbstract {
 
 /**
  * @class
+ * @version 1.0.0
  * @implements {CatalogItemAbstract}
  * @description defines a new Catalog Item model
  */

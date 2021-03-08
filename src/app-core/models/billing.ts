@@ -12,6 +12,7 @@ export interface BillingAbstract {
 
 /**
  * @class
+ * @version 1.0.0
  * @implements {BillingAbstract}
  * @description defines a new Billing model
  */

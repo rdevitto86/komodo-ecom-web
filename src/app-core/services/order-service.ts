@@ -1,7 +1,8 @@
-import ValidationUtil from '../../app-supplementary/util/validation-util';
+import ValidationUtil from '../../app-auxiliary/util/validation-util';
 
 /**
  * @class
+ * @version 1.0.0
  * @description handles requests/responses for the Finance service
  */
 export default class OrderService {

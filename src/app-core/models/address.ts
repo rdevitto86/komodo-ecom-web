@@ -14,6 +14,7 @@ export interface AddressAbstract {
 
 /**
  * @class
+ * @version 1.0.0
  * @implements {AddressAbstract}
  * @description defines a new Address model
  */

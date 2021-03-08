@@ -2,6 +2,7 @@
 
 /**
  * @class
+ * @version 1.0.0
  * @description handles requests/responses for the Payment service
  */
 export default class PaymentService {
