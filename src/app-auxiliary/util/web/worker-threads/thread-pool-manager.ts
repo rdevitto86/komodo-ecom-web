@@ -2,7 +2,7 @@ import ThreadPool from './thread-pool';
 
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @singleton
  * @description manages worker thread pools
  */

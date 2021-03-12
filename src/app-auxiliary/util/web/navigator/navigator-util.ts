@@ -5,7 +5,7 @@
  * @description creates a mapping of available browser details
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Navigator
  */
-class PlatformUtil {
+class NavigatorUtil {
     /**
      * @public
      * @property {Boolean} [isDesktop]
@@ -92,11 +92,11 @@ class PlatformUtil {
                 userAgent, connection, language, cookieEnabled, doNotTrack
             } = navigator;
 
-            const agentLower = userAgent.toLowerCase();
-
             this.userAgent = userAgent;
             this.language = language;
             this.cookiesEnabled = cookieEnabled;
+
+            const agentLower = userAgent.toLowerCase();
 
             const isDesktop = /windows|mac os|linux/i.test(agentLower);
             const isPhone = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(agentLower);
@@ -173,5 +173,5 @@ class PlatformUtil {
     }
 }
 
-const singleton = new PlatformUtil();
+const singleton = new NavigatorUtil();
 export default singleton;

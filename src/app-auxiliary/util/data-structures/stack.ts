@@ -1,15 +1,21 @@
+// TODO - consider WeakMap for increased security
+
 /**
  * @class
  * @version 1.0
- * @description implementation of Stack
+ * @description implementation of a FILO stack
+ * @complexity
+ *  - add => O(1)
+ *  - remove => O(1)
+ *  - search => O(n)
  */
 export default class Stack {
     /**
      * @private
-     * @property {Array<Any>} _items
-     * @description
+     * @property {Array<Any>} _stack
+     * @description queues items based on FILO
      */
-    private _items: Array<any> = [];
+    private _stack: Array<any> = [];
 
     /**
      * @public
@@ -18,7 +24,7 @@ export default class Stack {
      * @param {Any} item item to add
      */
     push(item: any) {
-        this._items.push(item);
+        this._stack.push(item);
     }
 
     /**
@@ -28,7 +34,7 @@ export default class Stack {
      * @returns {Any | Undefined} stack item
      */
     pop() {
-        return (this._items.length > 0) ? this._items.pop() : undefined;
+        return (this._stack.length > 0) ? this._stack.pop() : undefined;
     }
 
     /**
@@ -38,7 +44,7 @@ export default class Stack {
      * @returns {Any | Undefined} stack item
      */
     peek() {
-        return (this._items.length > 0) ? this._items[this._items.length - 1] : undefined;
+        return (this._stack.length > 0) ? this._stack[this._stack.length - 1] : undefined;
     }
 
     /**
@@ -49,7 +55,7 @@ export default class Stack {
      * @returns {Number} first index of item, -1 if not found
      */
     seek(item: any) {
-        return this._items.indexOf(item);
+        return this._stack.indexOf(item);
     }
 
     /**
@@ -59,7 +65,7 @@ export default class Stack {
      * @returns {String} string print-out
      */
     print() {
-        return JSON.stringify(this._items);
+        return JSON.stringify(this._stack);
     }
 
     /**
@@ -68,7 +74,7 @@ export default class Stack {
      * @description removes all elements from stack
      */
     clear() {
-        this._items = [];
+        this._stack = [];
     }
 
     /**
@@ -77,7 +83,7 @@ export default class Stack {
      * @description current size of the stack
      */
     get size() {
-        return this._items.length;
+        return this._stack.length;
     }
 
     /**
@@ -86,6 +92,6 @@ export default class Stack {
      * @description determines if stack is empty (no items)
      */
     get isEmpty() {
-        return this._items.length === 0;
+        return this._stack.length === 0;
     }
 }

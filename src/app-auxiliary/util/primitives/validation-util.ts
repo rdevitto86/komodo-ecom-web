@@ -44,6 +44,9 @@ export default class ValidationUtil {
      * @function ValidationUtil.isString
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
+     * @example
+     *  - 'test123'
+     *  - ['t', 'e', 's', 't']
      */
     static isString(value: any) {
         // checks individual strings
@@ -81,20 +84,7 @@ export default class ValidationUtil {
      * @returns {Boolean} true/false
      */
     static isNumber(value: any) {
-        // checks individual numbers
-        if (value.constructor === Number && Number.isFinite(value)) {
-            return true;
-        }
-        // checks arrays of numbers
-        if (this.isArray(value)) {
-            for (const num of value) {
-                if (!this.isNumber(num)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
+        return (value.constructor === Number && Number.isFinite(value));
     }
 
     /**
@@ -171,21 +161,15 @@ export default class ValidationUtil {
      * @returns {Boolean} true/false
      */
     static isEmptyObject(value: any) {
-        // TODO handle Map scenario
-        return this.isObject(value) && Object.keys(value).length;
-    }
-
-    /**
-     * @public
-     * @static
-     * @function ValidationUtil.hasProperties
-     * @description checks if an object has properties
-     * @param {Any} value value to validate
-     * @returns {Boolean} true/false
-     */
-    static hasProperties(value: any) {
-        // TODO handle Map scenario
-        return this.isObject(value) && Object.keys(value).length > 0;
+        // check for Object type
+        if (this.isObject(value) && Object.keys(value).length) {
+            return true;
+        }
+        // check for Map type
+        if (this.isMap(value) && value.size) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -281,12 +265,14 @@ export default class ValidationUtil {
      * @public
      * @static
      * @function ValidationUtil.validateEmail
-     * @description performs a regex on an email string
+     * @description performs a simple regex on an email string
      * @param {String} email entered email
      * @returns {Boolean} true/false
+     * @example
+     *  - 'anystring@anystring.anystring'
      */
     static validateEmail(email: string) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        return /^[^\s@]+@[^\s@]+$/.test(email);
     }
 
     /**
@@ -296,35 +282,17 @@ export default class ValidationUtil {
      * @description performs a regex on a phone number
      * @param {String} phoneNum entered phone number
      * @returns {Boolean} true/false
+     * @example
+     *  - '(123) 456-7890'
+     *  - '(123)456-7890'
+     *  - '123-456-7890'
+     *  - '123.456.7890'
+     *  - '1234567890'
+     *  - '+01234567890'
+     *  - '000-12345678'
      */
     static validatePhoneNumber(phoneNum: string) {
         return /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im.test(phoneNum);
-    }
-
-    /**
-     * @public
-     * @static
-     * @function ValidationUtil.validatePassword
-     * @description performs a regex on a password
-     * VALID = 6 char minimum | contain at least one numeric digit | contain at least one uppercase
-     * @param {String} password entered password
-     * @returns {Boolean} true/false
-     */
-    static validatePassword(password: string) {
-        return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/.test(password);
-    }
-
-    /**
-     * @public
-     * @static
-     * @function ValidationUtil.validateAddress
-     * @description validates an entered street address
-     * @param {String} address entered address
-     * @returns {Boolean} true/false
-     */
-    static validateAddress(address: string) {
-        // TODO
-        return / /.test(address);
     }
 
     /**
@@ -334,9 +302,25 @@ export default class ValidationUtil {
      * @description validates an entered postal (zip) code
      * @param {String} zip entered zipcode
      * @returns {Boolean} true/false
+     * @example
+     *  - '12345'
+     *  - '12345-6789'
+     *  - '12345 1234'
      */
     static validateZipcode(zip: string) {
-        // TODO
-        return / /.test(zip);
+        return /^\d{5}(?:[-\s]\d{4})?$/.test(zip);
+    }
+
+    /**
+     * @public
+     * @static
+     * @function ValidationUtil.validatePassword
+     * @description performs a regex on a password
+     * @param {String} password entered password
+     * @returns {Boolean} true/false
+     * @example
+     */
+    static validatePassword(password: string) {
+        return / /.test(password);
     }
 }

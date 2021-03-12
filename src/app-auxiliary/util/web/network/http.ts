@@ -1,12 +1,12 @@
+/* eslint-disable class-methods-use-this */
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @description service wrapper for REST HTTP operations
  */
 export default class HTTP {
     /**
      * @public
-     * @static
      * @async
      * @function HTTP.GET
      * @description executes a GET request
@@ -14,7 +14,7 @@ export default class HTTP {
      * @returns {Promise<any>} response
      * @throws {Error}
      */
-    static async GET(url: string): Promise<any> {
+    async GET(url: string): Promise<any> {
         if (typeof url !== 'string') {
             throw Error('failed to execute GET request - invalid URL');
         }
@@ -24,7 +24,6 @@ export default class HTTP {
 
     /**
      * @public
-     * @static
      * @async
      * @function HTTP.POST
      * @description executes a POST request
@@ -32,11 +31,11 @@ export default class HTTP {
      * @param {Any} params request parameters
      * @returns {Promise<any>} response
      */
-    static async POST(url: string, params: any): Promise<any> {
+    async POST(url: string, params: any): Promise<any> {
         if (typeof url !== 'string') {
             throw Error('failed to execute POST request - invalid URL');
         }
-        if (!params || typeof url !== 'object') {
+        if (!params || url.constructor !== Object) {
             throw Error('failed to execute POST request - invalid params');
         }
 
@@ -48,7 +47,6 @@ export default class HTTP {
 
     /**
      * @public
-     * @static
      * @async
      * @function HTTP.PUT
      * @description executes a PUT request
@@ -57,11 +55,11 @@ export default class HTTP {
      * @returns {Promise<any>} response
      * @throws {Error}
      */
-    static async PUT(url: string, params: any): Promise<any> {
+    async PUT(url: string, params: any): Promise<any> {
         if (typeof url !== 'string') {
             throw Error('failed to execute PUT request - invalid URL');
         }
-        if (!params || typeof url !== 'object') {
+        if (!params || url.constructor !== Object) {
             throw Error('failed to execute PUT request - invalid params');
         }
 
@@ -73,7 +71,6 @@ export default class HTTP {
 
     /**
      * @public
-     * @static
      * @async
      * @function HTTP.DELETE
      * @description executes a DELETE request
@@ -82,11 +79,11 @@ export default class HTTP {
      * @returns {Promise<any>} response
      * @throws {Error}
      */
-    static async DELETE(url: string, params: any): Promise<any> {
+    async DELETE(url: string, params: any): Promise<any> {
         if (typeof url !== 'string') {
             throw Error('failed to execute DELETE request - invalid URL');
         }
-        if (!params || typeof url !== 'object') {
+        if (!params || url.constructor !== Object) {
             throw Error('failed to execute DELETE request - invalid params');
         }
 
@@ -98,7 +95,6 @@ export default class HTTP {
 
     /**
      * @public
-     * @static
      * @async
      * @function HTTP.HEAD
      * @description executes a HEAD request
@@ -106,7 +102,7 @@ export default class HTTP {
      * @returns {Promise<any>} response
      * @throws {Error}
      */
-    static async HEAD(url: string): Promise<any> {
+    async HEAD(url: string): Promise<any> {
         if (typeof url !== 'string') {
             throw Error('failed to execute HEAD request - invalid URL');
         }

@@ -5,7 +5,7 @@
 
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @description
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers
  */

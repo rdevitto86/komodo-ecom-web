@@ -2,7 +2,7 @@ import WorkerThread from './worker-thread';
 
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @description creates and manages a worker thread pool
  */
 export default class ThreadPool {

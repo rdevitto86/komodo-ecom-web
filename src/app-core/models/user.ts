@@ -49,7 +49,7 @@ export interface UserAbstract {
 
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @implements {UserAbstract}
  * @description defines a new User model
  */

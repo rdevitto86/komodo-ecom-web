@@ -15,7 +15,7 @@ export interface PaymentMethodAbstract {
 
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @implements {PaymentMethodAbstract}
  * @description defines a new Payment Method model
  */

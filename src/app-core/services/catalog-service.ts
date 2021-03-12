@@ -1,5 +1,5 @@
-import HTTP from './wrappers/http';
-import ValidationUtil from '../../app-auxiliary/util/validation-util';
+import HTTP from '../../app-auxiliary/util/web/network/http';
+import ValidationUtil from '../../app-auxiliary/util/primitives/validation-util';
 import { CatalogItem, CatalogItemAbstract } from '../models/catalog-item';
 
 // /**
@@ -13,29 +13,27 @@ import { CatalogItem, CatalogItemAbstract } from '../models/catalog-item';
 
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @description handles requests/responses for the Catalog service
  */
 export default class CatalogService extends HTTP {
     /**
      * @private
-     * @static
      * @readonly
      * @property {String} _SERVICE_URL
      * @description url for the Catalog service
      */
-    private static readonly _SERVICE_URL = 'https://www.todo.com';
+    private readonly _SERVICE_URL = 'https://www.todo.com';
 
     /**
      * @public
-     * @static
      * @async
      * @function CatalogService.getItemDetails
      * @description fetches a catalog item's information (i.e. product/service)
      * @param {String | Number} id item ID (i.e. product number)
      * @returns {Promise<Object | Undefined>} item details
      */
-    static async getItem(id: string | number): Promise<Object | undefined> {
+    async getItem(id: string | number): Promise<Object | undefined> {
         if (!ValidationUtil.isString(id) || !ValidationUtil.isNumber(id)) {
             return undefined;
         }
@@ -46,14 +44,13 @@ export default class CatalogService extends HTTP {
 
     /**
      * @public
-     * @static
      * @async
      * @function CatalogService.getCategoryItems
      * @description fetches a list of items under a specified category
      * @param {String | Number} catID category ID
      * @returns {Promise<Array<CatalogItem> | Undefined>} category list
      */
-    static async getCategoryItems(catID: string | number): Promise<Array<CatalogItem> | undefined> {
+    async getCategoryItems(catID: string | number): Promise<Array<CatalogItem> | undefined> {
         if (!ValidationUtil.isString(catID) || !ValidationUtil.isNumber(catID)) {
             return undefined;
         }

@@ -1,26 +1,24 @@
-import HTTP from './wrappers/http';
-import ValidationUtil from '../../app-auxiliary/util/validation-util';
+import HTTP from '../../app-auxiliary/util/web/network/http';
+import ValidationUtil from '../../app-auxiliary/util/primitives/validation-util';
 import { LoginResponse } from './responses/auth-response';
 
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @extends {HTTP}
  * @description handles requests/responses for the Authorization service
  */
 export default class AuthService extends HTTP {
     /**
      * @private
-     * @static
      * @readonly
      * @property {String} _SERVICE_URL
      * @description url for the Authorization service
      */
-    private static readonly _SERVICE_URL = 'https://www.todo.com';
+    private readonly _SERVICE_URL = 'https://www.todo.com';
 
     /**
      * @public
-     * @static
      * @async
      * @function AuthService.login
      * @description logs a user into the current session
@@ -29,7 +27,7 @@ export default class AuthService extends HTTP {
      * @returns {Promise<Object | Undefined>} account information
      * @see HTTP.POST
      */
-    static async login(username: string, password: string): Promise<Object | undefined> {
+    async login(username: string, password: string): Promise<Object | undefined> {
         if (!ValidationUtil.isString([username, password])) {
             return undefined;
         }
@@ -49,7 +47,6 @@ export default class AuthService extends HTTP {
 
     /**
      * @public
-     * @static
      * @async
      * @function AuthService.logout
      * @description logs-out a user and invalidates session token
@@ -57,7 +54,7 @@ export default class AuthService extends HTTP {
      * @returns {Promise<Boolean>} log-out status (true/false)
      * @see HTTP.POST
      */
-    static async logout(username: string): Promise<boolean> {
+    async logout(username: string): Promise<boolean> {
         if (!ValidationUtil.isString(username)) {
             return false;
         }
@@ -74,14 +71,13 @@ export default class AuthService extends HTTP {
 
     /**
      * @public
-     * @static
      * @async
      * @function AuthService.valididateSession
      * @description checks if a session token is valid
      * @returns {Promise<Boolean>} session validity (true/false/undefined)
      * @see HTTP.POST
      */
-    static async valididateSession(): Promise<boolean> {
+    async valididateSession(): Promise<boolean> {
         const response = await this.POST(this._SERVICE_URL, {});
         return response.ok || false;
     }

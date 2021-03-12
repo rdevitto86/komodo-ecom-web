@@ -1,15 +1,34 @@
-// TODO - consider security of data and ways to encapsulate
+/* eslint-disable max-classes-per-file */
+/**
+ * @private
+ * @class
+ * @description binds a queue element to a given priority
+ */
+class QueueElement {
+    public value: any;
+    public priority: number;
+
+    /**
+     * @constructor
+     * @param {Any} value value to be stored in queue
+     * @param {Number} priority priority of element
+     */
+    constructor(value: any, priority: number) {
+        this.value = value;
+        this.priority = priority;
+    }
+}
 
 /**
  * @class
  * @version 1.0
- * @description @description implementation of a FIFO queue
+ * @description implementation of a FIFO queue w/ priority sorting
  * @complexity
- *  - add => O(1)
+ *  - add => O(n)
  *  - remove => O(1)
  *  - search => O(n)
  */
-export default class Queue {
+export default class PriorityQueue {
     /**
      * @private
      * @property {Any[]} _queue
@@ -22,9 +41,28 @@ export default class Queue {
      * @function Queue.enqueue
      * @description adds item to the queue and sorts priority
      * @param {Any} item item to add
+     * @param {Number} [priority] item priority
      */
-    enqueue(item: any) {
-        this._queue.push(item);
+    enqueue(item: any, priority: number = 0) {
+        const { _queue } = this;
+        const element = new QueueElement(item, priority);
+
+        // tracks if new item is higher or lower priority
+        let lowerPriority = false;
+
+        // loop through queue and insert prioritized item
+        for (let i = 0, len = _queue.length; i < len; i++) {
+            if (_queue[i].priority > element.priority) {
+                _queue.splice(i, 0, element);
+                lowerPriority = true;
+                break;
+            }
+        }
+
+        // add item to front of queue
+        if (!lowerPriority) {
+            _queue.push(element);
+        }
     }
 
     /**
@@ -34,28 +72,28 @@ export default class Queue {
      * @returns {Any | Undefined} queue item
      */
     dequeue() {
-        return (this.isEmpty) ? undefined : this._queue.shift();
+        return (this.isEmpty) ? undefined : (this._queue.shift()).value;
     }
 
     /**
      * @public
-     * @function Queue.peekFront
+     * @function Queue.peek
      * @description peeks element at the front of the queue
      * @returns {Any | Undefined} queue item
      */
     peekFront() {
-        return (this.isEmpty) ? undefined : this._queue[0];
+        return (this.isEmpty) ? undefined : (this._queue[0]).value;
     }
 
     /**
      * @public
-     * @function Queue.peekBack
+     * @function Queue.peek
      * @description peeks element at the back of the queue
      * @param {Number} [priority] priority of queue to peek item
      * @returns {Any | Undefined} queue item
      */
     peekBack() {
-        return (this.isEmpty) ? undefined : this._queue[this._queue.length - 1];
+        return (this.isEmpty) ? undefined : (this._queue[this._queue.length - 1]).value;
     }
 
     /**
@@ -66,7 +104,13 @@ export default class Queue {
      * @returns {Number} first index of item, -1 if not found
      */
     seek(item: any) {
-        return this._queue.indexOf(item);
+        const { _queue } = this;
+        for (let i = 0, len = _queue.length; i < len; i++) {
+            if (_queue[i].value === item) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**

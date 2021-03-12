@@ -1,30 +1,28 @@
-import ValidationUtil from '../../app-auxiliary/util/validation-util';
+import ValidationUtil from '../../app-auxiliary/util/primitives/validation-util';
 
 /**
  * @class
- * @version 1.0.0
+ * @version 1.0
  * @description handles requests/responses for the Finance service
  */
 export default class OrderService {
     /**
      * @private
-     * @static
      * @readonly
      * @property {String} _SERVICE_URL
      * @description url for the Order service
      */
-    private static readonly _SERVICE_URL = 'https://www.todo.com';
+    private readonly _SERVICE_URL = 'https://www.todo.com';
 
     /**
      * @public
-     * @static
      * @async
      * @function OrderService.getOrder
      * @description fetches information for a specified order
      * @param {String} id order ID
      * @returns {Promise<Object | Undefined>} order details
      */
-    static async getOrder(id: string): Promise<Object | undefined> {
+    async getOrder(id: string): Promise<Object | undefined> {
         if (!ValidationUtil.isString(id)) {
             return undefined;
         }

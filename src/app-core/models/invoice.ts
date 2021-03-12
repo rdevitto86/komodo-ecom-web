@@ -12,7 +12,7 @@ type LineItemData = {
 
 /**
  * @interface
- * @version 1.0.0
+ * @version 1.0
  * @description defines an abstract Invoice object
  */
 export interface InvoiceAbstract {
@@ -65,7 +65,7 @@ export class Invoice implements InvoiceAbstract {
      * @param {Number} updatedPrice updated line item price
      * @returns {Boolean} success/failure
      */
-    private updateTotals = (updatedPrice: number | undefined): boolean => {
+    private _updateTotals = (updatedPrice: number | undefined): boolean => {
         if (typeof updatedPrice !== 'number' || Number.isNaN(updatedPrice)) {
             return false;
         }
@@ -147,7 +147,7 @@ export class Invoice implements InvoiceAbstract {
         if (item instanceof CatalogItem) {
             const { id, price } = item;
 
-            if (!this._lineItems[id] && this.updateTotals(price)) {
+            if (!this._lineItems[id] && this._updateTotals(price)) {
                 this._lineItems[id] = item;
             }
         }
@@ -162,7 +162,7 @@ export class Invoice implements InvoiceAbstract {
     removeLineItem(id: string) {
         const item = this._lineItems[id];
 
-        if (item && this.updateTotals(item.price)) {
+        if (item && this._updateTotals(item.price)) {
             delete this._lineItems[id];
         }
     }
