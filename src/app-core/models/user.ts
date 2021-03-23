@@ -1,8 +1,8 @@
-// models
-import { Address, AddressAbstract } from './address';
-import { Billing, BillingAbstract } from './billing';
-import { Company, CompanyAbstract } from './company';
-import { Invoice, InvoiceAbstract } from './invoice';
+import PriorityQueue from '../../app-auxiliary/util/data-structures/queue-priority';
+import { Address, AddressJSON, isAddress } from './address';
+import { Billing, BillingJSON } from './billing';
+import { Company, CompanyJSON } from './company';
+import { OrderInvoiceJSON } from './order-invoice';
 
 /**
  * @public
@@ -17,66 +17,135 @@ export const ACCT_TYPES = Object.freeze({
 });
 
 /**
- * @interface UserAbstract
+ * @interface UserJSON
  * @description defines an abstract Billing object
  */
-export interface UserAbstract {
+export interface UserJSON {
     // database information
-    id?: string;
-    type?: number;
+    id: string;
+    type: number;
 
     // user name information
-    firstName?: string;
-    lastName?: string;
+    firstName: string;
+    lastName: string;
     suffix?: string;
 
     // contact information
-    email?: string;
+    email: string;
     phone?: string;
 
     // address details
-    address?: AddressAbstract;
+    address?: AddressJSON;
 
     // business details
-    company?: CompanyAbstract;
+    company?: CompanyJSON;
 
     // billing details
-    billing?: BillingAbstract;
+    billing?: BillingJSON;
 
-    // current/previous invoices
-    invoices?: InvoiceAbstract[] | Map<string, Invoice>;
+    // current/previous invoice(s)
+    invoices?: {
+        priority: number;
+        lineItem: OrderInvoiceJSON;
+    }[];
 }
 
 /**
  * @class
  * @version 1.0
- * @implements {UserAbstract}
  * @description defines a new User model
  */
-export class User implements UserAbstract {
-    // database indentifiers
-    private _id: string = 'Unknown';
-    private _type: number = 1;
+export class User {
+    // /**
+    //  * @public
+    //  * @property {Boolean} hasEdits
+    //  * @description determines if the user model has user changes
+    //  */
+    // public hasEdits: boolean = false;
 
-    // user information
-    private _firstName: string = '';
-    private _lastName: string = '';
-    private _suffix: string = '';
-    private _email: string = '';
-    private _phone: string = '';
-    private _address?: Address;
-    private _company?: Company;
-    private _billing?: Billing;
+    /**
+     * @public
+     * @property {String} id
+     * @description user identifier
+     */
+    public id: string = '*';
 
-    // invoice data
-    private _invoices: Map<string, Invoice> = new Map();
+    /**
+     * @public
+     * @property {Number} type
+     * @description account type
+     */
+    public type: number = 1;
+
+    /**
+     * @public
+     * @property {String} firstName
+     * @description user's first name
+     */
+    public firstName: string = '';
+
+    /**
+     * @public
+     * @property {String} lastName
+     * @description user's last name
+     */
+    public lastName: string = '';
+
+    /**
+     * @public
+     * @property {String | Null} suffix
+     * @description user's name suffix (ex. Sr, Jr)
+     */
+    public suffix: string | null = null;
+
+    /**
+     * @public
+     * @property {String | Null} email
+     * @description user's email address
+     */
+    public email: string | null = null;
+
+    /**
+     * @public
+     * @property {String | Null} phone
+     * @description user's phone number
+     */
+    public phone: string | null = null;
+
+    /**
+     * @public
+     * @property {Address | Null} address
+     * @description address information
+     */
+    public address: Address | null = null;
+
+    /**
+     * @public
+     * @property {Company | Null} company
+     * @description company information
+     */
+    public company: Company | null = null;
+
+    /**
+     * @public
+     * @property {Billing | Null} billing
+     * @description billing information
+     */
+    public billing: Billing | null = null;
+
+    /**
+     * @private
+     * @property {PriorityQueue} _invoices
+     * @description user invoice history
+     */
+    private _invoices: PriorityQueue = new PriorityQueue();
 
     /**
      * @constructor
-     * @param {Object<UserAbstract>} [props] exsisting user details
+     * @param {UserJSON} [props] exsisting user details
      */
-    constructor(props?: UserAbstract) {
-        if (props && typeof props === 'object') {
+    constructor(props?: UserJSON) {
+        if (isUser(props)) {
             const {
                 id,
                 type,
@@ -91,98 +160,57 @@ export class User implements UserAbstract {
                 invoices,
             } = props;
 
-            this._id = id || '-1';
-            this._type = type || 1;
+            this.id = id;
+            this.type = type;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.email = email;
 
-            this.firstName = firstName || '';
-            this.lastName = lastName || '';
-            this.suffix = suffix || '';
-            this.email = email || '';
-            this.phone = phone || '';
-
-            this._address = new Address(address);
-
+            if (typeof suffix === 'string') {
+                this.suffix = suffix;
+            }
+            if (typeof phone === 'string') {
+                this.phone = phone;
+            }
+            if (isAddress(address)) {
+                this.address = new Address(address);
+            }
             if (billing) {
-                this._billing = new Billing(billing);
+                this.billing = new Billing(billing);
             }
             if (company) {
-                this._company = new Company(company);
+                this.company = new Company(company);
             }
-            if (invoices) {
-                // TODO
+            if (invoices instanceof Array) {
+                // loop through invoices and prioritze invoices
+                for (const invoice of invoices) {
+                    if (invoice) {
+                        this._invoices.enqueue(
+                            invoice.lineItem, invoice.priority
+                        );
+                    }
+                }
             }
         }
     }
 
-    /**
-     * @public
-     * @property {String} id
-     * @description user's account id
-     */
-    get id() {
-        return this._id;
-    }
-    set id(id: string) {
-        if (typeof id === 'string' || typeof id === 'number') {
-            this._id = id;
-        }
-    }
+    // addInvoice() {
 
-    /**
-     * @public
-     * @property {Number} type
-     * @description user's account type
-     */
-    get type() {
-        return this._type;
-    }
-    set type(type: number) {
-        if (typeof type === 'number' && type > 0) {
-            this._type = type;
-        }
-    }
+    // }
 
-    /**
-     * @public
-     * @property {String} firstName
-     * @description user's first name
-     */
-    get firstName() {
-        return this._firstName;
-    }
-    set firstName(firstName: string) {
-        if (typeof firstName === 'string') {
-            this._firstName = firstName;
-        }
-    }
+    // removeInvoice() {
 
-    /**
-     * @public
-     * @property {String} lastName
-     * @description user's last name
-     */
-    get lastName() {
-        return this._lastName;
-    }
-    set lastName(lastName: string) {
-        if (typeof lastName === 'string') {
-            this._lastName = lastName;
-        }
-    }
+    // }
 
-    /**
-     * @public
-     * @property {String} suffix
-     * @description user's name suffix (ex. Sr, Jr)
-     */
-    get suffix() {
-        return this._suffix;
-    }
-    set suffix(suffix: string) {
-        if (typeof suffix === 'string') {
-            this._suffix = suffix;
-        }
-    }
+    // /**
+    //  * @public
+    //  * @function User.clearInvoices
+    //  * @description clears the invoice list
+    //  * @see PriorityQueue.clear
+    //  */
+    // clearInvoices() {
+    //     this._invoices.clear();
+    // }
 
     /**
      * @public
@@ -191,79 +219,8 @@ export class User implements UserAbstract {
      * @description the user's full name (ex. John Smith Sr.)
      */
     get fullName() {
-        const { suffix } = this;
-        return `${this.firstName} ${this.lastName}${(suffix) ? ` ${suffix}` : ''}`;
-    }
-
-    /**
-     * @public
-     * @property {String} email
-     * @description user's email address
-     */
-    get email() {
-        return this._email;
-    }
-    set email(email: string) {
-        if (typeof email === 'string') {
-            this._email = email;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} phone
-     * @description user's phone number
-     */
-    get phone() {
-        return this._phone;
-    }
-    set phone(phone: string) {
-        if (typeof phone === 'string') {
-            this._phone = phone;
-        }
-    }
-
-    /**
-     * @public
-     * @property {Address} address
-     * @description address information
-     */
-    get address() {
-        return this._address;
-    }
-    set address(address: Address | undefined) {
-        if (address instanceof Address || address === undefined) {
-            this._address = address;
-        }
-    }
-
-    /**
-     * @public
-     * @property {Company | Undefined} company
-     * @description company information
-     */
-    get company() {
-        return this._company;
-    }
-    set company(company: Company | undefined) {
-        if (company instanceof Company || company === undefined) {
-            this._company = company;
-        }
-    }
-
-    /**
-     * @public
-     * @readonly
-     * @property {Billing} billing
-     * @description billing information
-     */
-    get billing() {
-        return this._billing;
-    }
-    set billing(billing: Billing | undefined) {
-        if (billing instanceof Billing || billing === undefined) {
-            this._billing = billing;
-        }
+        const { firstName, lastName, suffix } = this;
+        return `${firstName} ${lastName}${(suffix) ? ` ${suffix}` : ''}`;
     }
 
     /**
@@ -276,3 +233,14 @@ export class User implements UserAbstract {
         return this._invoices;
     }
 }
+
+/**
+ * @constant
+ * @function isUser
+ * @description checks if an item is a User type object
+ * @param {Any} obj object to reference
+ * @returns {Boolean} true/false
+ */
+export const isUser = (obj: any): obj is UserJSON => (
+    'id' in obj && 'type' in obj && 'email' in obj
+);

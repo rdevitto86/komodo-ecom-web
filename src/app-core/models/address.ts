@@ -1,38 +1,85 @@
 /**
+ * @type {AddressItem}
+ * @description defines an address item
+ */
+type AddressItem = string | null;
+
+/**
  * @interface AddressAbstract
  * @description defines an abstract Address object
  */
-export interface AddressAbstract {
-    line1: string;
-    line2: string;
-    city: string;
-    region: string;
-    subRegion: string;
-    mailingCode: string;
-    country: string;
+export interface AddressJSON {
+    line1: AddressItem;
+    line2?: AddressItem;
+    city: AddressItem;
+    region: AddressItem;
+    subRegion: AddressItem;
+    mailingCode: AddressItem;
+    countryCode: AddressItem;
 }
 
 /**
  * @class
  * @version 1.0
- * @implements {AddressAbstract}
+ * @implements {AddressJSON}
  * @description defines a new Address model
  */
-export class Address implements AddressAbstract {
-    private _line1: string = '';
-    private _line2: string = '';
-    private _city: string = '';
-    private _region: string = '';
-    private _subRegion: string = '';
-    private _mailingCode: string = '';
-    private _country: string = '';
+export class Address implements AddressJSON {
+    /**
+     * @public
+     * @property {AddressItem} line1
+     * @description primary street address info
+     */
+    public line1: AddressItem = null;
+
+    /**
+     * @public
+     * @property {AddressItem} line2
+     * @description secondary street address info
+     */
+    public line2: AddressItem = null;
+
+    /**
+     * @public
+     * @property {AddressItem} city
+     * @description city of address
+     */
+    public city: AddressItem = null;
+
+    /**
+     * @public
+     * @property {AddressItem} region
+     * @description region of address (eg. state, etc.)
+     */
+    public region: AddressItem = null;
+
+    /**
+     * @public
+     * @property {AddressItem} subRegion
+     * @description address sub-region (eg. county)
+     */
+    public subRegion: AddressItem = null;
+
+    /**
+     * @public
+     * @property {AddressItem} mailingCode
+     * @description address mailing code (eg. zipcode)
+     */
+    public mailingCode: AddressItem = null;
+
+    /**
+     * @public
+     * @property {AddressItem} countryCode
+     * @description country of address
+     */
+    public countryCode: AddressItem = null;
 
     /**
      * @constructor
-     * @param {Object<AddressAbstract>} [props] exsisting address details
+     * @param {AddressJSON} [props] exsisting address details
      */
-    constructor(props?: AddressAbstract) {
-        if (props && typeof props === 'object') {
+    constructor(props?: AddressJSON) {
+        if (isAddress(props)) {
             const {
                 line1,
                 line2,
@@ -40,126 +87,46 @@ export class Address implements AddressAbstract {
                 region,
                 subRegion,
                 mailingCode,
-                country
+                countryCode
             } = props;
 
-            this.line1 = line1 || '';
-            this.line2 = line2 || '';
-            this.city = city || '';
-            this.region = region || '';
-            this.subRegion = subRegion || '';
-            this.mailingCode = mailingCode || '';
-            this.country = country || '';
+            this.line1 = line1;
+            this.city = city;
+            this.region = region;
+            this.subRegion = subRegion;
+            this.mailingCode = mailingCode;
+            this.countryCode = countryCode;
+
+            if (line2) {
+                this.line2 = line2;
+            }
         }
     }
 
     /**
      * @public
-     * @function Address#printAddress
+     * @function Address.format
      * @description converts an address to standardized format
      * @returns {String} Example: One Apple Park Way, Cupertino, CA 95014 US
      */
-    printAddress(): string {
-        let addressString = this.line1 + ((this.line2) ? ` ${this.line2}` : '');
-        addressString += `, ${this.city}, ${this.region} ${this.mailingCode} ${this.country}`;
-        return addressString;
-    }
+    format(): string {
+        const {
+            line1, line2, city, region, subRegion, mailingCode, countryCode
+        } = this;
 
-    /**
-     * @public
-     * @property {String} line1
-     * @description primary street address info
-     */
-    get line1() {
-        return this._line1;
-    }
-    set line1(line1: string) {
-        if (typeof line1 === 'string') {
-            this._line1 = line1;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} line2
-     * @description secondary street address info
-     */
-    get line2() {
-        return this._line2;
-    }
-    set line2(line2: string) {
-        if (typeof line2 === 'string') {
-            this._line2 = line2;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} city
-     * @description city of address
-     */
-    get city() {
-        return this._city;
-    }
-    set city(city: string) {
-        if (typeof city === 'string') {
-            this._city = city;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} region
-     * @description region of address (eg. state, etc.)
-     */
-    get region() {
-        return this._region;
-    }
-    set region(region: string) {
-        if (typeof region === 'string') {
-            this._region = region;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} subRegion
-     * @description address sub-region (eg. county)
-     */
-    get subRegion() {
-        return this._subRegion;
-    }
-    set subRegion(subRegion: string) {
-        if (typeof subRegion === 'string') {
-            this._subRegion = subRegion;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} mailingCode
-     * @description address mailing code (eg. zipcode)
-     */
-    get mailingCode() {
-        return this._mailingCode;
-    }
-    set mailingCode(mailingCode: string) {
-        if (typeof mailingCode === 'string') {
-            this._mailingCode = mailingCode;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} country
-     * @description country of address
-     */
-    get country() {
-        return this._country;
-    }
-    set country(country: string) {
-        if (typeof country === 'string') {
-            this._country = country;
-        }
+        const fullAddress = `${line1 || ''}${((line2) ? ` ${line2}` : '')}`;
+        const fullRegion = `, ${region || ''}${(subRegion) ? `, ${subRegion}` : ''}`;
+        return `${fullAddress}, ${city || ''}, ${fullRegion} ${mailingCode || ''} ${countryCode || ''}`;
     }
 }
+
+/**
+ * @constant
+ * @function isAddress
+ * @description checks if an item is an Address type object
+ * @param {Any} obj object to reference
+ * @returns {Boolean} true/false
+ */
+ export const isAddress = (obj: any): obj is AddressJSON => (
+    'line1' in obj && 'city' in obj && 'region' in obj && 'mailingCode' in obj
+);

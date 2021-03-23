@@ -1,140 +1,107 @@
-import { Address, AddressAbstract } from './address';
+import { Address, AddressJSON, isAddress } from './address';
 
 /**
  * @interface
  * @description defines an abstract Payment Method object
  */
-export interface PaymentMethodAbstract {
-    name: string;
-    cardNumber?: string;
-    cardType?: string;
-    cardNetwork?: string;
+export interface PaymentMethodJSON {
+    name: string | null;
+    cardNumber?: string | null;
+    cardType?: string | null;
+    cardNetwork?: string | null;
+    billingAddress: AddressJSON | null;
     isDefault?: boolean;
-    address?: AddressAbstract;
 }
 
 /**
  * @class
  * @version 1.0
- * @implements {PaymentMethodAbstract}
  * @description defines a new Payment Method model
  */
-export class PaymentMethod implements PaymentMethodAbstract {
-    private _name: string = 'New Method';
-    private _cardNumber: string = '';
-    private _cardType: string = '';
-    private _cardNetwork: string = '';
-    private _isDefault: boolean = false;
-    private _address: Address;
-
-    /**
-     * @constructor
-     * @param {Object<PaymentMethodAbstract>} [props] payment prop object
-     */
-    constructor(props?: PaymentMethodAbstract) {
-        if (props && typeof props === 'object') {
-            const {
-                name,
-                cardNumber,
-                cardType,
-                cardNetwork,
-                isDefault,
-                address
-            } = props;
-
-            this.name = name;
-            this.cardNumber = cardNumber || '';
-            this.cardType = cardType || '';
-            this.cardNetwork = cardNetwork || '';
-            this.isDefault = isDefault || false;
-
-            this._address = new Address(address);
-        } else {
-            this._address = new Address();
-        }
-    }
-
+export class PaymentMethod {
     /**
      * @public
-     * @property {String} name
+     * @property {String | Null} name
      * @description method name (ex. PayPal, Amex)
      */
-    get name() {
-        return this._name;
-    }
-    set name(name: string) {
-        if (typeof name === 'string') {
-            this._name = name;
-        }
-    }
+    public name: string | null = null;
 
     /**
      * @public
-     * @property {String} cardNumber
+     * @property {String | Null} cardNumber
      * @description primary street address info
      */
-    get cardNumber() {
-        return this._cardNumber;
-    }
-    set cardNumber(cardNumber: string) {
-        if (typeof cardNumber === 'string') {
-            this._cardNumber = cardNumber;
-        }
-    }
+    public cardNumber: string | null = null;
 
     /**
      * @public
-     * @property {String} cardType
+     * @property {String | Null} cardType
      * @description primary street address info
      */
-    get cardType() {
-        return this._cardType;
-    }
-    set cardType(cardType: string) {
-        if (typeof cardType === 'string') {
-            this._cardType = cardType;
-        }
-    }
+    public cardType: string | null = null;
 
     /**
      * @public
-     * @property {String} cardNetwork
+     * @property {String | Null} cardNetwork
      * @description payment card network
      */
-    get cardNetwork() {
-        return this._cardNetwork;
-    }
-    set cardNetwork(cardNetwork: string) {
-        if (typeof cardNetwork === 'string') {
-            this._cardNetwork = cardNetwork;
-        }
-    }
+    public cardNetwork: string | null = null;
 
     /**
      * @public
      * @property {Boolean} isDefault
      * @description is current payment prefferred
      */
-    get isDefault() {
-        return this._isDefault;
-    }
-    set isDefault(isDefault: boolean) {
-        if (typeof isDefault === 'boolean') {
-            this._isDefault = isDefault;
-        }
-    }
+    public isDefault: boolean = false;
 
     /**
      * @public
-     * @property {Address} address
+     * @property {AddressJSON | Null} billingAddress
      * @description billing address
      */
-    get address() {
-        return this._address;
-    }
-    set address(address: Address) {
-        if (address instanceof Address) {
-            this._address = address;
+    public billingAddress: AddressJSON | null = null;
+
+    /**
+     * @constructor
+     * @param {PaymentMethodJSON} [props] payment prop object
+     */
+    constructor(props?: PaymentMethodJSON) {
+        if (isPaymentMethod(props)) {
+            const {
+                name,
+                cardNumber,
+                cardType,
+                cardNetwork,
+                isDefault,
+                billingAddress
+            } = props;
+
+            this.name = name;
+            this.isDefault = (typeof isDefault === 'boolean') ? isDefault : false;
+
+            if (cardNumber) {
+                this.cardNumber = cardNumber;
+            }
+            if (cardType) {
+                this.cardType = cardType;
+            }
+            if (cardNetwork) {
+                this.cardNetwork = cardNetwork;
+            }
+            if (isAddress(billingAddress)) {
+                this.billingAddress = new Address(billingAddress);
+            }
         }
     }
 }
+
+/**
+ * @constant
+ * @function isPaymentMethod
+ * @description checks if an item is an Promotion type object
+ * @param {Any} obj object to reference
+ * @returns {Boolean} true/false
+ */
+ export const isPaymentMethod = (obj: any): obj is PaymentMethodJSON => (
+    'name' in obj && 'billingAddress' in obj && 'percentOff' in obj && 'hasFreeShipping' in obj
+);

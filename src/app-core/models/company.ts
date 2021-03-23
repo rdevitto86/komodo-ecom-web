@@ -1,15 +1,15 @@
-import { Address } from './address';
+import { Address, AddressJSON } from './address';
 
 /**
- * @interface CompanyAbstract
+ * @interface CompanyJSON
  * @description defines an abstract Business object
  */
-export interface CompanyAbstract {
-    name: string;
-    contactName: string;
-    contactPhone: string;
-    contactEmail: string;
-    address?: Address;
+export interface CompanyJSON {
+    name: string | null;
+    contactName: string | null;
+    contactEmail: string | null;
+    contactPhone?: string | null;
+    address?: AddressJSON;
 }
 
 /**
@@ -17,85 +17,67 @@ export interface CompanyAbstract {
  * @version 1.0
  * @extends {Address}
  * @description defines a new Company model
+ * @see Address
  */
 export class Company extends Address {
-    private _name: string = '';
-    private _contactName: string = '';
-    private _contactPhone: string = '';
-    private _contactEmail: string = '';
+    /**
+     * @public
+     * @property {String | Null} name
+     * @description company name
+     */
+    public name: string | null = null;
+
+    /**
+     * @public
+     * @property {String | Null} contactName
+     * @description company contact person
+     */
+    public contactName: string | null = null;
+
+    /**
+     * @public
+     * @property {String | Null} contactPhone
+     * @description company contact phone number
+     */
+    public contactPhone: string | null = null;
+
+    /**
+     * @public
+     * @property {String | Null} contactEmail
+     * @description company contact email
+     */
+    public contactEmail: string | null = null;
 
     /**
      * @constructor
-     * @param {CompanyAbstract?} [props] exsisting business details
+     * @param {CompanyJSON} [props] exsisting business details
      */
-    constructor(props?: CompanyAbstract) {
+    constructor(props?: CompanyJSON) {
         super((props || {}).address);
 
-        if (props && typeof props === 'object') {
+        if (isCompany(props)) {
             const {
                 name, contactName, contactPhone, contactEmail
             } = props;
 
-            this.name = name || '';
-            this.contactName = contactName || '';
-            this.contactPhone = contactPhone || '';
-            this.contactEmail = contactEmail || '';
-        }
-    }
+            this.name = name;
+            this.contactName = contactName;
+            this.contactEmail = contactEmail;
 
-    /**
-     * @public
-     * @property {String} name
-     * @description company name
-     */
-    get name() {
-        return this._name;
-    }
-    set name(name: string) {
-        if (typeof name === 'string') {
-            this._name = name;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} contactName
-     * @description company contact person
-     */
-    get contactName() {
-        return this._contactName;
-    }
-    set contactName(contactName: string) {
-        if (typeof contactName === 'string') {
-            this._contactName = contactName;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} contactPhone
-     * @description company contact phone number
-     */
-    get contactPhone() {
-        return this._contactPhone;
-    }
-    set contactPhone(contactPhone: string) {
-        if (typeof contactPhone === 'string') {
-            this._contactPhone = contactPhone;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} contactEmail
-     * @description company contact email
-     */
-    get contactEmail() {
-        return this._contactEmail;
-    }
-    set contactEmail(contactEmail: string) {
-        if (typeof contactEmail === 'string') {
-            this._contactEmail = contactEmail;
+            if (typeof contactPhone === 'string') {
+                this.contactPhone = contactPhone;
+            }
         }
     }
 }
+
+/**
+ * @constant
+ * @function isCompany
+ * @description checks if an item is a Company type object
+ * @param {Any} obj object to reference
+ * @returns {Boolean} true/false
+ */
+ export const isCompany = (obj: any): obj is CompanyJSON => (
+    'name' in obj && 'contactName' in obj && 'contactEmail' in obj
+);

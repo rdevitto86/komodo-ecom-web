@@ -1,6 +1,6 @@
 import HTTP from '../../app-auxiliary/util/web/network/http';
 import ValidationUtil from '../../app-auxiliary/util/primitives/validation-util';
-import { CatalogItem, CatalogItemAbstract } from '../models/catalog-item';
+import { CatalogItem, CatalogItemJSON } from '../models/catalog-item';
 
 // /**
 //  * @private
@@ -48,9 +48,9 @@ export default class CatalogService extends HTTP {
      * @function CatalogService.getCategoryItems
      * @description fetches a list of items under a specified category
      * @param {String | Number} catID category ID
-     * @returns {Promise<Array<CatalogItem> | Undefined>} category list
+     * @returns {Promise<CatalogItem[] | Undefined>} category list
      */
-    async getCategoryItems(catID: string | number): Promise<Array<CatalogItem> | undefined> {
+    async getCategoryItems(catID: string | number): Promise<CatalogItem[] | undefined> {
         if (!ValidationUtil.isString(catID) || !ValidationUtil.isNumber(catID)) {
             return undefined;
         }
@@ -65,7 +65,7 @@ export default class CatalogService extends HTTP {
         // iterate through response items and build local models
         if (items && items.length) {
             for (const item in items) {
-                if (item as unknown as CatalogItemAbstract) {
+                if (item) {
                     categoryItems.push(new CatalogItem(item));
                 }
             }

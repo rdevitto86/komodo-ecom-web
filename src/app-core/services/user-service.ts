@@ -1,4 +1,4 @@
-import { User, UserAbstract } from '../models/user';
+import { User, UserJSON } from '../models/user';
 import HTTP from '../../app-auxiliary/util/web/network/http';
 import ValidationUtil from '../../app-auxiliary/util/primitives/validation-util';
 
@@ -42,10 +42,10 @@ export default class UserService extends HTTP {
      * @function UserService.updateAccountInfo
      * @description updates a user's account information
      * @param {String} username user ID
-     * @param {Object<UserAbstract>} data updated user information
+     * @param {Object<UserJSON>} data updated user information
      * @returns {Promise<Boolean>} user details
      */
-    async updateAccountInfo(username: string, payload: UserAbstract): Promise<Boolean> {
+    async updateAccountInfo(username: string, payload: UserJSON): Promise<Boolean> {
         if (!ValidationUtil.isString(username)) {
             return false;
         }

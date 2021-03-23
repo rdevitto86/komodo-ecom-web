@@ -2,76 +2,96 @@
  * @interface
  * @description defines a new Promotion abstract class
  */
-export interface PromotionAbstract {
+export interface PromotionJSON {
     id: string;
-    value: number;
-    title?: string;
+    dollarsOff: number;
+    percentOff: number;
+    hasFreeShipping: boolean;
+    hasBOGO: boolean;
+    description?: string;
 }
 
 /**
  * @class
  * @version 1.0
- * @implements {PromotionAbstract}
+ * @implements {PromotionJSON}
  * @description defines a new Promotion model
  */
-export class Promotion implements PromotionAbstract {
-    private _id: string = '';
-    private _value: number = 0;
-    private _title?: string;
-
-    /**
-     * @constructor
-     * @param {Object<PromotionAbstract>} [props] promotions details object
-     */
-    constructor(props?: PromotionAbstract) {
-        if (props && typeof props === 'object') {
-            const { id, value, title } = props;
-
-            this.id = id;
-            this.value = value;
-            this.title = title;
-        }
-    }
-
+export class Promotion implements PromotionJSON {
     /**
      * @public
      * @property {String} id
      * @description promotion identifier
      */
-    get id() {
-        return this._id;
-    }
-    set id(id: string) {
-        if (typeof id === 'string') {
-            this._id = id;
-        }
-    }
+    public id: string = '';
 
     /**
      * @public
-     * @property {Number} value
-     * @description promotion value
+     * @property {Number} dollarsOff
+     * @description number of dollars off
      */
-    get value() {
-        return this._value;
-    }
-    set value(value: number) {
-        if (typeof value === 'number') {
-            this._value = value;
-        }
-    }
+    public dollarsOff: number = 0;
 
     /**
      * @public
-     * @property {Number | Undefined} title
+     * @property {Number} percentOff
+     * @description percent discounted
+     */
+     public percentOff: number = 0;
+
+    /**
+     * @public
+     * @property {Boolean} freeShipping
+     * @description should removes shipping cost
+     */
+     public hasFreeShipping: boolean = false;
+
+    /**
+     * @public
+     * @property {Boolean} hasBOGO
+     * @description has free item with purchase
+     */
+     public hasBOGO: boolean = false;
+
+    /**
+     * @public
+     * @property {Number | Undefined} description
      * @description promotion title/name
      */
-    get title() {
-        return this._title;
-    }
-    set title(title: string | undefined) {
-        if (typeof title === 'string' || title === undefined) {
-            this._title = title;
+    public description?: string;
+
+    /**
+     * @constructor
+     * @param {PromotionJSON} [props] promotions details object
+     */
+    constructor(props?: PromotionJSON) {
+        if (isPromotion(props)) {
+            const {
+                id,
+                dollarsOff,
+                percentOff,
+                hasFreeShipping,
+                hasBOGO,
+                description
+            } = props;
+
+            this.id = id;
+            this.dollarsOff = dollarsOff;
+            this.percentOff = percentOff;
+            this.hasFreeShipping = hasFreeShipping;
+            this.hasBOGO = hasBOGO;
+            this.description = description;
         }
     }
 }
+
+/**
+ * @constant
+ * @function isPromotion
+ * @description checks if an item is an Promotion type object
+ * @param {Any} obj object to reference
+ * @returns {Boolean} true/false
+ */
+ export const isPromotion = (obj: any): obj is PromotionJSON => (
+    'id' in obj && 'dollarsOff' in obj && 'percentOff' in obj && 'hasFreeShipping' in obj
+);

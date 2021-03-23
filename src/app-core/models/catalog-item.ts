@@ -1,140 +1,174 @@
+import { isPromotion, Promotion, PromotionJSON } from './promotion';
+import { UserReview, UserReviewJSON } from './user-review';
+
+/**
+ * @type {CatalogItemDetails}
+ * @description defines textual details of a catalog item
+ */
+type CatalogItemDetails = string | null;
+
+/**
+ * @type {CatalogItemQuantity}
+ * @description defines numeric quantity of a catalog item
+ */
+type CatalogItemQuantity = number | null;
+
 /**
  * @interface
  * @description defines an abstract Catalog Item object
  */
-export interface CatalogItemAbstract {
-    id: string;
-    sku?: string;
-    price?: number;
-    quantity?: number;
-    stock?: number;
-    description?: string;
+export interface CatalogItemJSON {
+    id: CatalogItemDetails;
+    description: CatalogItemDetails;
+    price: CatalogItemQuantity;
+    totalRating?: number;
+    personalRating?: CatalogItemQuantity;
+    reviews?: UserReviewJSON[];
+    sku?: CatalogItemDetails;
+    quantity?: CatalogItemQuantity;
+    stock?: CatalogItemQuantity;
+    promotion?: PromotionJSON;
 }
 
 /**
  * @class
  * @version 1.0
- * @implements {CatalogItemAbstract}
  * @description defines a new Catalog Item model
  */
-export class CatalogItem implements CatalogItemAbstract {
-    // mandatory properties
-    private _id: string;
+export class CatalogItem {
+    /**
+     * @public
+     * @property {CatalogItemDetails} id
+     * @description catalog item id
+     */
+    public id: CatalogItemDetails = null;
 
-    // optional properties
-    private _sku?: string;
-    private _price?: number;
-    private _quantity?: number;
-    private _stock?: number;
-    private _description?: string;
+    /**
+     * @public
+     * @property {CatalogItemQuantity} price
+     * @description item price
+     */
+    public price: CatalogItemQuantity = null;
+
+    /**
+     * @public
+     * @property {CatalogItemDetails} description
+     * @description item description
+     */
+    public description: CatalogItemDetails = null;
+
+    /**
+     * @public
+     * @property {Number} totalRating
+     * @description aggregate user rating
+     */
+    public totalRating: number = 0;
+
+    /**
+     * @public
+     * @property {CatalogItemQuantity} personalRating
+     * @description user's personal rating
+     */
+    public personalRating: CatalogItemQuantity = null;
+
+    /**
+     * @public
+     * @property {UserReview[]} ratings
+     * @description item user rating
+     */
+     public reviews: UserReview[] = [];
+
+    /**
+     * @public
+     * @property {CatalogItemDetails} sku
+     * @description item SKU number
+     */
+    public sku?: CatalogItemDetails;
+
+    /**
+     * @public
+     * @property {CatalogItemQuantity} quantity
+     * @description item quantity
+     */
+    public quantity?: CatalogItemQuantity;
+
+    /**
+     * @public
+     * @property {CatalogItemQuantity} stock
+     * @description item stock level
+     */
+    public stock?: CatalogItemQuantity;
+
+    /**
+     * @public
+     * @property {Promotion | PromotionJSON | Null} promotion
+     * @description item-level promotion
+     */
+    public promotion: Promotion | null = null;
 
     /**
      * @constructor
-     * @description creates a new Catalog Item object
-     * @param {String} id item identifier
-     * @param {Object<CatalogItemAbstract>} [props] item details object
+     * @param {CatalogItemJSON} [props] item details object
      */
-    constructor(id: string, props?: CatalogItemAbstract) {
-        this._id = id || '';
-
-        if (props && props.constructor === Object) {
+    constructor(props?: CatalogItemJSON) {
+        if (isCatalogItem(props)) {
             const {
+                id,
                 price,
+                description,
+                totalRating,
+                personalRating,
+                reviews,
                 sku,
                 quantity,
                 stock,
-                description
+                promotion
             } = props;
 
+            // --- universal properties ---
+            this.id = id;
             this.price = price;
+            this.description = description;
+
+            if (typeof totalRating === 'number') {
+                this.totalRating = totalRating;
+            }
+            if (reviews instanceof Array && reviews.length) {
+                const reviewList = [];
+
+                // loop through reviews and map
+                for (const review of reviews) {
+                    if (review) {
+                        reviewList.push(new UserReview(review));
+                    }
+                }
+
+                this.reviews = reviewList;
+            }
+
+            // --- optional properties ---
+            if (typeof personalRating === 'number') {
+                this.personalRating = personalRating;
+            }
+            if (isPromotion(promotion)) {
+                this.promotion = new Promotion(promotion);
+            }
+
+            // --- product-only properties ---
             this.sku = sku;
             this.quantity = quantity;
             this.stock = stock;
-            this.description = description;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String} id
-     * @description catalog item id
-     */
-    get id() {
-        return this._id;
-    }
-    set id(id: string) {
-        if (typeof id === 'string') {
-            this._id = id;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String | Undefined} sku
-     * @description item SKU number
-     */
-    get sku() {
-        return this._sku;
-    }
-    set sku(sku: string | undefined) {
-        if (typeof sku === 'number') {
-            this._sku = sku;
-        }
-    }
-
-    /**
-     * @public
-     * @property {Number | Undefined} price
-     * @description item price
-     */
-    get price() {
-        return this._price;
-    }
-    set price(price: number | undefined) {
-        if (typeof price === 'number') {
-            this._price = price;
-        }
-    }
-
-    /**
-     * @public
-     * @property {Number | Undefined} quantity
-     * @description item quantity
-     */
-    get quantity() {
-        return this._quantity;
-    }
-    set quantity(quantity: number | undefined) {
-        if (typeof quantity === 'number' || quantity === undefined) {
-            this._quantity = quantity;
-        }
-    }
-
-    /**
-     * @public
-     * @property {Number | Undefined} quantity
-     * @description item stock level
-     */
-    get stock() {
-        return this._stock;
-    }
-    set stock(stock: number | undefined) {
-        if (typeof stock === 'number' || stock === undefined) {
-            this._stock = stock;
-        }
-    }
-
-    /**
-     * @public
-     * @property {String | Undefined} description
-     * @description item description
-     */
-    get description() {
-        return this._description;
-    }
-    set description(description: string | undefined) {
-        if (typeof description === 'string' || description === undefined) {
-            this._description = description;
         }
     }
 }
+
+/**
+ * @constant
+ * @function isCatalogItem
+ * @description checks if an item is an CatalogItem type object
+ * @param {Any} obj object to reference
+ * @returns {Boolean} true/false
+ */
+export const isCatalogItem = (obj: any): obj is CatalogItemJSON => (
+    'id' in obj && 'price' in obj
+);
