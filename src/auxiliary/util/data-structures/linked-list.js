@@ -1,12 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
 /**
- * @type
- * @description defines a linked list node
- */
-type ListNode = Node | null;
-
-/**
  * @private
  * @class
  * @description builds a LinkedList node
@@ -17,21 +11,21 @@ class Node {
      * @property {Any} value
      * @description node data
      */
-    public value: any;
+    value;
 
     /**
      * @public
      * @property {Node | Null} [next]
      * @description next node in linked list
      */
-    public next: ListNode;
+    next = null;
 
     /**
      * @public
      * @property {Node | Null} [prev]
      * @description previous node in linked list
      */
-    public prev: ListNode;
+    prev = null;
 
     /**
      * @constructor
@@ -39,7 +33,7 @@ class Node {
      * @param {Node | Null} [next] next node in linked list
      * @param {Node | Null} [prev] previous node in linked list
      */
-    constructor(value: any, next: ListNode = null, prev: ListNode = null) {
+    constructor(value, next = null, prev = null) {
         this.value = value;
         this.next = next;
         this.prev = prev;
@@ -55,33 +49,33 @@ class Node {
  *  - remove: [best case] => O(1), [worst case] => O(n)
  *  - search => [best case] => O(1), [worst case] => O(n)
  */
-export default class LinkedList<T> {
+export default class LinkedList {
     /**
      * @public
      * @property {ListNode} [head]
      * @description first node in list
      */
-    public head: ListNode = null;
+    head = null;
 
     /**
      * @public
      * @property {ListNode} [tail]
      * @description last node in list
      */
-    public tail: ListNode = null;
+    tail = null;
 
     /**
      * @public
      * @property {Number} size
      * @description size of linked list
      */
-    public size: number = 0;
+    size = 0;
 
     /**
      * @constructor
      * @param {T} [data] data used in first list node
      */
-    constructor(data?: T) {
+    constructor(data) {
         if (data) {
             this.head = new Node(data);
         }
@@ -93,7 +87,7 @@ export default class LinkedList<T> {
      * @description adds a new leading node
      * @param {T} item data of new node
      */
-    insertHead(item: T) {
+    insertHead(item) {
         const newNode = new Node(item, this.head);
 
         // adjust list after insertion
@@ -113,7 +107,7 @@ export default class LinkedList<T> {
      * @description adds a new trailing node
      * @param {T} item data of new node
      */
-    insertTail(item: T) {
+    insertTail(item) {
         const newNode = new Node(item, null, this.tail);
 
         // adjust list after insertion
@@ -223,7 +217,7 @@ export default class LinkedList<T> {
      * @param {T} item data to match to exsisting node
      * @returns {Node | Undefined} node matching search item
      */
-    search(item: T) {
+    search(item) {
         let current = this.head;
 
         // loop through list and find node with search item
@@ -245,7 +239,7 @@ export default class LinkedList<T> {
      * @param {T} item data to match to exsisting node
      * @returns {Boolean} item exsists or not
      */
-    contains(item: T) {
+    contains(item) {
         return !!(this.search(item));
     }
 }

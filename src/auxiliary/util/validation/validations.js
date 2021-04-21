@@ -1,54 +1,66 @@
 /**
  * @class
  * @version 1.0
- * @description a collection of validation functions used throughout the app
+ * @description a collection of common validation functions
  */
-export default class ValidationUtil {
+export default class Validations {
     /**
      * @public
      * @static
-     * @function ValidationUtil.isNull
+     * @function Validations.isNull
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isNull(value: any) {
-        return !value && typeof value === 'object';
+    static isNull(value) {
+        return value === null;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isUndefined
+     * @function Validations.isUndefined
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isUndefined(value: any) {
+    static isUndefined(value) {
         return value === undefined;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isNullish
+     * @function Validations.isNullish
+     * @description determines if a value is null or undefined
+     * @param {Any} value value(s) to check
+     * @returns {Boolean} true/false
+     */
+    static isNullish(value) {
+        return value === null || value === undefined;
+    }
+
+    /**
+     * @public
+     * @static
+     * @function Validations.isFalsy
      * @description determines if a value is null, undefined, or empty
      * @param {Any} value value(s) to check
      * @returns {Boolean} true/false
      */
-    static isNullish(value: any) {
+    static isFalsy(value) {
         return !value;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isString
+     * @function Validations.isString
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      * @example
      *  - 'test123'
      *  - ['t', 'e', 's', 't']
      */
-    static isString(value: any) {
+    static isString(value) {
         // checks individual strings
         if (value.constructor === String || value instanceof String) {
             return true;
@@ -68,99 +80,99 @@ export default class ValidationUtil {
     /**
      * @public
      * @static
-     * @function ValidationUtil.isEmptyString
+     * @function Validations.isEmptyString
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isEmptyString(value: any) {
+    static isEmptyString(value) {
         return value === '';
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isNumber
+     * @function Validations.isNumber
      * @param {any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isNumber(value: any) {
+    static isNumber(value) {
         return (value.constructor === Number && Number.isFinite(value));
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isInt
+     * @function Validations.isInt
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isInt(value: any) {
+    static isInt(value) {
         return this.isNumber(value) && Number.isInteger(value);
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isFloat
+     * @function Validations.isFloat
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isFloat(value: any) {
+    static isFloat(value) {
         return this.isNumber(value) && !Number.isInteger(value);
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isBigInt
+     * @function Validations.isBigInt
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isBigInt(value: any) {
+    static isBigInt(value) {
         return value.constructor === BigInt;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isBoolean
+     * @function Validations.isBoolean
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isBoolean(value: any) {
+    static isBoolean(value) {
         return value.constructor === Boolean;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isFunction
+     * @function Validations.isFunction
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isFunction(value: any) {
+    static isFunction(value) {
         return value.constructor === Function;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isObject
+     * @function Validations.isObject
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isObject(value: any) {
+    static isObject(value) {
         return value.constructor === Object;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isEmptyObject
+     * @function Validations.isEmptyObject
      * @param {Object} value value to validate
      * @returns {Boolean} true/false
      */
-    static isEmptyObject(value: any) {
+    static isEmptyObject(value) {
         // check for Object type
         if (this.isObject(value) && Object.keys(value).length) {
             return true;
@@ -175,110 +187,110 @@ export default class ValidationUtil {
     /**
      * @public
      * @static
-     * @function ValidationUtil.isArray
+     * @function Validations.isArray
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isArray(value: any) {
+    static isArray(value) {
         return value.constructor === Array;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isEmptyArray
+     * @function Validations.isEmptyArray
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isEmptyArray(value: any) {
+    static isEmptyArray(value) {
         return this.isArray(value) && value.length === 0;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.hasElements
+     * @function Validations.hasElements
      * @description checks if an array has elements
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static hasElements(value: any) {
+    static hasElements(value) {
         return this.isArray(value) && value.length > 0;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isDate
+     * @function Validations.isDate
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isDate(value: any) {
+    static isDate(value) {
         return value.constructor === Date;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isError
+     * @function Validations.isError
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isError(value: any) {
+    static isError(value) {
         return value.constructor === Error;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isSymbol
+     * @function Validations.isSymbol
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isSymbol(value: any) {
+    static isSymbol(value) {
         return value.constructor === Symbol;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isMap
+     * @function Validations.isMap
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isMap(value: any) {
+    static isMap(value) {
         return value.constructor === Map;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.isWeakMap
+     * @function Validations.isWeakMap
      * @param {Any} value value to validate
      * @returns {Boolean} true/false
      */
-    static isWeakMap(value: any) {
+    static isWeakMap(value) {
         return value.constructor === WeakMap;
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.validateEmail
+     * @function Validations.isEmail
      * @description performs a simple regex on an email string
      * @param {String} email entered email
      * @returns {Boolean} true/false
      * @example
      *  - 'anystring@anystring.anystring'
      */
-    static validateEmail(email: string) {
+    static isEmail(email) {
         return /^[^\s@]+@[^\s@]+$/.test(email);
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.validatePhoneNumber
+     * @function Validations.isPhoneNumber
      * @description performs a regex on a phone number
      * @param {String} phoneNum entered phone number
      * @returns {Boolean} true/false
@@ -291,14 +303,14 @@ export default class ValidationUtil {
      *  - '+01234567890'
      *  - '000-12345678'
      */
-    static validatePhoneNumber(phoneNum: string) {
+    static isPhoneNumber(phoneNum) {
         return /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im.test(phoneNum);
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.validateZipcode
+     * @function Validations.isZipcode
      * @description validates an entered postal (zip) code
      * @param {String} zip entered zipcode
      * @returns {Boolean} true/false
@@ -307,20 +319,20 @@ export default class ValidationUtil {
      *  - '12345-6789'
      *  - '12345 1234'
      */
-    static validateZipcode(zip: string) {
+    static isZipcode(zip) {
         return /^\d{5}(?:[-\s]\d{4})?$/.test(zip);
     }
 
     /**
      * @public
      * @static
-     * @function ValidationUtil.validatePassword
+     * @function Validations.isPassword
      * @description performs a regex on a password
      * @param {String} password entered password
      * @returns {Boolean} true/false
      * @example
      */
-    static validatePassword(password: string) {
+    static isPassword(password) {
         return / /.test(password);
     }
 }

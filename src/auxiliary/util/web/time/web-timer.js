@@ -1,4 +1,19 @@
 /**
+ * @private
+ * @property {TimeHandler | Null} _timer
+ * @description timer object
+ */
+let _timer = null;
+
+/**
+ * @private
+ * @readonly
+ * @property {Number} DEFAULT_TIMEOUT
+ * @description default timeout in milliseconds
+ */
+const DEFAULT_TIMEOUT = 1000;
+
+/**
  * @class
  * @version 1.0
  * @description creates a stopwatch timer to track time durations
@@ -6,60 +21,45 @@
 export default class WebTimer {
     /**
      * @public
-     * @readonly
-     * @property {Number} DEFAULT_TIMEOUT
-     * @description default timeout in milliseconds
-     */
-    public readonly DEFAULT_TIMEOUT = 1000;
-
-    /**
-     * @public
      * @property {String} current
      * @description shows the current running time
      */
-    public current: string = '00:00:00';
+    current = '00:00:00';
 
     /**
      * @public
      * @property {Number} milliseconds
      * @description number of milliseconds past
      */
-    public milliseconds: number = 0;
+    milliseconds = 0;
 
     /**
      * @public
      * @property {Boolean} isRunning
      * @description shows if the timer is currently running
      */
-    public isRunning: boolean = false;
+    isRunning = false;
 
     /**
      * @public
-     * @property {String | Undefined} startTime
+     * @property {String | Null} startTime
      * @description timer start
      */
-    public startTime: string | undefined = undefined;
+    startTime = null;
 
     /**
      * @public
-     * @property {String | Undefined} endTime
+     * @property {String | Null} endTime
      * @description timer end
      */
-    public endTime: string | undefined = undefined;
+    endTime = null;
 
     /**
      * @public
      * @property {String[]} history
      * @description lap history
      */
-    public history: String[] = [];
-
-    /**
-     * @private
-     * @property {TimeHandler | Null} _timer
-     * @description timer object
-     */
-    private _timer: number | null = null;
+    history = [];
 
     /**
      * @public
@@ -68,27 +68,27 @@ export default class WebTimer {
      * @param {Number} [timeout] custom timeout variable
      * @see setInterval
      */
-    start(timeout?: number) {
+    start(timeout) {
         // validate the timeout variable
         if (typeof timeout !== 'number' || timeout <= 0) {
-            timeout = this.DEFAULT_TIMEOUT;
+            timeout = DEFAULT_TIMEOUT;
         }
 
         this.startTime = (new Date()).toDateString();
 
         // start new timer and begin recording (timeout of 1000ms)
-        this._timer = window.setInterval(() => {
+        _timer = window.setInterval(() => {
             this.milliseconds++;
 
             let remain = this.milliseconds;
 
-            let hours: number | string = Math.floor(remain / 3600);
+            let hours = Math.floor(remain / 3600);
             remain -= hours * 3600;
 
-            let mins: number | string = Math.floor(remain / 60);
+            let mins = Math.floor(remain / 60);
             remain -= mins * 60;
 
-            let secs: number | string = remain;
+            let secs = remain;
 
             if (hours < 10) {
                 hours = `0${hours}`;
@@ -115,10 +115,10 @@ export default class WebTimer {
      * @see clearInterval
      */
     stop() {
-        if (this._timer) {
+        if (_timer) {
             this.endTime = new Date().toDateString();
-            window.clearInterval(this._timer);
-            this._timer = null;
+            window.clearInterval(_timer);
+            _timer = null;
             this.isRunning = false;
         }
     }

@@ -1,7 +1,7 @@
 import HTTPS from '../../auxiliary/util/web/network/https';
 import { Order } from '../models/order';
 import ExceptionFactory from './exceptions/ExceptionFactory';
-import ValidationUtil from '../../auxiliary/util/primitives/validation-util';
+import Validations from '../../auxiliary/util/validation/validations';
 
 /**
  * @private
@@ -39,7 +39,7 @@ export default class OrderService extends HTTPS {
      * @see ExceptionFactory
      */
     async getOrder(id: string): Promise<Order> {
-        if (!ValidationUtil.isString(id)) {
+        if (!Validations.isString(id)) {
             throw ExceptionFactory.build(400, "failed to get order info - invalid 'id' param");
         }
 

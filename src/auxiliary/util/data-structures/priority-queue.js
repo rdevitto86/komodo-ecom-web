@@ -5,15 +5,26 @@
  * @description binds a queue element to a given priority
  */
 class QueueElement {
-    public value: any;
-    public priority: number;
+    /**
+     * @public
+     * @property {Any} value
+     * @description element data
+     */
+    value = null;
+
+    /**
+     * @public
+     * @property {Number} priority
+     * @description queue priority
+     */
+    priority = 0;
 
     /**
      * @constructor
      * @param {Any} value value to be stored in queue
      * @param {Number} priority priority of element
      */
-    constructor(value: any, priority: number) {
+    constructor(value, priority) {
         this.value = value;
         this.priority = priority;
     }
@@ -28,13 +39,13 @@ class QueueElement {
  *  - remove => O(1)
  *  - search => O(n)
  */
-export default class PriorityQueue<T> {
+export default class PriorityQueue {
     /**
      * @private
      * @property {QueueElement[]} _queue
      * @description queues items based on FIFO
      */
-    private _queue: QueueElement[] = [];
+    _queue = [];
 
     /**
      * @public
@@ -43,7 +54,7 @@ export default class PriorityQueue<T> {
      * @param {Any} item item to add
      * @param {Number} [priority] item priority
      */
-    enqueue(item: T, priority: number = 0) {
+    enqueue(item, priority = 0) {
         const { _queue } = this;
         const element = new QueueElement(item, priority);
 
@@ -103,7 +114,7 @@ export default class PriorityQueue<T> {
      * @param {T} item item to search
      * @returns {Number} first index of item, -1 if not found
      */
-    seek(item: T) {
+    seek(item) {
         const { _queue } = this;
         for (let i = 0, len = _queue.length; i < len; i++) {
             if (_queue[i].value === item) {

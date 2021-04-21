@@ -5,76 +5,76 @@
  * @description creates a mapping of available browser details
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Navigator
  */
-class NavigatorUtil {
+class NavigatorParser {
     /**
      * @public
      * @property {Boolean} [isDesktop]
      * @description device is a desktop/laptop/full browser
      */
-    public isDesktop?: boolean;
+    isDesktop = undefined;
 
     /**
      * @public
      * @property {Boolean} [isPhone]
      * @description device is a mobile phone
      */
-    public isPhone?: boolean;
+    isPhone = undefined;
 
     /**
      * @public
      * @property {Boolean} [isTablet]
      * @description device is a tablet
      */
-    public isTablet?: boolean;
+    isTablet = undefined;
 
     /**
      * @public
      * @property {Boolean} [isAndroid]
      * @description device is running Android
      */
-    public isAndroid?: boolean;
+    isAndroid = undefined;
 
     /**
      * @public
      * @property {Boolean} [isIOS]
      * @description device is running iOS
      */
-    public isIOS?: boolean;
+    isIOS = undefined;
 
     /**
      * @public
      * @property {String} [userAgent]
      * @description device and browser information
      */
-    public userAgent?: string;
+    userAgent = undefined;
 
     /**
      * @public
      * @property {String} [language]
      * @description device language
      */
-    public language?: string;
+    language = undefined;
 
     /**
      * @public
      * @property {Boolean} [cookiesEnabled]
      * @description browser cookies enabled
      */
-    public cookiesEnabled?: boolean;
+    cookiesEnabled = undefined;
 
     /**
      * @public
      * @property {String} [connectionType]
      * @description internet connection type
      */
-    public connectionType?: string;
+    connectionType = undefined;
 
     /**
      * @public
      * @property {Boolean} [doNotTrack]
      * @description Do Not Track header enabled
      */
-    public doNotTrack?: boolean;
+    doNotTrack = undefined;
 
     /**
      * @constructor
@@ -173,5 +173,5 @@ class NavigatorUtil {
     }
 }
 
-const singleton = new NavigatorUtil();
+const singleton = new NavigatorParser();
 export default singleton;

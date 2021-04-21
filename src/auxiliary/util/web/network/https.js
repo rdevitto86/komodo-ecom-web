@@ -1,5 +1,5 @@
+/* eslint-disable no-throw-literal */
 /* eslint-disable class-methods-use-this */
-import ExceptionFactory from '../../../../core/services/exceptions/ExceptionFactory';
 
 /**
  * @private
@@ -20,7 +20,7 @@ import ExceptionFactory from '../../../../core/services/exceptions/ExceptionFact
  * @param {String} url URL to validate
  * @returns {Boolean} true/false
  */
-const isValidURL = (url: string) => (typeof url === 'string'); // TODO - add Regex
+const isValidURL = (url) => (typeof url === 'string'); // TODO - add Regex
 
 /**
  * @class
@@ -37,9 +37,12 @@ export default class HTTPS {
      * @returns {Promise<Any>} response
      * @throws {ServiceException} 400 Bad Request
      */
-    async GET(url: string): Promise<any> {
+    async GET(url) {
         if (!isValidURL(url)) {
-            throw ExceptionFactory.build(400, 'invalid URL');
+            throw {
+                code: 400,
+                message: 'invalid request URL'
+            };
         }
         return fetch(url, { method: 'GET' });
     }
@@ -53,12 +56,18 @@ export default class HTTPS {
      * @returns {Promise<Any>} response
      * @throws {ServiceException} 400 Bad Request
      */
-    async POST(request: Request): Promise<any> {
+    async POST(request) {
         if (!(request instanceof Request) || request.method !== 'POST') {
-            throw ExceptionFactory.build(400, 'invalid request');
+            throw {
+                code: 400,
+                message: 'invalid http request'
+            };
         }
         if (!isValidURL(request.url)) {
-            throw ExceptionFactory.build(400, 'invalid URL');
+            throw {
+                code: 400,
+                message: 'invalid request URL'
+            };
         }
         return fetch(request);
     }
@@ -72,12 +81,18 @@ export default class HTTPS {
      * @returns {Promise<Any>} response
      * @throws {ServiceException} 400 Bad Request
      */
-    async PUT(request: Request): Promise<any> {
+    async PUT(request) {
         if (!(request instanceof Request) || request.method !== 'PUT') {
-            throw ExceptionFactory.build(400, 'invalid request');
+            throw {
+                code: 400,
+                message: 'invalid http request'
+            };
         }
         if (!isValidURL(request.url)) {
-            throw ExceptionFactory.build(400, 'invalid URL');
+            throw {
+                code: 400,
+                message: 'invalid request URL'
+            };
         }
         return fetch(request);
     }
@@ -91,12 +106,18 @@ export default class HTTPS {
      * @returns {Promise<Any>} response
      * @throws {ServiceException} 400 Bad Request
      */
-    async DELETE(request: Request): Promise<any> {
+    async DELETE(request) {
         if (!(request instanceof Request) || request.method !== 'DELETE') {
-            throw ExceptionFactory.build(400, 'invalid request');
+            throw {
+                code: 400,
+                message: 'invalid http request'
+            };
         }
         if (!isValidURL(request.url)) {
-            throw ExceptionFactory.build(400, 'invalid URL');
+            throw {
+                code: 400,
+                message: 'invalid request URL'
+            };
         }
         return fetch(request);
     }
@@ -110,9 +131,12 @@ export default class HTTPS {
      * @returns {Promise<Any>} response
      * @throws {ServiceException} 400 Bad Request
      */
-    async HEAD(url: string): Promise<any> {
+    async HEAD(url) {
         if (!isValidURL(url)) {
-            throw ExceptionFactory.build(400, 'invalid URL');
+            throw {
+                code: 400,
+                message: 'invalid request URL'
+            };
         }
         return fetch(url, { method: 'HEAD' });
     }

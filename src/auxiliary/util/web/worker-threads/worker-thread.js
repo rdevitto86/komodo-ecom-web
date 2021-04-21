@@ -1,89 +1,83 @@
+/* eslint-disable class-methods-use-this */
+
 /*
     NOTE:
-    - add listeners functionality
+        - add listeners functionality
+        - https://threads.js.org/usage
+        - https://threads.js.org/usage-observables
 */
+
+/**
+ * @private
+ * @property {Worker | Null} _thread
+ * @description web worker thread instance
+ */
+let _thread = null;
 
 /**
  * @class
  * @version 1.0
+ * @extends {Worker}
  * @description
  * @link https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers
  */
-export default class WorkerThread {
+export default class WorkerThread extends Worker {
     /**
      * @public
-     * @readonly
-     * @property {String | Undefined} id
+     * @property {String | Null} id
      * @description thread indentifier
      */
-    public readonly id: string;
+    id = null;
 
     /**
      * @public
-     * @readonly
-     * @property {String | Undefined} filepath
+     * @property {String | Null} filepath
      * @description thread executable filepath
      */
-    public readonly filepath: string;
-
-    /**
-     * @public
-     * @readonly
-     * @property {Function | Function[] | Undefined} listener
-     * @description parent-thread listener function
-     */
-    public readonly listener?: Function | Function[];
+    filepath = null;
 
     /**
      * @public
      * @property {Boolean} isActive
      * @description timestamp of thread termination
      */
-    public isActive: boolean = false;
+    isActive = false;
 
     /**
      * @public
-     * @property {String | Undefined} createdTimestamp
+     * @property {String | Null} createdTimestamp
      * @description timestamp of thread creation
      */
-    public createdTimestamp?: string;
+    createdTimestamp = null;
 
     /**
      * @public
-     * @property {String | Undefined} terminatedTimestamp
+     * @property {String | Null} terminatedTimestamp
      * @description timestamp of thread termination
      */
-    public terminatedTimestamp?: string;
-
-    /**
-     * @private
-     * @property {Worker | Undefined} _thread
-     * @description web worker thread instance
-     */
-    private _thread?: Worker;
+    terminatedTimestamp = null;
 
     /**
      * @constructor
-     * @param {String} id thread identifier
      * @param {String} filepath thread executable filepath
-     * @param {Function | Function[] | Undefined} [listener] workerthread message handler
+     * @param {WorkerOptions} options thread identifier
+     * @param {String} id thread identifier
+     * @param {Function | Function[]} [listener] workerthread message handler
      */
-    constructor(id: string, filepath: string, listener?: Function | Function[]) {
-        // validate and set thread properties
-        this.id = id;
-        this.filepath = filepath;
-        this.listener = listener;
+    constructor(filepath, options, id) {
+        super(filepath, options);
 
         // disable functionality if web workers not supported
-        if (window.Worker) {
-            // start new thread
-            this.run();
-        } else {
+        if (!window.Worker) {
             this.run = () => false;
             this.postMessage = () => false;
             this.terminate = () => false;
             this.restart = () => false;
         }
+
+        // validate and set thread properties
+        this.id = id;
+        this.filepath = filepath;
     }
 
     /**
@@ -124,7 +118,7 @@ export default class WorkerThread {
         // };
 
         // set local thread
-        this._thread = thread;
+        _thread = thread;
         this.isActive = true;
 
         // reset last terminated time (if not previously)
@@ -142,11 +136,11 @@ export default class WorkerThread {
      * @returns {Boolean} success/failure
      * @throws {Error}
      */
-    postMessage(message: any): boolean {
-        if (!this._thread) {
+    postMessage(message) {
+        if (!_thread) {
             throw Error('failed to post message - worker thread non-exsistant');
         }
-        this._thread.postMessage(message);
+        _thread.postMessage(message);
         return true;
     }
 
@@ -156,11 +150,11 @@ export default class WorkerThread {
      * @description terminates/ends the current thread
      * @returns {Boolean} success/failure
      */
-    terminate(): boolean {
-        if (this._thread) {
+    terminate() {
+        if (_thread) {
             this.terminatedTimestamp = String((new Date()).getTime());
-            this._thread.terminate();
-            this._thread = undefined;
+            _thread.terminate();
+            _thread = undefined;
             this.isActive = false;
             return true;
         }
@@ -173,7 +167,7 @@ export default class WorkerThread {
      * @description restarts the worker thread
      * @returns {Boolean} success/failure
      */
-    restart(): boolean {
+    restart() {
         return (this.terminate()) ? this.run() : false;
     }
 
@@ -184,6 +178,7 @@ export default class WorkerThread {
      */
     get timeActive() {
         return (this.createdTimestamp)
-            ? (Date.now() - new Date(this.createdTimestamp).getTime()) : 0;
+            ? (Date.now() - new Date(this.createdTimestamp).getTime())
+            : 0;
     }
 }

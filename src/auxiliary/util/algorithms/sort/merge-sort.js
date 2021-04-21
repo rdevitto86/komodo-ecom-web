@@ -1,10 +1,4 @@
 /**
- * @type
- * @description defines allowed data structures
- */
-type DataStructure = number[]; // TODO - handle sorting of Maps and strings
-
-/**
  * @class
  * @version 1.0
  * @description implements a merge sort algorithm
@@ -18,13 +12,13 @@ export default class MergeSort {
      * @static
      * @function MergeSort.sort
      * @description executes a mergesort on a given iterable data structure
-     * @param {DataStructure} data data structure to sort
-     * @returns {DataStructure | Null}
+     * @param {Number[]} data data structure to sort
+     * @returns {Number[] | Null}
      * @example
      *  const arr = MergeSort.sort([3,2,5,1,4]);
      *  console.log(arr); // arr = [1,2,3,4,5]
      */
-    static sort(data: DataStructure): DataStructure | null {
+    static sort(data) {
         // validate unsorted data
         if (!(data instanceof Array)) {
             return null;
@@ -34,10 +28,10 @@ export default class MergeSort {
          * @private
          * @function _sort
          * @description helper function that recursively splits and sorts data
-         * @param {DataStructure} unsorted data to be sorted
-         * @returns {DataStructure} sorted data
+         * @param {Number[]} unsorted data to be sorted
+         * @returns {Number[]} sorted data
          */
-        return (function _sort(unsorted: DataStructure): DataStructure {
+        return (function _sort(unsorted) {
             // validate data for base case
             if (unsorted.length < 2) {
                 return unsorted;
@@ -52,7 +46,7 @@ export default class MergeSort {
              * @param {Any[]} right right sub-array
              * @returns {Any[]} sorted sub-array
              */
-            return ((left: any[], right: any[]) => {
+            return ((left, right) => {
                 const arr = [];
 
                 // loop through sub-arrays until one side is empty
@@ -65,7 +59,11 @@ export default class MergeSort {
 
                 // concatenate remaining elements
                 return [...arr, ...left, ...right];
-            })(_sort(unsorted.splice(0, unsorted.length / 2)), _sort(unsorted)); // _merge entry
+            })(
+                // _merge entry
+                _sort(unsorted.splice(0, unsorted.length / 2)),
+                _sort(unsorted)
+            );
         }(data)); // _sort entry
     }
 }

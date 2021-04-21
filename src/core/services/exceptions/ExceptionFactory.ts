@@ -41,8 +41,9 @@ export default class ExceptionFactory {
         const isMessage = typeof message === 'string';
 
         return (name && isMessage)
-            ? new ServiceException(name, code, message) : new Error(
-                (isMessage) ? message : 'a service exception occured w/ no error code supplied'
+            ? new ServiceException(name, code, message)
+            : new Error(
+                (isMessage) ? message : 'service exception occured w/ no status code'
             );
     }
 }

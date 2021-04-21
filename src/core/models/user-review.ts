@@ -11,7 +11,7 @@ export interface UserReviewJSON {
 /**
  * @class
  * @version 1.0
- * @description defines a new User Review model
+ * @description defines a new Catalog Item Review model
  */
 export class UserReview {
     /**
@@ -23,7 +23,7 @@ export class UserReview {
 
     /**
      * @public
-     * @property {Number} rating
+     * @property {Number | Null} rating
      * @description catalog item id
      */
     public rating: number | null = null;

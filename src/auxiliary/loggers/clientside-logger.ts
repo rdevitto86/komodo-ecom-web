@@ -19,13 +19,12 @@ const LOG_PRIORITIES: {[key: string]: number} = Object.freeze({
  * @interface
  * @description defines a log message
  */
-interface LogMessage {
+interface Log {
     level: string,
-    code?: string,
     message: string,
-    trace?: any,
+    code?: string,
     http?: number,
-    useTrace?: boolean
+    trace?: any,
 }
 
 /**
@@ -37,247 +36,247 @@ interface Exception {
     message: string,
     code?: string,
     trace?: any,
-    http?: number
+    http?: number,
 }
+
+// flags that enable functionality
+const ENABLE_CONSOLE = console && process.env.ENABLE_LOG_CONSOLE === 'TRUE';
+const ENABLE_REMOTE = process.env.ENABLE_LOG_REMOTE === 'TRUE';
+const ENABLE_LOGGER = ENABLE_CONSOLE || ENABLE_REMOTE;
+const ENABLE_TIMESTAMPS = ENABLE_LOGGER && process.env.ENABLE_LOG_TIMESTAMP;
+
+// flags that control log processing
+const DEFAULT_LEVEL = (ENABLE_LOGGER) ? 4 : 0;
+const LOG_LEVEL = LOG_PRIORITIES[process.env.LOGGING_MODE || ''] || DEFAULT_LEVEL;
+
+/**
+ * @private
+ * @constant {Function | Null} _getTimestamp
+ * @description fetches the current timestamp
+ * @returns {String} timestamp, minus time zone string
+ */
+const _getTimestamp = (ENABLE_TIMESTAMPS) ? () => {
+    const curr = (new Date()).toString();
+    return curr.slice(0, curr.indexOf('(') - 1);
+} : null;
+
+/**
+ * @private
+ * @constant {Function | Null} _logConsole
+ * @description logs a clientside message to the console
+ * @param {String} level log level
+ * @param {String} message log message
+ * @param {String} [code] custom error code
+ * @param {String} [trace] stack trace
+ * @param {Number} [http] HTTP service code
+ */
+const _logConsole = (ENABLE_CONSOLE) ? (
+    level: string,
+    message: string,
+    code?: string,
+    trace?: string,
+    http?: number
+) => {
+    const logHTTP = (http) ? `[${http}]` : '';
+    const logCode = (code) ? ` ${code} |` : '';
+    const logStack = (trace) ? `\n.....\n${trace}` : '';
+    const timestamp = (_getTimestamp) ? ` ${_getTimestamp()} |` : '';
+
+    /**
+     * @example [INFO] creating new order
+     * @example [ERROR][404] Fri Apr 01 2021 00:00:00 GMT-0500 | LC-001 | failed to login
+     * .....
+     * [stack trace here]
+     */
+    const formatted = `[${level}]${logHTTP}${timestamp}${logCode} ${message}${logStack}`;
+
+    // use level-approriate console function
+    switch (level) {
+        case 'FATAL':
+        case 'ERROR':
+            console.error(formatted);
+            break;
+        case 'WARN':
+            console.warn(formatted);
+            break;
+        case 'INFO':
+            console.info(formatted);
+            break;
+        case 'DEBUG':
+            console.debug(formatted);
+            break;
+        default:
+            console.log(formatted);
+    }
+} : null;
+
+// /**
+//  * @private
+//  * @constant {Function | Null} _logRemote
+//  * @description sends a log message to a remote service
+//  * @param {LogMessage} log log message properties
+//  */
+// const _logRemote = (ENABLE_REMOTE) ? (log: LogMessage) => {
+
+// } : null;
+
+/**
+ * @private
+ * @constant {Function} _processLog
+ * @description processes incoming log messages
+ * @param {Log} log log message properties
+ */
+const _processLog = (ENABLE_LOGGER) ? (log: Log) => {
+    try {
+        const {
+            level, message, code, http, trace
+        } = log;
+
+        // reject logs lower than logging mode
+        if (LOG_PRIORITIES[level] < LOG_LEVEL) {
+            return;
+        }
+
+        // log console message
+        if (_logConsole) {
+            _logConsole(level, message, code, trace, http);
+        }
+
+        // log remote message
+        // if (logRemote) {
+        //     logRemote(log);
+        // }
+    } catch (e) {
+        if (console && e instanceof Error) {
+            console.error(e.message);
+        }
+    }
+} : () => {};
 
 /**
  * @class
  * @singleton
  * @version 1.0
  * @description clientside logger that records runtime messages
- * @see process.env
  */
 class Logger {
     /**
      * @public
+     * @static
      * @function Logger.fatal
      * @description records a fatal log message
      * @param {Exception | String} log error information
      */
-    public fatal: Function = () => {};
+    public static fatal(log: Exception | string) {
+        switch (typeof log) {
+            case 'string':
+                _processLog({
+                    level: 'FATAL',
+                    message: log
+                });
+                break;
+            case 'object':
+                _processLog({
+                    level: 'FATAL',
+                    ...log
+                });
+                break;
+            default:
+        }
+    }
 
     /**
      * @public
+     * @static
      * @function Logger.error
      * @description records an error log message
      * @param {Exception | String} log error information
      */
-    public error: Function = () => {};
+    public static error(log: Exception | string) {
+        switch (typeof log) {
+            case 'string':
+                _processLog({
+                    level: 'ERROR',
+                    message: log
+                });
+                break;
+            case 'object':
+                _processLog({
+                    level: 'ERROR',
+                    ...log
+                });
+                break;
+            default:
+        }
+    }
 
     /**
      * @public
+     * @static
      * @function Logger.warn
      * @description records a warn log message
      * @param {Exception | String} log error information
      */
-    public warn: Function = () => {};
+    public static warn(log: Exception | string) {
+        switch (typeof log) {
+            case 'string':
+                _processLog({
+                    level: 'WARN',
+                    message: log
+                });
+                break;
+            case 'object':
+                _processLog({
+                    level: 'WARN',
+                    ...log
+                });
+                break;
+            default:
+        }
+    }
 
     /**
      * @public
+     * @static
      * @function Logger.info
      * @description records an info log message
      * @param {String} message info message
      */
-    public info: Function = () => {};
+    public static info(message: string) {
+        _processLog({
+            level: 'INFO',
+            message
+        });
+    }
 
     /**
      * @public
+     * @static
      * @function Logger.debug
      * @description records a debug log message
      * @param {String} message info message
-     * @param {Boolean} [useTrace] enables trace logging for the message
+     * @param {Boolean} [logTrace] optionally logs stack trace
      */
-    public debug: Function = () => {};
+    public static debug(message: any, logTrace = false) {
+        _processLog({
+            level: 'DEBUG',
+            message
+        });
+
+        if (ENABLE_CONSOLE && logTrace === true) {
+            console.trace();
+        }
+    }
 
     /**
      * @public
+     * @static
      * @function Logger.clear
      * @description clears console of previous logs
      */
-    public clear: Function = () => {};
-
-    /**
-     * @constructor
-     * @description builds and assigns singleton runtime properties
-     */
-    constructor() {
-        // environment variables
-        const {
-            LOGGING_MODE, ENABLE_CONSOLE, // ENABLE_LOGGING_SERVICE
-        } = process.env;
-
-        // validate logger properties before building singleton
-        if (typeof LOGGING_MODE === 'string' && (LOG_PRIORITIES[LOGGING_MODE] || -1) > LOG_PRIORITIES.OFF) {
-            // determine output stream eligibility
-            const defaultPriority = LOG_PRIORITIES[LOGGING_MODE];
-            const enableConsole = (console && console.log) && ENABLE_CONSOLE === 'TRUE';
-            // const enableRemote = ENABLE_LOGGING_SERVICE === 'TRUE';
-
-            /**
-             * @private
-             * @constant {Function | Undefined} logConsole
-             * @description logs a clientside message to the console
-             * @param {String} level log level
-             * @param {String} message log message
-             * @param {String} code custom error code
-             * @param {String} trace stack trace
-             * @param {Number} http HTTP service code
-             * @param {Boolean} useTrace enables console strack trace
-             */
-            const logConsole = (enableConsole) ? (
-                level: string,
-                message: string,
-                code?: string,
-                trace?: string,
-                http?: number,
-                useTrace?: boolean
-            ) => {
-                const logHTTP = (http) ? `[${http}]` : '';
-                const logCode = (code) ? ` ${code} |` : '';
-                const logStack = (trace) ? `\n.....\n${JSON.stringify(trace)}` : '';
-
-                /**
-                 * @example [INFO] creating new order
-                 * @example [ERROR][404] LC-001 | failed to login - invalid credentials
-                 * .....
-                 * [stack trace here]
-                 */
-                const formatted = `[${level}]${logHTTP}${logCode} ${message}${logStack}`;
-
-                // use level-approriate console function
-                switch (level) {
-                    case 'FATAL':
-                    case 'ERROR':
-                        console.error(formatted);
-                        break;
-                    case 'WARN':
-                        console.warn(formatted);
-                        break;
-                    case 'INFO':
-                        console.info(formatted);
-                        break;
-                    case 'DEBUG':
-                        console.debug(formatted);
-                        break;
-                    default:
-                        console.log(formatted);
-                }
-
-                // log stack trace (optional)
-                if (!trace && useTrace === true) {
-                    console.trace();
-                }
-            } : undefined;
-
-            /**
-             * @private
-             * @constant {Function | Undefined} logRemote
-             * @description sends local log to logging service
-             * @param {String} level log level
-             * @param {String} message log message
-             * @param {String} code custom error code
-             * @param {String} trace stack trace
-             * @param {Number} http HTTP service code
-             */
-            // const logRemote = (enableRemote) ? (
-            //     level: string,
-            //     message: string,
-            //     code?: string,
-            //     trace?: any,
-            //     http?: number,
-            // ) => {
-            //     // TODO - build batch handler
-            //     // TODO - remote service
-            //     const timestamp = (new Date()).toString();
-            // } : undefined;
-
-            /**
-             * @private
-             * @function logHandler
-             * @description processes incoming log messages
-             * @param {LogMessage} log log message object
-             */
-            const logHandler = (log: LogMessage) => {
-                // log message properties
-                const {
-                    level, code, message, trace, http, useTrace
-                } = log;
-
-                // reject logs lower than logging mode
-                if (LOG_PRIORITIES[level] < defaultPriority) {
-                    return;
-                }
-
-                // log console message
-                if (logConsole) {
-                    logConsole(level, message, code, trace, http, useTrace);
-                }
-
-                // log remote
-                // if (logRemote) {
-                //     logRemote(level, message, code, trace, http);
-                // }
-            };
-
-            /**
-             * @private
-             * @function methodWrapper
-             * @description dynamically builds error logging methods
-             * @param {String} level log level
-             * @returns {Function} error logging function
-             */
-            const methodWrapper = (level: string) => (log: Exception | string) => {
-                let code;
-                let message;
-                let trace;
-                let http;
-
-                switch (typeof log) {
-                    case 'object':
-                        code = log.code;
-                        message = log.message;
-                        trace = log.trace;
-                        http = log.http;
-                        break;
-                    case 'string':
-                        message = log;
-                        break;
-                    default:
-                        return;
-                }
-
-                logHandler({
-                    level, code, message, trace, http
-                });
-            };
-
-            // bind fatal method
-            this.fatal = methodWrapper('FATAL');
-
-            // bind error method
-            this.error = methodWrapper('ERROR');
-
-            // bind warn method
-            this.warn = methodWrapper('WARN');
-
-            // enable console clearing
-            if (enableConsole) {
-                // bind clear method
-                this.clear = () => console.clear();
-            }
-
-            // disable info and debug for production
-            if (LOGGING_MODE === 'PROD') {
-                // bind info method
-                this.info = (message: string) => logHandler({
-                    level: 'INFO', message
-                });
-
-                // bind debug method
-                this.debug = (message: string, useTrace?: boolean) => logHandler({
-                    level: 'DEBUG', message, useTrace
-                });
-            }
+    public static clear() {
+        if (ENABLE_CONSOLE) {
+            console.clear();
         }
     }
 }

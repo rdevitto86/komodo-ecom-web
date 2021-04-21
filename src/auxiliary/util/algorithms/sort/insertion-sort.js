@@ -1,10 +1,4 @@
 /**
- * @type
- * @description defines allowed data structures
- */
-type DataStructure = number[]; // TODO - handle sorting of Maps and strings
-
-/**
  * @class
  * @version 1.0
  * @description implements an insertion sort algorithm
@@ -18,13 +12,13 @@ export default class InsertionSort {
      * @static
      * @function InsertionSort.sort
      * @description executes an insertion sort on a given iterable data structure
-     * @param {DataStructure} data data structure to sort
+     * @param {Number[]} data data structure to sort
      * @example
      *  const arr = [3,4,1,2];
      *  InsertionSort.sort(arr);
      *  console.log(arr); // arr = [1,2,3,4];
      */
-    static sort(data: DataStructure) {
+    static sort(data) {
         // validate input data
         if (!(data instanceof Array)) {
             return;

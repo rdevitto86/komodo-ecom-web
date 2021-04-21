@@ -1,7 +1,7 @@
 import HTTPS from '../../auxiliary/util/web/network/https';
 import { isUser, User, UserJSON } from '../models/user';
 import ExceptionFactory from './exceptions/ExceptionFactory';
-import ValidationUtil from '../../auxiliary/util/primitives/validation-util';
+import Validations from '../../auxiliary/util/validation/validations';
 
 /**
  * @private
@@ -40,7 +40,7 @@ export default class UserService extends HTTPS {
      * @see ExceptionFactory
      */
     async getAccountInfo(username: string): Promise<User> {
-        if (!ValidationUtil.isString(username)) {
+        if (!Validations.isString(username)) {
             throw ExceptionFactory.build(400, 'invalid username param');
         }
 
@@ -77,7 +77,7 @@ export default class UserService extends HTTPS {
      * @see ExceptionFactory
      */
     async updateAccountInfo(username: string, details: User | UserJSON): Promise<boolean> {
-        if (!ValidationUtil.isString(username)) {
+        if (!Validations.isString(username)) {
             throw ExceptionFactory.build(400, 'invalid username param');
         }
         if (!isUser(details)) {
@@ -107,7 +107,7 @@ export default class UserService extends HTTPS {
      * @see ExceptionFactory
      */
     async deleteAccount(username: string): Promise<boolean> {
-        if (!ValidationUtil.isString(username)) {
+        if (!Validations.isString(username)) {
             throw ExceptionFactory.build(400, 'invalid username param');
         }
         return (await this.DELETE(

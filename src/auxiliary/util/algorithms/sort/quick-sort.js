@@ -1,10 +1,4 @@
 /**
- * @type
- * @description defines allowed data structures
- */
-type DataStructure = number[]; // TODO - handle sorting of Maps and strings
-
-/**
  * @class
  * @description implements a quick sort algorithm
  * @complexity
@@ -17,13 +11,13 @@ export default class QuickSort {
      * @static
      * @function QuickSort.sort
      * @description executes a quicksort on a given iterable data structure
-     * @param {DataStructure} data data structure to sort
+     * @param {Number[]} data data structure to sort
      * @example
      *  const arr = [3,4,1,2];
      *  QuickSort.sort(arr);
      *  console.log(arr); // arr = [1,2,3,4];
      */
-    static sort(unsorted: any[]) {
+    static sort(unsorted) {
         // validate input data
         if (!(unsorted instanceof Array)) {
             return;
@@ -33,11 +27,11 @@ export default class QuickSort {
          * @private
          * @function _sort
          * @description helper function that handles recurssion
-         * @param {DataStructure} sData data to sort
+         * @param {Number[]} sData data to sort
          * @param {Number} sStart starting index
          * @param {Number} sEnd ending index
          */
-        (function _sort(sData: DataStructure, sStart: number, sEnd: number) {
+        (function _sort(sData, sStart, sEnd) {
             // check if pivot is greater/equal to end
             if (sStart >= sEnd) {
                 return;
@@ -48,11 +42,11 @@ export default class QuickSort {
              * @function
              * @alias _partition
              * @description helper function that handles pivot calculation
-             * @param {DataStructure} pData data to sort
+             * @param {Number[]} pData data to sort
              * @param {Number} pStart starting index
              * @param {Number} pEnd ending index
              */
-            const index = ((pData: any[], pStart: number, pEnd: number) => {
+            const index = ((pData, pStart, pEnd) => {
                 const pivotValue = pData[pEnd];
                 let pivotIndex = pStart;
 

@@ -19,14 +19,14 @@ type ItemQuantity = number | null;
  */
 export interface CatalogItemJSON {
     // universal item properties
-    id: ItemText;
+    id: string;
+    catID?: string;
     price: ItemQuantity;
     description: ItemText;
     overview: ItemText;
 
     // item rating properties
     itemRating?: ItemQuantity;
-    userRating?: ItemQuantity;
     enableRatings?: boolean;
 
     // item review properties
@@ -50,38 +50,38 @@ export interface CatalogItemJSON {
 export class CatalogItem {
     /**
      * @public
-     * @property {CatalogItemDetails} id
+     * @property {ItemText} id
      * @description catalog item id
      */
     public id: ItemText = null;
 
     /**
      * @public
-     * @property {CatalogItemQuantity} price
+     * @property {ItemText} catID
+     * @description catalog item id
+     */
+    public catID: ItemText = null;
+
+    /**
+     * @public
+     * @property {ItemQuantity} price
      * @description item price
      */
     public price: ItemQuantity = null;
 
     /**
      * @public
-     * @property {CatalogItemDetails} description
+     * @property {ItemText} description
      * @description item description
      */
     public description: ItemText = null;
 
     /**
      * @public
-     * @property {CatalogItemQuantity} itemRating
+     * @property {ItemQuantity} itemRating
      * @description aggregate user rating
      */
     public itemRating: ItemQuantity = null;
-
-    /**
-     * @public
-     * @property {CatalogItemQuantity} userRating
-     * @description user's personal rating
-     */
-    public userRating: ItemQuantity = null;
 
     /**
      * @public
@@ -113,21 +113,21 @@ export class CatalogItem {
 
     /**
      * @public
-     * @property {CatalogItemDetails} sku
+     * @property {ItemText} sku
      * @description item SKU number
      */
     public sku: ItemText = null;
 
     /**
      * @public
-     * @property {CatalogItemQuantity} quantity
+     * @property {ItemQuantity} quantity
      * @description item quantity
      */
     public quantity: ItemQuantity = null;
 
     /**
      * @public
-     * @property {CatalogItemQuantity} stock
+     * @property {ItemQuantity} stock
      * @description item stock level
      */
     public stock: ItemQuantity = null;
@@ -154,10 +154,10 @@ export class CatalogItem {
         if (isCatalogItem(props)) {
             const {
                 id,
+                catID,
                 price,
                 description,
                 itemRating,
-                userRating,
                 reviews,
                 enableRatings,
                 enableReviews,
@@ -172,15 +172,16 @@ export class CatalogItem {
             this.price = price;
             this.description = description;
 
+            if (catID) {
+                this.catID = catID;
+            }
+
             // set ratings data (if enabled)
             if (enableRatings === true) {
                 this.enableRatings = true;
 
                 if (typeof itemRating === 'number') {
                     this.itemRating = itemRating;
-                }
-                if (typeof userRating === 'number') {
-                    this.userRating = userRating;
                 }
             }
 

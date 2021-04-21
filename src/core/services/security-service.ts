@@ -1,6 +1,6 @@
 import HTTPS from '../../auxiliary/util/web/network/https';
 import ExceptionFactory from './exceptions/ExceptionFactory';
-import ValidationUtil from '../../auxiliary/util/primitives/validation-util';
+import Validations from '../../auxiliary/util/validation/validations';
 
 /**
  * @private
@@ -45,7 +45,7 @@ export default class SecurityService extends HTTPS {
      * @see ExceptionFactory
      */
     async login(username: string, password: string): Promise<void> {
-        if (ValidationUtil.isString([username, password])) {
+        if (Validations.isString([username, password])) {
             const response = await this.POST(
                 new Request(SERVICE_URL, {
                     method: 'POST',
@@ -77,7 +77,7 @@ export default class SecurityService extends HTTPS {
      * @see HTTPS.POST
      */
     async logout(username: string): Promise<void> {
-        if (ValidationUtil.isString(username) && !sessionStorage.getItem(SESH_TOKEN_KEY)) {
+        if (Validations.isString(username) && !sessionStorage.getItem(SESH_TOKEN_KEY)) {
             const response = await this.POST(
                 new Request(SERVICE_URL, {
                     method: 'POST',
