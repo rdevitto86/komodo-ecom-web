@@ -1,0 +1,3 @@
+export const KEY_ID_TOKEN = 'SESH_ID_TOKEN';
+export const KEY_ACCESS_TOKEN = 'SESH_AUTH_TOKEN';
+export const KEY_REFRESH_TOKEN = 'SESH_REFRESH_TOKEN';

@@ -1,0 +1,39 @@
+The plan with libraries is to move them to the package.json and an internal NPM registry. 
+Ideally, we want to handle versioning and dependancy population there.
+
+Sample NPM Libraries:
+@kfs-tsx/ui-common
+@kfs-ts/web-socket
+@kfs-ts/api-user-responses
+@kfs-styles/ecom-styles
+@kfs-types/mongodb
+@kfs-ts/util-clientside-logger
+@kfs-ts/algorithms-sort
+@kfs-js/primitives-string-ext
+
+NPM Directories:
+@kfs-js         // JavaScript
+@kfs-jsx        // React JavaScript
+@kfs-json       // JSON
+@kfs-ts         // Typescript
+@kfs-tsx        // Typescript React
+@kfs-angular    // Typescript Angular
+@kfs-types      // Typescript Types
+@kfs-styles     // CSS/SCSS
+@kfs-fonts      // fonts
+@kfs-i18n       // internalized text JS/JSON
+@kfs-config     // configuration JS/JSON
+@kfs-licensed   // 3rd Party JS libraries
+
+NPM Sub-Directories:
+/{appName}      // common app functionality (ex. ecom)
+/web            // shared web tools (ex. https rules)
+/ui             // shared ui elements
+/api            // shared api requests/responses
+/db             // shared database mappings
+/exceptions     // shared client/server exceptions/etc.
+/validation     // shared validations
+/algorithms     // shared algorithms
+/data-structs   // shared data-structures
+/primitives     // shared extended JS primitives
+/util           // shared utilities (ex. analytics)
