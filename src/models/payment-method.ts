@@ -1,71 +1,56 @@
-import { Address, AddressJSON, isAddress } from './address';
+import Address from './address';
+import { isAddress } from '../npm-libs/ts/types/address-type';
+import { isPaymentMethod, PaymentMethodJSON } from '../npm-libs/ts/types/payment-method-types';
 
 /**
- * @interface
- * @description defines an abstract Payment Method object
+ * Defines a new Payment Method model
+ * @version 1.0.0
  */
-export interface PaymentMethodJSON {
-    name: string | null;
-    cardNumber?: string | null;
-    cardType?: string | null;
-    cardNetwork?: string | null;
-    billingAddress: AddressJSON | null;
-    isDefault?: boolean;
-}
-
-/**
- * @class
- * @version 1.0
- * @description defines a new Payment Method model
- */
-export class PaymentMethod {
+export default class PaymentMethod {
     /**
-     * @public
-     * @property {String | Null} name
-     * @description method name (ex. PayPal, Amex)
+     * Payment method name (ex. PayPal, Amex Preferred Card)
      */
-    public name: string | null = null;
+    name: string | null = null;
 
     /**
-     * @public
-     * @property {String | Null} cardNumber
-     * @description primary street address info
+     * Card number
      */
-    public cardNumber: string | null = null;
+    cardNumber: string | null = null;
 
     /**
-     * @public
-     * @property {String | Null} cardType
-     * @description primary street address info
+     * Card Issuer (ex. Bank of America, Chase, etc.)
      */
-    public cardType: string | null = null;
+    cardType: string | null = null;
 
     /**
-     * @public
-     * @property {String | Null} cardNetwork
-     * @description payment card network
+     * Card payment network (ex. Visa, Mastercard, etc.)
      */
-    public cardNetwork: string | null = null;
+    cardNetwork: string | null = null;
 
     /**
-     * @public
-     * @property {Boolean} isDefault
-     * @description is current payment prefferred
+     * Card security code
      */
-    public isDefault: boolean = false;
+    securityCode: string | null = null;
 
     /**
-     * @public
-     * @property {AddressJSON | Null} billingAddress
-     * @description billing address
+     * Denotes if the current payment method is user default
      */
-    public billingAddress: AddressJSON | null = null;
+    isDefault: boolean = false;
 
     /**
-     * @constructor
-     * @param {PaymentMethodJSON} [props] payment prop object
+     * Denotes if payment method is through a payment processor (ex. PayPal, Apple, Square, etc.)
      */
-    constructor(props?: PaymentMethodJSON) {
+    isPaymentProcessor: boolean = false;
+
+    /**
+     * Card's billing address
+     */
+    billingAddress: Address | null = null;
+
+    /**
+     * @param {PaymentMethodJSON | PaymentMethod} [props] payment prop object
+     */
+    constructor(props?: PaymentMethodJSON | PaymentMethod) {
         if (isPaymentMethod(props)) {
             const {
                 name,
@@ -94,14 +79,3 @@ export class PaymentMethod {
         }
     }
 }
-
-/**
- * @constant
- * @function isPaymentMethod
- * @description checks if an item is an Promotion type object
- * @param {Any} obj object to reference
- * @returns {Boolean} true/false
- */
- export const isPaymentMethod = (obj: any): obj is PaymentMethodJSON => (
-    'name' in obj && 'billingAddress' in obj && 'percentOff' in obj && 'hasFreeShipping' in obj
-);

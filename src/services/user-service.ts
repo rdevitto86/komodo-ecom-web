@@ -1,12 +1,15 @@
-import HTTPS from '../npm-libs/typescript/web/network/https';
-import { isUser, User, UserJSON } from '../models/user';
-import Validations from '../npm-libs/typescript/util/validation/validations';
-import ServiceException from '../npm-libs/typescript/exceptions/service-exception';
-import { GetAccountInfoResponse } from './responses/user-api-responses';
+import HTTPS from '../npm-libs/ts/web/network/https';
+import User from '../models/user';
+import { isUser, UserJSON } from '../npm-libs/ts/types/user-types';
+import { GetAccountInfoResponse } from '../npm-libs/ts/api/responses/user-api-responses';
+import UserAPIHeaders from '../npm-libs/ts/api/headers/user-api-headers';
+import ServiceException from '../npm-libs/ts/api/exceptions/service-exception';
+import { KEY_SESH_ACCESS_TOKEN } from '../config/session-storage-config';
+import { isString } from '../npm-libs/ts/validations/types/string-validations';
 
 // /**
 //  * @private
-//  * @constant {String} BASE_URL
+//  * @constant {string} BASE_URL
 //  * @description User API endpoint
 //  */
 // const API_URL = `${process.env.USER_API_URL || ''}/${process.env.USER_API_VER || ''}`;
@@ -14,36 +17,20 @@ import { GetAccountInfoResponse } from './responses/user-api-responses';
 const API_URL = '';
 
 /**
- * @private
- * @constant {Object<String, String>} HEADERS
- * @description default headers for the API
- */
-const HEADERS = {
-    'accept': 'application/json',
-    'content-type': 'application/json',
-};
-
-/**
- * @class
- * @singleton
- * @version 1.0
- * @extends {HTTPS}
- * @description handles requests/responses for the User API
+ * Handles requests/responses for the User API
+ * @version 1.0.0
+ * @extends HTTPS
  */
 export default class UserService extends HTTPS {
     /**
-     * @public
+     * Fetches a user's account information
      * @async
-     * @function UserService.getAccountInfo
-     * @description fetches a user's account information
-     * @param {String} username user ID
+     * @param {string} username user ID
      * @returns {Promise<User>} user details
-     * @throws {Error} service exception
-     * @see HTTPS
-     * @see ServiceException
+     * @throws {ServiceException} service exception
      */
     async getAccountInfo(username: string): Promise<User> {
-        if (!Validations.isString(username)) {
+        if (!isString(username)) {
             throw new ServiceException(400, 'invalid username param');
         }
 
@@ -51,7 +38,10 @@ export default class UserService extends HTTPS {
         const response = await this.POST(
             new Request(API_URL, {
                 method: 'POST',
-                headers: HEADERS,
+                headers: new UserAPIHeaders(
+                    sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN),
+                    null // TODO
+                ),
                 body: JSON.stringify({
                     username
                 })
@@ -67,19 +57,15 @@ export default class UserService extends HTTPS {
     }
 
     /**
-     * @public
+     * Updates a user's account information
      * @async
-     * @function UserService.updateAccountInfo
-     * @description updates a user's account information
-     * @param {String} username user ID
+     * @param {string} username user ID
      * @param {User | UserJSON} details user account information
-     * @returns {Promise<Boolean>} user details
-     * @throws {Error} service exception
-     * @see HTTPS
-     * @see ServiceException
+     * @returns {Promise<boolean>} user details
+     * @throws {ServiceException} service exception
      */
     async updateAccountInfo(username: string, details: User | UserJSON): Promise<boolean> {
-        if (!Validations.isString(username)) {
+        if (!isString(username)) {
             throw new ServiceException(400, 'invalid username param');
         }
         if (!isUser(details)) {
@@ -89,7 +75,10 @@ export default class UserService extends HTTPS {
         const response = await this.POST(
             new Request(API_URL, {
                 method: 'POST',
-                headers: HEADERS,
+                headers: new UserAPIHeaders(
+                    sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN),
+                    null
+                ),
                 body: JSON.stringify({
                     username,
                     details
@@ -100,24 +89,23 @@ export default class UserService extends HTTPS {
     }
 
     /**
-     * @public
+     * Deletes a user's account
      * @async
-     * @function UserService.deleteAccount
-     * @description deletes a user's account
-     * @param {String} username user ID
-     * @returns {Promise<Boolean>} user details
-     * @throws {Error} service exception
-     * @see HTTPS
-     * @see ServiceException
+     * @param {string} username user ID
+     * @returns {Promise<boolean>} user details
+     * @throws {ServiceException} service exception
      */
     async deleteAccount(username: string): Promise<boolean> {
-        if (!Validations.isString(username)) {
+        if (!isString(username)) {
             throw new ServiceException(400, 'invalid username param');
         }
         const response = await this.DELETE(
             new Request(API_URL, {
                 method: 'DELETE',
-                headers: HEADERS,
+                headers: new UserAPIHeaders(
+                    sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN),
+                    null
+                ),
                 body: JSON.stringify({
                     username
                 })

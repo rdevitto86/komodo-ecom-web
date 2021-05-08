@@ -1,132 +1,100 @@
-import { CatalogItem, CatalogItemJSON } from './catalog-item';
-import { OrderLineItem, OrderLineItemJSON } from './order-line-item';
-import { isPromotion, Promotion, PromotionJSON } from './promotion';
+import Promotion from './promotion';
+import CatalogItem from './catalog-item';
+import OrderLineItem from './order-line-item';
+import { CatalogItemJSON, isCatalogItem } from '../npm-libs/ts/types/catalog-item-type';
+import { InvoiceStates, OrderJSON, isOrder } from '../npm-libs/ts/types/order-types';
+import { isPromotion, PromotionJSON } from '../npm-libs/ts/types/promotion-types';
 
 /**
- * @readonly
- * @constant {Object<Number, String>} INVOICE_STATE
- * @description mapping of invoice status/progress
+ * Defines a new Order model
+ * @version 1.0.0
  */
-export const INVOICE_STATE: {[key:number]: string} = Object.freeze({
-    1: 'OPEN',
-    2: 'PARTIAL_PAYMENT',
-    3: 'PAID',
-    4: 'SCHEDULED',
-    5: 'FUFILLED'
-});
-
-// TODO - move this to kode validation library
-
-/**
- * @interface
- * @description defines an abstract Order object
- */
-export interface OrderJSON {
-    id: string;
-    status?: number;
-    lineItems: OrderLineItemJSON[];
-    total: number;
-    subTotal: number;
-    salesTax: number;
-    salesTaxRate: number;
-    shippingCost: number;
-    shippingRate: number;
-    fees: number;
-    promotion?: PromotionJSON;
-}
-
-/**
- * @class
- * @version 1.0
- * @description defines a new Order model
- */
-export class Order {
+export default class Order {
     /**
-     * @public
-     * @property {String} id
-     * @description invoice number (ID). Invoice IDs will be generated on submission.
+     * Unique invoice indentifier.
+     * In-progress orders will be dentoed by the * character.
+     * Orders upon submission will have an auto-generated ID assigned to it.
      */
-    public id: string = '*';
+    id: string = '*';
 
     /**
-     * @public
-     * @property {Map<String, LineItem>} lineItems
-     * @description invoice line items
+     * Invoice line items
      */
-    public lineItems: Map<String, OrderLineItem> = new Map();
+    lineItems: Map<string, OrderLineItem> = new Map();
 
     /**
-     * @private
-     * @property {Number} _status
-     * @description invoice status indicator
+     * Invoice status indicator
      */
-    public status: number = 1;
+    status: number = 1;
+
+    /**
+     * Invoice total
+     */
+    total: number = 0;
+
+    /**
+     * Invoice sub-total
+     */
+    subTotal: number = 0;
+
+    /**
+     * Applied sales tax
+     */
+    salesTax: number = 0;
+
+    /**
+     * Local sales tax rate
+     */
+    salesTaxRate: number = 1;
+
+    /**
+     * Total shipping cost
+     */
+    shippingCost: number = 0;
+
+    /**
+     * Shipping rate for an order
+     */
+    shippingRate: number = 0;
+
+    /**
+     * Invoice fees (ex. processing, expedited, etc)
+     */
+    fees: number = 0;
+
+    /**
+     * Tracking number(s) for ordered products
+     */
+    trackingNumbers: Map<string, string[]> = new Map();
+
+    /**
+     * Date(s) for scheduled service(s)
+     */
+    serviceDates: Map<string, string[]> = new Map();
+
+    /**
+     * Order-level promotion
+     */
+    promotion: Promotion | null = null;
+
+    /**
+     * Enables order-level promotions
+     */
+    enablePromotions: boolean = false;
 
     // /**
-    //  * @public
-    //  * @property {Boolean} hasEdits
-    //  * @description determines if the invoice model has invoice changes
+    //  * Determines if the invoice model has changes
     //  */
-    // public hasEdits: boolean = false;
+    // hasEdits: boolean = false;
 
     /**
-     * @public
-     * @property {Number} total
-     * @description invoice total
+     * Total number of order line items added
      */
-    public total: number = 0;
+    get totalLineItems() {
+        return this.lineItems.size;
+    }
 
     /**
-     * @public
-     * @property {Number} subTotal
-     * @description invoice sub-total
-     */
-    public subTotal: number = 0;
-
-    /**
-     * @public
-     * @property {Number} salesTax
-     * @description applied sales tax
-     */
-    public salesTax: number = 0;
-
-    /**
-     * @public
-     * @property {Number} salesTaxRate
-     * @description local sales tax rate
-     */
-    public salesTaxRate: number = 1;
-
-    /**
-     * @public
-     * @property {Number} shippingCost
-     * @description total shipping cost
-     */
-    public shippingCost: number = 0;
-
-    /**
-     * @public
-     * @property {Number} shippingRate
-     * @description shipping rate for an order
-     */
-    public shippingRate: number = 0;
-
-    /**
-     * @public
-     * @property {Number} fees
-     * @description invoice fees (ex. processing, expedited, etc)
-     */
-    public fees: number = 0;
-
-    /**
-     * @public
-     * @property {Promotion | Null} promotion
-     * @description order-level promotion
-     */
-    public promotion: Promotion | null = null;
-
-    /**
-     * @constructor
      * @param {OrderJSON | Order} [props] invoice details object
      */
     constructor(props?: OrderJSON | Order) {
@@ -142,7 +110,10 @@ export class Order {
                 shippingCost,
                 shippingRate,
                 fees,
-                promotion
+                trackingNumbers,
+                serviceDates,
+                promotion,
+                enablePromotions
             } = props;
 
             this.id = id;
@@ -154,9 +125,11 @@ export class Order {
             this.shippingRate = shippingRate;
             this.fees = fees;
 
-            if (typeof status === 'number' && INVOICE_STATE[status]) {
+            // set order status
+            if (typeof status === 'number' && InvoiceStates[status]) {
                 this.status = status;
             }
+            // set order line items
             if (lineItems instanceof Array) {
                 for (const item of lineItems) {
                     if (item) {
@@ -164,98 +137,119 @@ export class Order {
                     }
                 }
             }
+            // set order promotions
             if (promotion && typeof promotion === 'object') {
                 this.promotion = new Promotion(promotion);
+            }
+            if (enablePromotions) {
+                this.enablePromotions = true;
+            }
+            // set item tracking number(s)
+            if (trackingNumbers && typeof trackingNumbers === 'object') {
+                const keys = Object.keys(trackingNumbers);
+                for (let i = 0, len = keys.length; i < len; i++) {
+                    const key = keys[i];
+                    this.trackingNumbers.set(key, trackingNumbers[key]);
+                }
+            }
+            // set item service date(s)
+            if (serviceDates && typeof serviceDates === 'object') {
+                const keys = Object.keys(serviceDates);
+                for (let i = 0, len = keys.length; i < len; i++) {
+                    const key = keys[i];
+                    this.serviceDates.set(key, serviceDates[key]);
+                }
             }
         }
     }
 
     /**
-     * @public
-     * @function Order.addLineItem
-     * @description adds a new line item to the invoice
+     * Adds a new line item to the invoice
      * @param {CatalogItemJSON | CatalogItem} item new invoice line item
-     * @param {Number} quantity total quantity added
+     * @param {number} quantity total quantity added
      */
     addLineItem(item: CatalogItemJSON | CatalogItem, quantity: number) {
-        if (item && typeof item === 'object' && item.id && typeof quantity === 'number') {
+        if (isCatalogItem(item) && typeof quantity === 'number') {
             const { id, price, promotion } = item;
             const basePrice = price || 0;
-
-            let itemPromotion = null;
-            if (isPromotion(promotion)) {
-                itemPromotion = (promotion instanceof Promotion)
-                    ? promotion : new Promotion(promotion);
-            }
-
-            // build and set new line item
-            this.lineItems.set(id, new OrderLineItem({
+            const lineItem = new OrderLineItem({
                 id,
                 details: item,
                 quantity,
                 basePrice,
                 netCost: basePrice * quantity,
-                promotion: itemPromotion,
-                trackingNumbers: [],
-                serviceDates: []
-            }));
+                promotion
+            });
 
-            // TODO adjust invoice totals
+            // build and set new line item
+            this.lineItems.set(id, lineItem);
+            this._rebalance(lineItem);
+            // this.hasEdits = true;
+        } else {
+            // TODO - logger
         }
     }
 
     /**
-     * @public
-     * @function Order.incramentLineItem
-     * @description increases line item quantity by 1
-     * @param {String} id line-item identifier
+     * Increases line item quantity by 1
+     * @param {string} id line-item identifier
      */
     incramentLineItem(id: string) {
         const item = this.lineItems.get(id);
         if (item && item.quantity) {
             item.quantity++;
-            // TODO adjust invoice totals
+            this._rebalance(item);
+            // this.hasEdits = true;
+        } else {
+            // TODO - logger
         }
     }
 
     /**
-     * @public
-     * @function Order.decramentLineItem
-     * @description decreases line item quantity by 1
-     * @param {String} id line-item identifier
+     * Decreases line item quantity by 1
+     * @param {string} id line-item identifier
      */
     decramentLineItem(id: string) {
         const item = this.lineItems.get(id);
         if (item && item.quantity && item.quantity < 0) {
             item.quantity--;
-            // TODO adjust invoice totals
+            this._rebalance(item);
+            // this.hasEdits = true;
+        } else {
+            // TODO - logger
         }
     }
 
     /**
-     * @public
-     * @function Order.removeLineItem
-     * @description removes a line item from the invoice
-     * @param {String} id line item identifier
+     * Removes a line item from the invoice
+     * @param {string} id line item identifier
      */
     removeLineItem(id: string) {
         const item = this.lineItems.get(id);
         if (item) {
-            // TODO adjust invoice totals
             this.lineItems.delete(id);
+            this._rebalance(item);
+            // this.hasEdits = true;
+        } else {
+            // TODO - logger
         }
     }
 
     /**
-     * @public
-     * @function Order.addPromotion
-     * @description adds a promotion to the order or an order line-item
-     * @param {Promotion | PromotionJSON} promo promotion details
-     * @param {String} [id] line item identifier
+     * Checks if the order has a given line item
+     * @param {string} id line item identifier
      */
-     addPromotion(promo: Promotion | PromotionJSON, id?: string) {
-        if (promo && typeof promo === 'object') {
-            // set param as Promotions model
+    hasLineItem(id: string) {
+        return this.lineItems.has(id);
+    }
+
+    /**
+     * Adds a promotion to the order or an order line-item
+     * @param {Promotion | PromotionJSON} promo promotion details
+     * @param {string} [id] line item identifier
+     */
+    addPromotion(promo: Promotion | PromotionJSON, id?: string) {
+        if (isPromotion(promo)) {
             if (!(promo instanceof Promotion)) {
                 promo = new Promotion(promo);
             }
@@ -271,67 +265,68 @@ export class Order {
                 this.promotion = promo;
             }
 
-            // TODO adjust invoice totals
+            this._rebalance(promo);
+            // this.hasEdits = true;
+        } else {
+            // TODO - logger
         }
     }
 
     /**
-     * @public
-     * @function Order.addTrackingNumber
-     * @description adds a tracking number to a line item
-     * @param {String} id line item identifier
-     * @param {String} trackingNumber tracking number to add
+     * Adds a tracking number to a line item
+     * @param {string} trackingNumber tracking number to add
+     * @param {string[]} lineItemIDs IDs for associated line items
      */
-    addTrackingNumber(id: string, trackingNumber: string) {
-        const item = this.lineItems.get(id);
-
-        if (item && typeof trackingNumber === 'string' && item.trackingNumbers) {
-            if (item.trackingNumbers.indexOf(trackingNumber) === -1) {
-                item.trackingNumbers.push(trackingNumber);
-            }
-        }
+    addTrackingNumber(trackingNumber: string, lineItemIDs: string[]) {
+        this.trackingNumbers.set(trackingNumber, lineItemIDs);
+        // this.hasEdits = true;
     }
 
     /**
-     * @public
-     * @function Order.addTrackingNumber
-     * @description adds a service date to a line item
-     * @param {String} id line item identifier
-     * @param {String} serviceDate service date to add
+     * Adds a service date to a line item
+     * @param {string} serviceDate service date to add
+     * @param {string[]} lineItemIDs IDs for associated line items
      */
-     addServiceDate(id: string, serviceDate: string) {
-        const item = this.lineItems.get(id);
-
-        if (item && typeof serviceDate === 'string' && item.serviceDates) {
-            if (item.serviceDates.indexOf(serviceDate) === -1) {
-                item.serviceDates.push(serviceDate);
-            }
-        }
+    addServiceDate(serviceDate: string, lineItemIDs: string[]) {
+        this.serviceDates.set(serviceDate, lineItemIDs);
+        // this.hasEdits = true;
     }
 
     /**
-     * @public
-     * @function Order.clearLineItems
-     * @description clears line items and resets invoice values
+     * Clears line items and resets invoice values
      */
-     clearLineItems() {
-        this.lineItems.clear();
+    clearLineItems() {
         this.total = 0;
         this.subTotal = 0;
         this.salesTax = 0;
         this.shippingCost = 0;
         this.fees = 0;
+        this.lineItems.clear();
+        this.trackingNumbers.clear();
+        this.serviceDates.clear();
+        // this.hasEdits = true;
+    }
+
+    /**
+     * Clears order promotion
+     */
+    clearPromotion() {
         this.promotion = null;
+        // this.hasEdits = true;
+    }
+
+    /**
+     * Adjusts order pricing when items are added/removed
+     * @private
+     * @param {OrderLineItem | Promotion} item updated item
+     */
+    private _rebalance(item: OrderLineItem | Promotion) {
+        if (item instanceof OrderLineItem) {
+            //
+        } else if (item instanceof Promotion) {
+            //
+        } else {
+            // TODO - logger
+        }
     }
 }
-
-/**
- * @constant
- * @function isOrder
- * @description checks if an item is an OrderInvoice type object
- * @param {Any} obj object to reference
- * @returns {Boolean} true/false
- */
-export const isOrder = (obj: any): obj is OrderJSON => (
-    'id' in obj && 'lineItems' in obj && 'subTotal' in obj
-);

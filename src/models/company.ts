@@ -1,63 +1,48 @@
-import { Address, AddressJSON } from './address';
+import { isAddress } from '../npm-libs/ts/types/address-type';
+import { CompanyJSON, isCompany } from '../npm-libs/ts/types/company-type';
+import Address from './address';
 
 /**
- * @interface CompanyJSON
- * @description defines an abstract Business object
+ * Defines a new Company model
+ * @version 1.0.0
  */
-export interface CompanyJSON {
-    name: string | null;
-    contactName: string | null;
-    contactEmail: string | null;
-    contactPhone?: string | null;
-    address?: AddressJSON;
-}
-
-/**
- * @class
- * @version 1.0
- * @extends {Address}
- * @description defines a new Company model
- * @see Address
- */
-export class Company extends Address {
+export default class Company {
     /**
-     * @public
-     * @property {String | Null} name
-     * @description company name
+     * Full company name
      */
-    public name: string | null = null;
+    name: string | null = null;
 
     /**
-     * @public
-     * @property {String | Null} contactName
-     * @description company contact person
+     * Full name of company contact
      */
-    public contactName: string | null = null;
+    contactName: string | null = null;
 
     /**
-     * @public
-     * @property {String | Null} contactPhone
-     * @description company contact phone number
+     * Phone number of company contact
      */
-    public contactPhone: string | null = null;
+    contactPhone: string | null = null;
 
     /**
-     * @public
-     * @property {String | Null} contactEmail
-     * @description company contact email
+     * Email of company contact
      */
-    public contactEmail: string | null = null;
+    contactEmail: string | null = null;
 
     /**
-     * @constructor
-     * @param {CompanyJSON} [props] exsisting business details
+     * Company street address
      */
-    constructor(props?: CompanyJSON) {
-        super((props || {}).address);
+    address: Address | null = null;
 
+    /**
+     * @param {CompanyJSON | Company} [props] exsisting business details
+     */
+    constructor(props?: CompanyJSON | Company) {
         if (isCompany(props)) {
             const {
-                name, contactName, contactPhone, contactEmail
+                name,
+                contactName,
+                contactPhone,
+                contactEmail,
+                address
             } = props;
 
             this.name = name;
@@ -67,17 +52,9 @@ export class Company extends Address {
             if (typeof contactPhone === 'string') {
                 this.contactPhone = contactPhone;
             }
+            if (isAddress(address)) {
+                this.address = new Address(address);
+            }
         }
     }
 }
-
-/**
- * @constant
- * @function isCompany
- * @description checks if an item is a Company type object
- * @param {Any} obj object to reference
- * @returns {Boolean} true/false
- */
- export const isCompany = (obj: any): obj is CompanyJSON => (
-    'name' in obj && 'contactName' in obj && 'contactEmail' in obj
-);

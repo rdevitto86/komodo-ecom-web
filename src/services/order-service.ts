@@ -1,11 +1,14 @@
-import HTTPS from '../npm-libs/typescript/web/network/https';
-import { Order, OrderJSON } from '../models/order';
-import Validations from '../npm-libs/typescript/util/validation/validations';
-import ServiceException from '../npm-libs/typescript/exceptions/service-exception';
+import HTTPS from '../npm-libs/ts/web/network/https';
+import Order from '../models/order';
+import OrderAPIHeaders from '../npm-libs/ts/api/headers/order-api-headers';
+import { GetOrderResponse } from '../npm-libs/ts/api/responses/order-api-responses';
+import ServiceException from '../npm-libs/ts/api/exceptions/service-exception';
+import { KEY_SESH_ACCESS_TOKEN } from '../config/session-storage-config';
+import { isString } from '../npm-libs/ts/validations/types/string-validations';
 
 // /**
 //  * @private
-//  * @constant {String} BASE_URL
+//  * @constant {string} BASE_URL
 //  * @description Order API endpoint
 //  */
 // const API_URL = `${process.env.ORDER_API_URL || ''}/${process.env.ORDER_API_VER || ''}`;
@@ -13,51 +16,30 @@ import ServiceException from '../npm-libs/typescript/exceptions/service-exceptio
 const API_URL = '';
 
 /**
- * @private
- * @constant {Object<String, String>} HEADERS
- * @description default headers for the API
- */
-const HEADERS = {
-    'accept': 'application/json',
-    'content-type': 'application/json',
-};
-
-/**
- * @interface
- * @description defines response for getOrder request
- */
-export interface GetOrderResponse {
-    status?: number;
-    message?: string;
-    order?: OrderJSON
-}
-
-/**
- * @class
- * @version 1.0
- * @extends {HTTPS}
- * @description handles requests/responses for the Order service
+ * Handles requests/responses for the Order service
+ * @version 1.0.0
+ * @extends HTTPS
  */
 export default class OrderService extends HTTPS {
     /**
-     * @public
+     * Fetches information for a specified order
      * @async
-     * @function OrderService.getOrder
-     * @description fetches information for a specified order
-     * @param {String} id order ID
+     * @param {string} id order ID
      * @returns {Promise<Order>} order details
      * @throws {ServiceException} service exception
-     * @see HTTPS
      */
     async getOrder(id: string): Promise<Order> {
-        if (!Validations.isString(id)) {
+        if (!isString(id)) {
             throw new ServiceException(400, "failed to get order info - invalid 'id' param");
         }
 
         const response = await this.POST(
             new Request(API_URL, {
                 method: 'POST',
-                headers: HEADERS,
+                headers: new OrderAPIHeaders(
+                    sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN),
+                    null // TODO
+                ),
                 body: JSON.stringify({
                     id
                 })

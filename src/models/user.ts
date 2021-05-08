@@ -1,153 +1,83 @@
-import PriorityQueue from '../npm-libs/typescript/util/data-structures/priority-queue';
-import { Address, AddressJSON, isAddress } from './address';
-import { Billing, BillingJSON, isBilling } from './billing';
-import { Company, CompanyJSON, isCompany } from './company';
-import { isOrder, Order, OrderJSON } from './order';
+import Address from './address';
+import Billing from './billing';
+import Company from './company';
+import Order from './order';
+import { UserTypes, isUser, UserJSON } from '../npm-libs/ts/types/user-types';
+import { isAddress } from '../npm-libs/ts/types/address-type';
+import { isBilling } from '../npm-libs/ts/types/billing-type';
+import { isCompany } from '../npm-libs/ts/types/company-type';
+import { isOrder, OrderJSON } from '../npm-libs/ts/types/order-types';
+import PriorityQueue from '../npm-libs/ts/data/data-structures/priority-queues/priority-queue';
 
 /**
- * @public
- * @readonly
- * @constant {Object<Number, String>} ACCT_TYPES
- * @description mapping of account type priorities
+ * Defines a new User model
+ * @version 1.0.0
  */
-export const ACCT_TYPES: {[key:number]: string} = Object.freeze({
-    1: 'GUEST',
-    2: 'PERSONAL',
-    3: 'BUSINESS',
-});
-
-// TODO - consider getter/setters for address, billing, etc.
-// consider whether that will prevent corruption of critical user data
-
-/**
- * @interface UserJSON
- * @description defines an abstract Billing object
- */
-export interface UserJSON {
-    // database information
-    id: string;
-    type?: number;
-
-    // user name information
-    firstName: string;
-    lastName: string;
-    suffix?: string;
-
-    // contact information
-    email: string;
-    phone?: string;
-
-    // address details
-    address?: AddressJSON;
-
-    // business details
-    company?: CompanyJSON;
-
-    // billing details
-    billing?: BillingJSON;
-
-    // current/previous invoice(s)
-    invoices?: {
-        priority: number;
-        lineItem: OrderJSON;
-    }[];
-}
-
-/**
- * @class
- * @version 1.0
- * @description defines a new User model
- */
-export class User {
-    // /**
-    //  * @public
-    //  * @property {Boolean} hasEdits
-    //  * @description determines if the user model has user changes
-    //  */
-    // public hasEdits: boolean = false;
+export default class User {
+    /**
+     * Unique user identifier
+     */
+    id: string = '*';
 
     /**
-     * @public
-     * @property {String} id
-     * @description user identifier
+     * Account type (ex. Guest, Business, etc.)
      */
-    public id: string = '*';
+    type: number = 1;
 
     /**
-     * @private
-     * @property {Number} type
-     * @description account type
+     * User's first name
      */
-    public type: number = 1;
+    firstName: string | null = null;
 
     /**
-     * @public
-     * @property {String} firstName
-     * @description user's first name
+     * User's last name
      */
-    public firstName: string = '';
+    lastName: string | null = null;
 
     /**
-     * @public
-     * @property {String} lastName
-     * @description user's last name
+     * User's suffix (ex. Sr, Jr)
      */
-    public lastName: string = '';
+    suffix: string | null = null;
 
     /**
-     * @public
-     * @property {String | Null} suffix
-     * @description user's name suffix (ex. Sr, Jr)
+     * User's email address
      */
-    public suffix: string | null = null;
+    email: string | null = null;
 
     /**
-     * @public
-     * @property {String | Null} email
-     * @description user's email address
+     * User's phone number
      */
-    public email: string | null = null;
+    phone: string | null = null;
 
     /**
-     * @public
-     * @property {String | Null} phone
-     * @description user's phone number
+     * User's address information
      */
-    public phone: string | null = null;
+    address: Address | null = null;
 
     /**
-     * @public
-     * @property {PriorityQueue<Order>} invoices
-     * @description user invoice history
+     * User's company information
      */
-    public invoices = new PriorityQueue<Order>();
+    company: Company | null = null;
 
     /**
-     * @public
-     * @property {Address | Null} address
-     * @description address information
+     * User's billing information
      */
-    public address: Address | null = null;
+    billing: Billing | null = null;
 
     /**
-     * @public
-     * @property {Company | Null} company
-     * @description company information
+     * User invoice history
      */
-    public company: Company | null = null;
+    invoices: PriorityQueue<Order> = new PriorityQueue<Order>();
 
     /**
-     * @public
-     * @property {Billing | Null} billing
-     * @description billing information
+     * Determines if the user model has changes
      */
-    public billing: Billing | null = null;
+    hasEdits: boolean = false;
 
     /**
-     * @constructor
-     * @param {UserJSON} [props] exsisting user details
+     * @param {UserJSON | User} [props] exsisting user details
      */
-    constructor(props?: UserJSON) {
+    constructor(props?: UserJSON | User) {
         if (isUser(props)) {
             const {
                 id,
@@ -168,7 +98,7 @@ export class User {
             this.lastName = lastName;
             this.email = email;
 
-            if (typeof type === 'number' && ACCT_TYPES[type]) {
+            if (typeof type === 'number' && UserTypes[type]) {
                 this.type = type;
             }
             if (typeof suffix === 'string') {
@@ -198,12 +128,9 @@ export class User {
     }
 
     /**
-     * @public
-     * @function User.addInvoice
-     * @description adds an invoice to the user's history
+     * Adds an invoice to the user's history
      * @param {OrderJSON | Order} invoice order invoice
-     * @param {Number} [priority] invoice priority. Default is undefined.
-     * @see Order
+     * @param {number} [priority] invoice priority. Default is undefined.
      */
     addInvoice(invoice: OrderJSON | Order, priority?: number) {
         if (isOrder(invoice)) {
@@ -215,34 +142,17 @@ export class User {
     }
 
     /**
-     * @public
-     * @function User.clearInvoices
-     * @description clears the invoice list
-     * @see PriorityQueue.clear
+     * Clears the invoice list
      */
     clearInvoices() {
         this.invoices.clear();
     }
 
     /**
-     * @public
-     * @readonly
-     * @property {String} fullName
-     * @description the user's full name (ex. John Smith Sr.)
+     * User's full name (ex. John Smith Sr.)
      */
-     get fullName() {
+    get fullName() {
         const { firstName, lastName, suffix } = this;
-        return `${firstName} ${lastName}${(suffix) ? ` ${suffix}` : ''}`;
+        return `${firstName || ''} ${lastName || ''} ${suffix || ''}`;
     }
 }
-
-/**
- * @constant
- * @function isUser
- * @description checks if an item is a User type object
- * @param {Any} obj object to reference
- * @returns {Boolean} true/false
- */
-export const isUser = (obj: any): obj is UserJSON => (
-    'id' in obj && 'type' in obj && 'email' in obj
-);

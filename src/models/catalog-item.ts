@@ -1,162 +1,99 @@
-import { isPromotion, Promotion, PromotionJSON } from './promotion';
-import { UserReview, UserReviewJSON } from './user-review';
+import { CatalogItemJSON, isCatalogItem } from '../npm-libs/ts/types/catalog-item-type';
+import { isPromotion } from '../npm-libs/ts/types/promotion-types';
+import Promotion from './promotion';
+import UserReview from './user-review';
 
 /**
- * @type {ItemText}
- * @description defines textual details of a catalog item
+ * Defines a new Catalog Item model
+ * @version 1.0.0
  */
-type ItemText = string | null;
-
-/**
- * @type {ItemQuantity}
- * @description defines numeric quantity of a catalog item
- */
-type ItemQuantity = number | null;
-
-/**
- * @interface
- * @description defines an abstract Catalog Item object
- */
-export interface CatalogItemJSON {
-    // universal item properties
-    id: string;
-    catID?: string;
-    price: ItemQuantity;
-    description: ItemText;
-    overview: ItemText;
-
-    // item rating properties
-    itemRating?: ItemQuantity;
-    enableRatings?: boolean;
-
-    // item review properties
-    reviews?: UserReviewJSON[];
-    userReview?: UserReview;
-    enableReviews?: boolean;
-
-    // additional product properties
-    sku?: ItemText;
-    quantity?: ItemQuantity;
-    stock?: ItemQuantity;
-    promotion?: PromotionJSON;
-    enablePromotions?: boolean;
-}
-
-/**
- * @class
- * @version 1.0
- * @description defines a new Catalog Item model
- */
-export class CatalogItem {
+export default class CatalogItem {
     /**
-     * @public
-     * @property {ItemText} id
-     * @description catalog item id
+     * Item's unique catalog identifier
      */
-    public id: ItemText = null;
+    id: string | null = null;
 
     /**
-     * @public
-     * @property {ItemText} catID
-     * @description catalog item id
+     * Item's category identifier
      */
-    public catID: ItemText = null;
+    catID: string | null = null;
 
     /**
-     * @public
-     * @property {ItemQuantity} price
-     * @description item price
+     * Item title
      */
-    public price: ItemQuantity = null;
+    title: string | null = null;
 
     /**
-     * @public
-     * @property {ItemText} description
-     * @description item description
+     * Item description
      */
-    public description: ItemText = null;
+    description: string | null = null;
 
     /**
-     * @public
-     * @property {ItemQuantity} itemRating
-     * @description aggregate user rating
+     * Item price
      */
-    public itemRating: ItemQuantity = null;
+    price: number | null = null;
 
     /**
-     * @public
-     * @property {Boolean} enableRatings
-     * @description enables user ratings functionality
+     * Item SKU number
      */
-    public enableRatings: boolean = false;
+    sku: string | null = null;
 
     /**
-     * @public
-     * @property {UserReview[]} ratings
-     * @description user rating history
+     * Item quantity
      */
-    public reviews: UserReview[] = [];
+    quantity: number | null = null;
 
     /**
-     * @public
-     * @property {UserReview | Null} userReview
-     * @description user's personal review
+     * Item stock level
      */
-    public userReview: UserReview | null = null;
+    stock: number | null = null;
 
     /**
-     * @public
-     * @property {Boolean} enableReviews
-     * @description enables user reviews functionality
+     * Item-level promotion
      */
-    public enableReviews: boolean = false;
+    promotion: Promotion | null = null;
 
     /**
-     * @public
-     * @property {ItemText} sku
-     * @description item SKU number
+     * Aggregated user rating
      */
-    public sku: ItemText = null;
+    itemRating: number | null = null;
 
     /**
-     * @public
-     * @property {ItemQuantity} quantity
-     * @description item quantity
+     * User rating history
      */
-    public quantity: ItemQuantity = null;
+    reviews: UserReview[] = [];
 
     /**
-     * @public
-     * @property {ItemQuantity} stock
-     * @description item stock level
+     * User's personal review
      */
-    public stock: ItemQuantity = null;
+    userReview: UserReview | null = null;
 
     /**
-     * @public
-     * @property {Promotion | PromotionJSON | Null} promotion
-     * @description item-level promotion
+     * Enables user ratings
      */
-    public promotion: Promotion | null = null;
+    enableRatings: boolean = false;
 
     /**
-     * @public
-     * @property {Boolean} enablePromotions
-     * @description enables item-level promotions
+     * Enables user reviews
      */
-    public enablePromotions: boolean = false;
+    enableReviews: boolean = false;
 
     /**
-     * @constructor
-     * @param {CatalogItemJSON} [props] item details object
+     * Enables item-level promotions
      */
-    constructor(props?: CatalogItemJSON) {
+    enablePromotions: boolean = false;
+
+    /**
+     * @param {CatalogItemJSON | CatalogItem} [props] item details object
+     */
+    constructor(props?: CatalogItemJSON | CatalogItem) {
         if (isCatalogItem(props)) {
             const {
                 id,
                 catID,
-                price,
+                title,
                 description,
+                price,
                 itemRating,
                 reviews,
                 enableRatings,
@@ -169,8 +106,9 @@ export class CatalogItem {
             } = props;
 
             this.id = id;
-            this.price = price;
+            this.title = title;
             this.description = description;
+            this.price = price;
 
             if (catID) {
                 this.catID = catID;
@@ -219,14 +157,3 @@ export class CatalogItem {
         }
     }
 }
-
-/**
- * @constant
- * @function isCatalogItem
- * @description checks if an item is an CatalogItem type object
- * @param {Any} obj object to reference
- * @returns {Boolean} true/false
- */
-export const isCatalogItem = (obj: any): obj is CatalogItemJSON => (
-    'id' in obj && 'price' in obj
-);

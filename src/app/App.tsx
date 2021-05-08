@@ -1,4 +1,3 @@
-// import React from 'react';
 import './App.scss';
 
 /*
@@ -8,21 +7,17 @@ import './App.scss';
   Most of the sub-components will handle their own UI, therefor, rending majority of
   stylings here redundant.
 
-  Any styling here will be JavaScript focused where the index.html/css files will handle much
+  any styling here will be JavaScript focused where the index.html/css files will handle much
   of the background and structural elements. Animations here can be any first-time animations,
   frameworks for sub-components, or things the HMTL didnt render.
 */
 
 /**
- * @class
- * @version 1.0
- * @description root react module for the website applicaiton
+ * Boostraps the React application
+ * @version 1.0.0
  */
-function App() {
+export default function App() {
   return (
-    // TODO - rename this to app-root
-    <div className="app-root-react" />
+    <div className="app-root" />
   );
 }
-
-export default App;

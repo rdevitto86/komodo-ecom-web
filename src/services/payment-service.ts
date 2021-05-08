@@ -1,8 +1,8 @@
-import HTTPS from '../npm-libs/typescript/web/network/https';
+import HTTPS from '../npm-libs/ts/web/network/https';
 
 // /**
 //  * @private
-//  * @constant {String} BASE_URL
+//  * @constant {string} BASE_URL
 //  * @description Order API endpoint
 //  */
 // const API_URL = `${
@@ -10,10 +10,9 @@ import HTTPS from '../npm-libs/typescript/web/network/https';
 //         process.env.CUST_PAYMENT_API_VER || ''}`;
 
 /**
- * @class
- * @version 1.0
- * @extends {HTTPS}
- * @description handles requests/responses for the Financial Payment API
+ * Handles requests/responses for the Financial Payment API
+ * @version 1.0.0
+ * @extends HTTPS
  */
 export default class PaymentService extends HTTPS {
 

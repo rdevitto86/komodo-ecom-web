@@ -1,97 +1,80 @@
-/**
- * @interface
- * @description defines a new Promotion abstract class
- */
-export interface PromotionJSON {
-    id: string;
-    dollarsOff: number;
-    percentOff: number;
-    hasFreeShipping: boolean;
-    hasBOGO: boolean;
-    description?: string;
-}
+import { isPromotion, PromotionJSON } from '../npm-libs/ts/types/promotion-types';
 
 /**
- * @class
- * @version 1.0
- * @implements {PromotionJSON}
- * @description defines a new Promotion model
+ * Defines a new Promotion model
+ * @version 1.0.0
  */
-export class Promotion implements PromotionJSON {
+export default class Promotion {
     /**
-     * @public
-     * @property {String} id
-     * @description promotion identifier
+     * Unique promotion identifier
      */
-    public id: string = '';
+    id: string | null = null;
 
     /**
-     * @public
-     * @property {Number} dollarsOff
-     * @description number of dollars off
+     * Promotion title/header
      */
-    public dollarsOff: number = 0;
+    title: string | null = null;
 
     /**
-     * @public
-     * @property {Number} percentOff
-     * @description percent discounted
+     * Promotion description
      */
-     public percentOff: number = 0;
+    description: string | null = null;
 
     /**
-     * @public
-     * @property {Boolean} freeShipping
-     * @description should removes shipping cost
+     * Denotes if promotion has dollars-off applied
      */
-     public hasFreeShipping: boolean = false;
+    dollarsOff: number = 0;
 
     /**
-     * @public
-     * @property {Boolean} hasBOGO
-     * @description has free item with purchase
+     * Denotes if promotion has percentage-off applied
      */
-     public hasBOGO: boolean = false;
+    percentOff: number = 0;
 
     /**
-     * @public
-     * @property {Number | Undefined} description
-     * @description promotion title/name
+     * Denotes if promotion has free shipping applied
      */
-    public description?: string;
+    hasFreeShipping: boolean = false;
 
     /**
-     * @constructor
-     * @param {PromotionJSON} [props] promotions details object
+     * Denotes if promotion has buy one, get one applied
      */
-    constructor(props?: PromotionJSON) {
+    hasBOGO: boolean = false;
+
+    /**
+     * @param {PromotionJSON | Promotion} [props] promotions details object
+     */
+    constructor(props?: PromotionJSON | Promotion) {
         if (isPromotion(props)) {
             const {
                 id,
+                title,
+                description,
                 dollarsOff,
                 percentOff,
                 hasFreeShipping,
                 hasBOGO,
-                description
             } = props;
 
             this.id = id;
-            this.dollarsOff = dollarsOff;
-            this.percentOff = percentOff;
-            this.hasFreeShipping = hasFreeShipping;
-            this.hasBOGO = hasBOGO;
-            this.description = description;
+
+            if (title) {
+                this.title = title;
+            }
+            if (description) {
+                this.description = description;
+            }
+            if (typeof dollarsOff === 'number') {
+                this.dollarsOff = dollarsOff;
+            }
+            if (typeof percentOff === 'number') {
+                this.percentOff = percentOff;
+            }
+            if (typeof hasFreeShipping === 'boolean') {
+                this.hasFreeShipping = hasFreeShipping;
+            }
+            if (typeof hasBOGO === 'boolean') {
+                this.hasBOGO = hasBOGO;
+            }
         }
     }
 }
-
-/**
- * @constant
- * @function isPromotion
- * @description checks if an item is an Promotion type object
- * @param {Any} obj object to reference
- * @returns {Boolean} true/false
- */
- export const isPromotion = (obj: any): obj is PromotionJSON => (
-    'id' in obj && 'dollarsOff' in obj && 'percentOff' in obj && 'hasFreeShipping' in obj
-);

@@ -2,38 +2,72 @@ The plan with libraries is to move them to the package.json and an internal NPM 
 Ideally, we want to handle versioning and dependancy population there.
 
 Sample NPM Libraries:
-@kfs-tsx/ui-common
-@kfs-ts/web-socket
-@kfs-ts/api-user-responses
-@kfs-styles/ecom-styles
-@kfs-types/mongodb
-@kfs-ts/util-clientside-logger
-@kfs-ts/algorithms-sort
-@kfs-js/primitives-string-ext
+@kfs-js/shared-web
+@kfs-ts/ecw-api
+@kfs-tsx/ecw-components
+@kfs-types/ecw-models
+@kfs-assets/shared-styles
+@kfs-config/ecw
 
-NPM Directories:
+NPM Libraries:
 @kfs-js         // JavaScript
-@kfs-jsx        // React JavaScript
-@kfs-json       // JSON
 @kfs-ts         // Typescript
-@kfs-tsx        // Typescript React
+@kfs-react      // React, React Native
 @kfs-angular    // Typescript Angular
-@kfs-types      // Typescript Types
-@kfs-styles     // CSS/SCSS
-@kfs-fonts      // fonts
-@kfs-i18n       // internalized text JS/JSON
-@kfs-config     // configuration JS/JSON
+@kfs-json       // JSON
+@kfs-node       // Serverside Node
+@kfs-assets     // styles (CSS/SCSS), text, fonts, images, videos
 @kfs-licensed   // 3rd Party JS libraries
 
-NPM Sub-Directories:
-/{appName}      // common app functionality (ex. ecom)
-/web            // shared web tools (ex. https rules)
-/ui             // shared ui elements
-/api            // shared api requests/responses
-/db             // shared database mappings
-/exceptions     // shared client/server exceptions/etc.
-/validation     // shared validations
-/algorithms     // shared algorithms
-/data-structs   // shared data-structures
-/primitives     // shared extended JS primitives
-/util           // shared utilities (ex. analytics)
+JS/TS Sub-Directories:
+/{appName}                      // app-specific
+/shared                         // universally shared
+    /auth                       // authentication/authorization
+    /web                        // web core
+        /network                // browser networking
+            /http               // HTTP/REST
+            /sockets            // web sockets
+        /navigator              // user agent / navigator
+        /threads                // worker threads
+        /time                   // time
+    /api                        // api core
+        /headers                // api headers
+        /requests               // api requests
+        /responses              // api responses 
+        /exceptions             // api exceptions
+    /client                     // client core
+        /exceptions             // clientside exceptions
+    /types                      // Typescript types/schemas
+    /data                       // data processing
+        /primitives             // native primitive extensions
+        /algorithms             // algorithms
+        /data-structures        // data structures
+        /transformations        // data transformations
+    /validation                 // data validations
+        /properties             // propery validations
+        /types                  // data type validations
+        /user-input             // inut validations
+    /util                       // utilities
+        /loggers                // loggers
+        /managers               // data managers
+    /testing                    // shared tools/test suites
+        /performance            // performance analytics
+
+JSX/TSX/Angular Sub-Directories:
+/{appName}      // common app UI
+/shared         // universal UI
+    /components     // common components
+    /modules        // common modules
+
+Assets Sub-Directories:
+/{appName}      // common app assets
+/shared         // universal assets
+    /styles         // common CSS/SCSS styling
+    /text           // common text/i18n
+    /fonts          // common fonts
+
+JSON Sub-Directories:
+/{appName}      // common app JSON
+/shared         // universal JSON
+    /config         // common JSON config
+    /events         // common event messages, etc.

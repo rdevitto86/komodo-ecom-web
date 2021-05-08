@@ -1,50 +1,47 @@
-/**
- * @interface
- * @description defines an interface of the UserReview object
- */
-export interface UserReviewJSON {
-    reviewerName: string | null;
-    rating: number | null;
-    comments?: string | null;
-}
+import { isUserReview, UserReviewJSON } from '../npm-libs/ts/types/user-review-types';
 
 /**
- * @class
- * @version 1.0
- * @description defines a new Catalog Item Review model
+ * Defines a new Catalog Item Review model
+ * @version 1.0.0
  */
-export class UserReview {
+export default class UserReview {
     /**
-     * @public
-     * @property {String | Null} reviewName
-     * @description name of reviewer
+     * First name of reviewer
      */
-    public reviewerName: string | null = null;
+    firstName: string | null = null;
 
     /**
-     * @public
-     * @property {Number | Null} rating
-     * @description catalog item id
+     * Last name of reviewer
      */
-    public rating: number | null = null;
+    lastName: string | null = null;
 
     /**
-     * @publicå
-     * @property {String | Null} comments
-     * @description catalog item id
+     * Review Ratings
      */
-    public comments: string | null = null;
+    rating: number | null = null;
 
     /**
-     * @constructor
-     * @param {UserReviewJSON} [props] user review object
+     * Review comments
      */
-    constructor(props?: UserReviewJSON) {
+    comments: string | null = null;
+
+    /**
+     * @param {UserReviewJSON | UserReview} [props] user review object
+     */
+    constructor(props?: UserReviewJSON | UserReview) {
         if (isUserReview(props)) {
-            const { reviewerName, rating, comments } = props;
+            const {
+                firstName,
+                lastName,
+                rating,
+                comments
+            } = props;
 
-            this.reviewerName = reviewerName;
+            this.firstName = firstName;
 
+            if (lastName) {
+                this.lastName = lastName;
+            }
             if (typeof rating === 'number') {
                 this.rating = rating;
             }
@@ -54,14 +51,3 @@ export class UserReview {
         }
     }
 }
-
-/**
- * @constant
- * @function isUserReview
- * @description checks if an item is a UserReview type object
- * @param {Any} obj object to reference
- * @returns {Boolean} true/false
- */
- export const isUserReview = (obj: any): obj is UserReviewJSON => (
-    'reviewerName' in obj && 'rating' in obj
-);

@@ -34,6 +34,9 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/extensions': 'off',
     'lines-between-class-members': 'off',
+    'class-methods-use-this': 'off',
+    'max-classes-per-file': 'off',
+    'import/prefer-default-export': 'off',
 
     // javascript-warnings
     'object-curly-newline': 'warn',
