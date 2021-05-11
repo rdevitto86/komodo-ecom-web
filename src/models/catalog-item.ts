@@ -1,5 +1,5 @@
-import { CatalogItemJSON, isCatalogItem } from '../npm-libs/ts/types/catalog-item-type';
-import { isPromotion } from '../npm-libs/ts/types/promotion-types';
+import { CatalogItemJSON, isCatalogItem } from '../npm/kfs-ts/ecw/types/catalog-item';
+import { isPromotion } from '../npm/kfs-ts/ecw/types/promotion';
 import Promotion from './promotion';
 import UserReview from './user-review';
 

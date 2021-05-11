@@ -10,65 +10,19 @@ Built using the Flux, Module/Component, and Observer design patterns.
 > HTML Version: HTML5 </br>
 
 ## Modules
-  - AppRoot
-  - LandingPageDesktop
+  - TODO
 
 ## Components
-  - common
-    - footers
-    - headers
-    - login
-    - menus
-    - popups
-    - ui
-      - buttons
-        - ButtonGeneric
-    
-  - ui_library
-    - MediaTriangleVertical
-    - MediaTriangleInverted
+  - TODO
 
 ## Services
-  - AuthService
-  - CartService
-  - CustSupportService
-  - HTTPClient
-  - MarketingService
-  - NewsBlogService
-  - OrderService
-  - PaymentService
-  - ProductService
-  - UserService
+  - TODO
 
 ## Models
-  - Address
-  - Billing
-  - Company
-  - ContractService
-  - Invoice
-  - PaymentAccount
-  - Product
-  - User
-  - Service Responses
-    - AuthResponse
-    - PaymentResponse
-    - ServiceError
-    - UserResponse
-  - Errors
-    - AccessError
-    - ActionError
+  - TODO
 
-## Supplemental
-  - BrowserUtil
-  - DateUtil
-  - MathUtil
-  - ObjectUtil
-  - StringUtil
-  - ValidationUtil
+## Internal NPM 
+  - TODO
 
-## Loggers
-  - RuntimeLogger
-
-## Configuration
-  - AppConfig
-  - UserConfig
+## External NPM 
+  - TODO

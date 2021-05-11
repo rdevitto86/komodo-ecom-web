@@ -1,10 +1,10 @@
-import HTTPS from '../npm-libs/ts/web/network/https';
+import HTTPS from '../npm/kfs-ts/common/web/network/https';
 import Order from '../models/order';
-import OrderAPIHeaders from '../npm-libs/ts/api/headers/order-api-headers';
-import { GetOrderResponse } from '../npm-libs/ts/api/responses/order-api-responses';
-import ServiceException from '../npm-libs/ts/api/exceptions/service-exception';
+import OrderAPIHeaders from '../npm/kfs-ts/ecw/api/headers/order-api-headers';
+import { GetOrderResponse } from '../npm/kfs-ts/ecw/api/responses/order-api-responses';
+import ServiceException from '../npm/kfs-ts/ecw/api/exceptions/service-exception';
 import { KEY_SESH_ACCESS_TOKEN } from '../config/session-storage-config';
-import { isString } from '../npm-libs/ts/validations/types/string-validations';
+import { isString } from '../npm/kfs-ts/common/validations/primitives/strings';
 
 // /**
 //  * @private

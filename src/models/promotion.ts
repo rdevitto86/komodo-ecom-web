@@ -1,4 +1,4 @@
-import { isPromotion, PromotionJSON } from '../npm-libs/ts/types/promotion-types';
+import { isPromotion, PromotionJSON } from '../npm/kfs-ts/ecw/types/promotion';
 
 /**
  * Defines a new Promotion model

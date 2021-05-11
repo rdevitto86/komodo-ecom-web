@@ -1,5 +1,5 @@
-import { BillingJSON, isBilling } from '../npm-libs/ts/types/billing-type';
-import { PaymentMethodJSON } from '../npm-libs/ts/types/payment-method-types';
+import { BillingJSON, isBilling } from '../npm/kfs-ts/ecw/types/billing';
+import { PaymentMethodJSON } from '../npm/kfs-ts/ecw/types/payment-method';
 import PaymentMethod from './payment-method';
 
 /**

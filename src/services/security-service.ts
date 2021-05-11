@@ -1,17 +1,17 @@
-import HTTPS from '../npm-libs/ts/web/network/https';
-import { LoginResponse } from '../npm-libs/ts/api/responses/security-api-responses';
+import HTTPS from '../npm/kfs-ts/common/web/network/https';
+import { LoginResponse } from '../npm/kfs-ts/ecw/api/responses/security-api-responses';
 import {
     LoginHeaders,
     LogoutHeaders,
     ValidateSessionHeaders
-} from '../npm-libs/ts/api/headers/security-api-headers';
+} from '../npm/kfs-ts/ecw/api/headers/security-api-headers';
 import {
     KEY_SESH_ID_TOKEN,
     KEY_SESH_ACCESS_TOKEN,
     KEY_SESH_REFRESH_TOKEN
 } from '../config/session-storage-config';
-import ServiceException from '../npm-libs/ts/api/exceptions/service-exception';
-import { isString } from '../npm-libs/ts/validations/types/string-validations';
+import ServiceException from '../npm/kfs-ts/ecw/api/exceptions/service-exception';
+import { isString } from '../npm/kfs-ts/common/validations/primitives/strings';
 
 // /**
 //  * @private

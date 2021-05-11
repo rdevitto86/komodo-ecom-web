@@ -1,4 +1,4 @@
-import HTTPS from '../npm-libs/ts/web/network/https';
+import HTTPS from '../npm/kfs-ts/common/web/network/https';
 
 // /**
 //  * @private

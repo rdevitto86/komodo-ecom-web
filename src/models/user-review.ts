@@ -1,4 +1,4 @@
-import { isUserReview, UserReviewJSON } from '../npm-libs/ts/types/user-review-types';
+import { isUserReview, UserReviewJSON } from '../npm/kfs-ts/ecw/types/user-review';
 
 /**
  * Defines a new Catalog Item Review model

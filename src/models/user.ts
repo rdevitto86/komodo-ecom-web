@@ -2,12 +2,14 @@ import Address from './address';
 import Billing from './billing';
 import Company from './company';
 import Order from './order';
-import { UserTypes, isUser, UserJSON } from '../npm-libs/ts/types/user-types';
-import { isAddress } from '../npm-libs/ts/types/address-type';
-import { isBilling } from '../npm-libs/ts/types/billing-type';
-import { isCompany } from '../npm-libs/ts/types/company-type';
-import { isOrder, OrderJSON } from '../npm-libs/ts/types/order-types';
-import PriorityQueue from '../npm-libs/ts/data/data-structures/priority-queues/priority-queue';
+
+import { UserTypes, isUser, UserJSON } from '../npm/kfs-ts/ecw/types/user';
+import { isAddress } from '../npm/kfs-ts/ecw/types/address';
+import { isBilling } from '../npm/kfs-ts/ecw/types/billing';
+import { isCompany } from '../npm/kfs-ts/ecw/types/company';
+import { isOrder, OrderJSON } from '../npm/kfs-ts/ecw/types/order';
+
+import PriorityQueue from '../npm/kfs-ts/common/data/data-structures/priority-queue';
 
 /**
  * Defines a new User model

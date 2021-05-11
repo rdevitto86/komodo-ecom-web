@@ -1,5 +1,5 @@
-import { isAddress } from '../npm-libs/ts/types/address-type';
-import { CompanyJSON, isCompany } from '../npm-libs/ts/types/company-type';
+import { isAddress } from '../npm/kfs-ts/ecw/types/address';
+import { CompanyJSON, isCompany } from '../npm/kfs-ts/ecw/types/company';
 import Address from './address';
 
 /**

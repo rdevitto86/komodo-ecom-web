@@ -1,11 +1,14 @@
-import HTTPS from '../npm-libs/ts/web/network/https';
-import User from '../models/user';
-import { isUser, UserJSON } from '../npm-libs/ts/types/user-types';
-import { GetAccountInfoResponse } from '../npm-libs/ts/api/responses/user-api-responses';
-import UserAPIHeaders from '../npm-libs/ts/api/headers/user-api-headers';
-import ServiceException from '../npm-libs/ts/api/exceptions/service-exception';
+import HTTPS from '../npm/kfs-ts/common/web/network/https';
+
+import { GetAccountInfoResponse } from '../npm/kfs-ts/ecw/api/responses/user-api-responses';
+import UserAPIHeaders from '../npm/kfs-ts/ecw/api/headers/user-api-headers';
+import ServiceException from '../npm/kfs-ts/ecw/api/exceptions/service-exception';
 import { KEY_SESH_ACCESS_TOKEN } from '../config/session-storage-config';
-import { isString } from '../npm-libs/ts/validations/types/string-validations';
+
+import User from '../models/user';
+import { isUser, UserJSON } from '../npm/kfs-ts/ecw/types/user';
+
+import { isString } from '../npm/kfs-ts/common/validations/primitives/strings';
 
 // /**
 //  * @private

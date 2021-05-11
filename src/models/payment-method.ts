@@ -1,6 +1,6 @@
 import Address from './address';
-import { isAddress } from '../npm-libs/ts/types/address-type';
-import { isPaymentMethod, PaymentMethodJSON } from '../npm-libs/ts/types/payment-method-types';
+import { isAddress } from '../npm/kfs-ts/ecw/types/address';
+import { isPaymentMethod, PaymentMethodJSON } from '../npm/kfs-ts/ecw/types/payment-method';
 
 /**
  * Defines a new Payment Method model

@@ -1,9 +1,9 @@
 import Promotion from './promotion';
 import CatalogItem from './catalog-item';
 import OrderLineItem from './order-line-item';
-import { CatalogItemJSON, isCatalogItem } from '../npm-libs/ts/types/catalog-item-type';
-import { InvoiceStates, OrderJSON, isOrder } from '../npm-libs/ts/types/order-types';
-import { isPromotion, PromotionJSON } from '../npm-libs/ts/types/promotion-types';
+import { CatalogItemJSON, isCatalogItem } from '../npm/kfs-ts/ecw/types/catalog-item';
+import { InvoiceStates, OrderJSON, isOrder } from '../npm/kfs-ts/ecw/types/order';
+import { isPromotion, PromotionJSON } from '../npm/kfs-ts/ecw/types/promotion';
 
 /**
  * Defines a new Order model

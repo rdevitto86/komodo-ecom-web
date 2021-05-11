@@ -1,4 +1,4 @@
-import { AddressJSON, isAddress } from '../npm-libs/ts/types/address-type';
+import { AddressJSON, isAddress } from '../npm/kfs-ts/ecw/types/address';
 
 /**
  * Defines a new Address model

@@ -1,19 +1,19 @@
-import HTTPS from '../npm-libs/ts/web/network/https';
-import CatalogItem from '../models/catalog-item';
-import { CatalogItemJSON } from '../npm-libs/ts/types/catalog-item-type';
-import UserReview from '../models/user-review';
-import { isUserReview, UserReviewJSON } from '../npm-libs/ts/types/user-review-types';
+import HTTPS from '../npm/kfs-ts/common/web/network/https';
 import {
     GetCategoryItemsResponse,
     GetItemResponse,
     GetReviewsResponse,
     SubmitReviewResponse
-} from '../npm-libs/ts/api/responses/catalog-api-responses';
-import ServiceException from '../npm-libs/ts/api/exceptions/service-exception';
-import CatalogSearchAPIHeaders from '../npm-libs/ts/api/headers/catalog-api-headers';
+} from '../npm/kfs-ts/ecw/api/responses/catalog-api-responses';
+import ServiceException from '../npm/kfs-ts/ecw/api/exceptions/service-exception';
+import CatalogSearchAPIHeaders from '../npm/kfs-ts/ecw/api/headers/catalog-api-headers';
 import { KEY_SESH_ACCESS_TOKEN } from '../config/session-storage-config';
-import { isString } from '../npm-libs/ts/validations/types/string-validations';
-import { isNumber } from '../npm-libs/ts/validations/types/number-validations';
+import CatalogItem from '../models/catalog-item';
+import { CatalogItemJSON } from '../npm/kfs-ts/ecw/types/catalog-item';
+import UserReview from '../models/user-review';
+import { isUserReview, UserReviewJSON } from '../npm/kfs-ts/ecw/types/user-review';
+import { isString } from '../npm/kfs-ts/common/validations/primitives/strings';
+import { isNumber } from '../npm/kfs-ts/common/validations/primitives/numbers';
 
 // /**
 //  * @private

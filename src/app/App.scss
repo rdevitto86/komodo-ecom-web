@@ -1,6 +1,11 @@
-@import '../app-core/assets/styles/styling-global.scss';
+@import '../assets/styles/styling-global.scss';
 
-#app-root-react {
+#landing-boostraper {
+    height: 100%;
+    width: 100%;
+}
+
+#landing-bg {
     color: $BG_PRIMARY;
     height: 100%;
     width: 100%;

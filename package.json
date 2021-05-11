@@ -1,5 +1,5 @@
 {
-  "name": "komodo-ecom-desktop",
+  "name": "ecom-react-desktop",
   "version": "0.0.1",
   "description": "Ecommerce web application that handles online ordering, order management, and customer support for Komodo Futurescapes, LLC.",
   "private": true,
