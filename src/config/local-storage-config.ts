@@ -1,2 +1,1 @@
-export const KEY_LOCAL_AUTH_TOKEN = 'LOCAL_AUTH_TOKEN';
-export const LOCAL_STORE_TEST123 = '';
+export const KEY_LOCAL_AUTH_TOKEN = 'ECW_LOCAL_AUTH_TOKEN';
