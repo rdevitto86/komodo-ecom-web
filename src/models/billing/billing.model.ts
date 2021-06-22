@@ -1,5 +1,5 @@
-import { BillingJSON, isBilling } from '../../npm/ec-shared/types/billing';
-import { PaymentMethodJSON } from '../../npm/ec-shared/types/payment-method';
+import { BillingJSON, isBilling } from '../../npm/kfs-api/user-api/schemas/billing';
+import { isPaymentMethod, PaymentMethodJSON } from '../../npm/kfs-api/finance-api/schemas/payment-method';
 import PaymentMethod from '../payment-methods/payment-method.model';
 
 /**
@@ -55,11 +55,11 @@ export default class Billing {
      * @returns {boolean} success/failure
      */
     addPaymentMethod(method: PaymentMethodJSON) {
-        if (method && method as PaymentMethodJSON && method.name) {
-            const exsisting = this.getPaymentMethod(method.name);
+        if (isPaymentMethod(method)) {
+            const existing = this.getPaymentMethod(method.name);
 
             // reject exsisting payment method
-            if (!exsisting) {
+            if (!existing) {
                 this.paymentMethods.set(method.name, new PaymentMethod(method));
                 return true;
             }

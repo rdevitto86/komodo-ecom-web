@@ -1,5 +1,5 @@
-import { isAddress } from '../../npm/ec-shared/types/address';
-import { CompanyJSON, isCompany } from '../../npm/ec-shared/types/company';
+import { isAddress } from '../../npm/kfs-api/user-api/schemas/address';
+import { CompanyJSON, isCompany } from '../../npm/kfs-api/user-api/schemas/company';
 import Address from '../address/address.model';
 
 /**
@@ -42,7 +42,7 @@ export default class Company {
                 contactName,
                 contactPhone,
                 contactEmail,
-                address
+                address,
             } = props;
 
             this.name = name;

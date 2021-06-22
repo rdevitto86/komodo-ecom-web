@@ -1,5 +1,5 @@
-import { CatalogItemJSON, isCatalogItem } from '../../npm/ec-shared/types/catalog-items';
-import { isPromotion } from '../../npm/ec-shared/types/promotion';
+import { CatalogItemJSON, isCatalogItem } from '../../npm/kfs-api/catalog-api/schemas/catalog-item';
+import { isPromotion } from '../../npm/kfs-api/promotion-api/schemas/promotion';
 import Promotion from '../promotions/promotion.model';
 
 /**

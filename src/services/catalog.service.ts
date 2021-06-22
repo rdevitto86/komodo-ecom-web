@@ -1,19 +1,19 @@
-import HTTP from '../npm/kfs-ts/web/network/http/rest';
-import {
-    GetCategoryItemsResponse,
-    GetItemResponse,
-    GetReviewsResponse,
-    SubmitReviewResponse,
-} from '../npm/ec-shared/api/responses/catalog-api-responses';
-import ServiceException from '../npm/kfs-ts/exceptions/service-exception';
-import CatalogSearchAPIHeaders from '../npm/ec-shared/api/headers/catalog-api-headers';
+import HTTP from '../npm/kfs-util/web/network/http/rest';
+import ServiceException from '../npm/kfs-api/exceptions/service.exception';
 import { KEY_SESH_ACCESS_TOKEN } from '../config/session-storage-config';
 import CatalogItem from '../models/catalog-items/catalog-item.model';
-import { CatalogItemJSON } from '../npm/ec-shared/types/catalog-items';
 import UserReview from '../models/user-reviews/user-review.model';
-import { isUserReview, UserReviewJSON } from '../npm/ec-shared/types/user-review';
-import { isString } from '../npm/kfs-ts/validations/primitives/strings';
-import { isNumber } from '../npm/kfs-ts/validations/primitives/numbers';
+import { isString } from '../npm/kfs-util/validations/primitives/strings';
+import { isNumber } from '../npm/kfs-util/validations/primitives/numbers';
+import { CatalogItemJSON } from '../npm/kfs-api/catalog-api/schemas/catalog-item';
+import CatalogSearchAPIHeaders from '../npm/kfs-api/catalog-api/headers';
+import { 
+    GetCategoryItemsResponse, 
+    GetItemResponse, 
+    GetReviewsResponse, 
+    SubmitReviewResponse,
+} from '../npm/kfs-api/catalog-api/responses';
+import { isUserReview, UserReviewJSON } from '../npm/kfs-api/catalog-api/schemas/user-review';
 
 // /**
 //  * @private

@@ -1,9 +1,8 @@
 import Promotion from '../promotions/promotion.model';
-import CatalogItem from '../catalog-items/catalog-item.model';
-import OrderLineItem from './order-line-item.model';
-import { CatalogItemJSON, isCatalogItem } from '../../npm/ec-shared/types/catalog-items';
-import { InvoiceStates, OrderJSON, isOrder } from '../../npm/ec-shared/types/order';
-import { isPromotion, PromotionJSON } from '../../npm/ec-shared/types/promotion';
+import OrderLineItem from '../order-line-item/order-line-item.model';
+import { InvoiceStates, isOrder, OrderJSON } from '../../npm/kfs-api/order-api/schemas/order';
+import { CatalogItem } from '../../npm/kfs-api/catalog-api/schemas/catalog-item';
+import { isPromotion, PromotionJSON } from '../../npm/kfs-api/promotion-api/schemas/promotion';
 
 /**
  * Defines a new Order model
@@ -113,7 +112,7 @@ export default class Order {
                 trackingNumbers,
                 serviceDates,
                 promotion,
-                enablePromotions
+                enablePromotions,
             } = props;
 
             this.id = id;
@@ -165,29 +164,11 @@ export default class Order {
 
     /**
      * Adds a new line item to the invoice
-     * @param {CatalogItemJSON | CatalogItem} item new invoice line item
+     * @param {CatalogItem} item new invoice line item
      * @param {number} quantity total quantity added
      */
-    addLineItem(item: CatalogItemJSON | CatalogItem, quantity: number) {
-        if (isCatalogItem(item) && typeof quantity === 'number') {
-            const { id, price, promotion } = item;
-            const basePrice = price || 0;
-            const lineItem = new OrderLineItem({
-                id,
-                details: item,
-                quantity,
-                basePrice,
-                netCost: basePrice * quantity,
-                promotion
-            });
-
-            // build and set new line item
-            this.lineItems.set(id, lineItem);
-            this._rebalance(lineItem);
-            // this.hasEdits = true;
-        } else {
-            // TODO - logger
-        }
+    addLineItem(item: CatalogItem, quantity: number) {
+        // TODO
     }
 
     /**
@@ -195,14 +176,7 @@ export default class Order {
      * @param {string} id line-item identifier
      */
     incramentLineItem(id: string) {
-        const item = this.lineItems.get(id);
-        if (item && item.quantity) {
-            item.quantity++;
-            this._rebalance(item);
-            // this.hasEdits = true;
-        } else {
-            // TODO - logger
-        }
+        // TODO
     }
 
     /**
@@ -210,14 +184,7 @@ export default class Order {
      * @param {string} id line-item identifier
      */
     decramentLineItem(id: string) {
-        const item = this.lineItems.get(id);
-        if (item && item.quantity && item.quantity < 0) {
-            item.quantity--;
-            this._rebalance(item);
-            // this.hasEdits = true;
-        } else {
-            // TODO - logger
-        }
+        // TODO
     }
 
     /**

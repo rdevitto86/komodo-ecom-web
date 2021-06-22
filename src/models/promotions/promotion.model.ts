@@ -1,4 +1,4 @@
-import { isPromotion, PromotionJSON } from '../../npm/ec-shared/types/promotion';
+import { isPromotion, PromotionJSON } from '../../npm/kfs-api/promotion-api/schemas/promotion';
 
 /**
  * Defines a new Promotion model

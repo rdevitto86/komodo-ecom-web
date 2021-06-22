@@ -2,14 +2,12 @@ import Address from '../address/address.model';
 import Billing from '../billing/billing.model';
 import Company from '../company/company.model';
 import Order from '../orders/order.model';
-
-import { UserTypes, isUser, UserJSON } from '../../npm/ec-shared/types/user';
-import { isAddress } from '../../npm/ec-shared/types/address';
-import { isBilling } from '../../npm/ec-shared/types/billing';
-import { isCompany } from '../../npm/ec-shared/types/company';
-import { isOrder, OrderJSON } from '../../npm/ec-shared/types/order';
-
-import PriorityQueue from '../../npm/kfs-ts/data/data-structures/priority-queue';
+import { isUser, UserJSON, UserTypes } from '../../npm/kfs-api/user-api/schemas/user';
+import { isOrder, OrderJSON } from '../../npm/kfs-api/order-api/schemas/order';
+import PriorityQueue from '../../npm/kfs-util/data/data-structures/priority-queue';
+import { isAddress } from '../../npm/kfs-api/user-api/schemas/address';
+import { isBilling } from '../../npm/kfs-api/user-api/schemas/billing';
+import { isCompany } from '../../npm/kfs-api/user-api/schemas/company';
 
 /**
  * Defines a User object

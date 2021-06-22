@@ -1,5 +1,5 @@
-import { isAddress } from '../../npm/ec-shared/types/address';
-import { isPaymentMethod, PaymentMethodJSON } from '../../npm/ec-shared/types/payment-method';
+import { isAddress } from '../../npm/kfs-api/user-api/schemas/address';
+import { isPaymentMethod, PaymentMethodJSON } from '../../npm/kfs-api/finance-api/schemas/payment-method';
 import Address from '../address/address.model';
 
 /**
@@ -58,7 +58,7 @@ export default class PaymentMethod {
                 cardType,
                 cardNetwork,
                 isDefault,
-                billingAddress
+                billingAddress,
             } = props;
 
             this.name = name;

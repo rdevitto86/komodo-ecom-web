@@ -1,17 +1,17 @@
-import HTTP from '../npm/kfs-ts/web/network/http/rest';
-import { LoginResponse } from '../npm/ec-shared/api/responses/security-api-responses';
-import {
-    LoginHeaders,
-    LogoutHeaders,
-    ValidateSessionHeaders,
-} from '../npm/ec-shared/api/headers/security-api-headers';
+import HTTP from '../npm/kfs-util/web/network/http/rest';
 import {
     KEY_SESH_ID_TOKEN,
     KEY_SESH_ACCESS_TOKEN,
     KEY_SESH_REFRESH_TOKEN,
 } from '../config/session-storage-config';
-import ServiceException from '../npm/kfs-ts/exceptions/service-exception';
-import { isString } from '../npm/kfs-ts/validations/primitives/strings';
+import ServiceException from '../npm/kfs-api/exceptions/service.exception';
+import { isString } from '../npm/kfs-util/validations/primitives/strings';
+import { LoginResponse } from '../npm/kfs-api/security-api/responses';
+import { 
+    LoginHeaders, 
+    LogoutHeaders, 
+    ValidateSessionHeaders
+} from '../npm/kfs-api/security-api/headers';
 
 // /**
 //  * @private

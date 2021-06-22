@@ -1,10 +1,10 @@
-import HTTP from '../npm/kfs-ts/web/network/http/rest';
+import HTTP from '../npm/kfs-util/web/network/http/rest';
 import Order from '../models/orders/order.model';
-import OrderAPIHeaders from '../npm/ec-shared/api/headers/order-api-headers';
-import { GetOrderResponse } from '../npm/ec-shared/api/responses/order-api-responses';
-import ServiceException from '../npm/kfs-ts/exceptions/service-exception';
+import ServiceException from '../npm/kfs-api/exceptions/service.exception';
 import { KEY_SESH_ACCESS_TOKEN } from '../config/session-storage-config';
-import { isString } from '../npm/kfs-ts/validations/primitives/strings';
+import { isString } from '../npm/kfs-util/validations/primitives/strings';
+import OrderAPIHeaders from '../npm/kfs-api/order-api/headers';
+import { GetOrderResponse } from '../npm/kfs-api/order-api/responses';
 
 // /**
 //  * @private
@@ -38,12 +38,12 @@ export default class OrderService extends HTTP {
                 method: 'POST',
                 headers: new OrderAPIHeaders(
                     sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN),
-                    null // TODO
+                    null, // TODO
                 ),
                 body: JSON.stringify({
-                    id
-                })
-            })
+                    id,
+                }),
+            }),
         );
         const body = response.json() as unknown as GetOrderResponse;
 

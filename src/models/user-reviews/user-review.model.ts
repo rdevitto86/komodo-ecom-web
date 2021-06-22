@@ -1,4 +1,4 @@
-import { isUserReview, UserReviewJSON } from '../../npm/ec-shared/types/user-review';
+import { isUserReview, UserReviewJSON } from '../../npm/kfs-api/catalog-api/schemas/user-review';
 
 /**
  * Defines a new Catalog Item Review model
@@ -34,7 +34,7 @@ export default class UserReview {
                 firstName,
                 lastName,
                 rating,
-                comments
+                comments,
             } = props;
 
             this.firstName = firstName;

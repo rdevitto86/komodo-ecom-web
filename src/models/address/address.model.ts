@@ -1,4 +1,4 @@
-import { AddressJSON, isAddress } from '../../npm/ec-shared/types/address';
+import { AddressJSON, isAddress } from '../../npm/kfs-api/user-api/schemas/address';
 
 /**
  * Defines a new Address model
@@ -16,27 +16,32 @@ export default class Address {
     line2: string | null = null;
 
     /**
+     * Tertiary street address
+     */
+    line3: string | null = null;
+
+    /**
      * Address city
      */
     city: string | null = null;
 
     /**
-     * Region of address (ex. state, etc.)
+     * Region of address
      */
-    region: string | null = null;
+    state: string | null = null;
 
     /**
-     * Address sub-region (ex. county)
+     * County of address
      */
-    subRegion: string | null = null;
+    county: string | null = null;
 
     /**
-     * Address mailing code (ex. zipcode)
+     * Address mailing code
      */
-    mailingCode: string | null = null;
+    zipcode: string | null = null;
 
     /**
-     * Address country (ex. US, CA, etc.)
+     * Country of address
      */
     country: string | null = null;
 
@@ -48,24 +53,28 @@ export default class Address {
             const {
                 line1,
                 line2,
+                line3,
                 city,
                 region,
                 subRegion,
                 mailingCode,
-                country
+                country,
             } = props;
 
             this.line1 = line1;
             this.city = city;
-            this.region = region;
-            this.mailingCode = mailingCode;
+            this.state = region;
+            this.zipcode = mailingCode;
             this.country = country;
 
             if (line2) {
                 this.line2 = line2;
             }
+            if (line3) {
+                this.line3 = line3;
+            }
             if (subRegion) {
-                this.subRegion = subRegion;
+                this.county = subRegion;
             }
         }
     }
@@ -79,15 +88,16 @@ export default class Address {
         const {
             line1,
             line2,
+            // line3,
             city,
-            region,
-            subRegion,
-            mailingCode,
-            country: countryCode
+            state,
+            county,
+            zipcode,
+            country,
         } = this;
 
         const fullAddress = `${line1 || ''}${((line2) ? ` ${line2}` : '')}`;
-        const fullRegion = `, ${region || ''}${(subRegion) ? `, ${subRegion}` : ''}`;
-        return `${fullAddress}, ${city || ''}, ${fullRegion} ${mailingCode || ''} ${countryCode || ''}`;
+        const fullRegion = `, ${state || ''}${(county) ? `, ${county}` : ''}`;
+        return `${fullAddress}, ${city || ''}, ${fullRegion} ${zipcode || ''} ${country || ''}`;
     }
 }
