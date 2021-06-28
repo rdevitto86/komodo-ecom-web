@@ -1,10 +1,9 @@
-import { isAddress } from '../../npm/kfs-api/user-api/schemas/address';
-import { CompanyJSON, isCompany } from '../../npm/kfs-api/user-api/schemas/company';
+import { isAddress } from '../../npm/kfs-api/src/user-api/schemas/address';
+import { CompanyJSON, isCompany } from '../../npm/kfs-api/src/user-api/schemas/company';
 import Address from '../address/address.model';
 
 /**
  * Defines a new Company model
- * @version 1.0.0
  */
 export default class Company {
     /**

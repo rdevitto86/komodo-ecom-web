@@ -3,7 +3,6 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  // overrides: [],
   extends: [
     'plugin:react/recommended',
     'airbnb',
@@ -21,8 +20,7 @@ module.exports = {
     '@typescript-eslint',
   ],
   rules: {
-    // TODO - make a custom ruleset. AirBnb is too generic
-    // javascript-disabled
+    // -- js-off ----
     'object-curly-newline': 'off',
     'no-trailing-spaces': 'off',
     'no-use-before-define': 'off',
@@ -40,16 +38,22 @@ module.exports = {
     'class-methods-use-this': 'off',
     'max-classes-per-file': 'off',
     'import/prefer-default-export': 'off',
+    'no-redeclare': 'off',
 
-    // javascript warnings
+    // -- js-warn ----
     'comma-dangle': 'warn',
+    'eol-last': 'warn',
 
-    // react-disabled
+    // -- typescript-off ----
+    '@typescript-eslint/no-use-before-define': 'off',
+
+    // typescript-warn
+
+    // -- react-off ----
     'react/jsx-filename-extension': 'off',
     'react/react-in-jsx-scope': 'off',
     // 'react/jsx-indent': 'off',
 
-    // typescript-disabled
-    '@typescript-eslint/no-use-before-define': 'off',
+    // -- react-warn ----
   },
 };

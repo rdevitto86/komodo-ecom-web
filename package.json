@@ -1,7 +1,7 @@
 {
   "name": "ecw-desktop-react",
-  "version": "0.0.1",
-  "description": "Ecommerce web application that handles online ordering, order management, and customer support for Komodo Futurescapes, LLC.",
+  "version": "1.0.0",
+  "description": "Ecommerce web application that handles online ordering, order management, and customer support",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

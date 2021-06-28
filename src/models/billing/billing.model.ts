@@ -1,10 +1,9 @@
-import { BillingJSON, isBilling } from '../../npm/kfs-api/user-api/schemas/billing';
-import { isPaymentMethod, PaymentMethodJSON } from '../../npm/kfs-api/finance-api/schemas/payment-method';
+import { BillingJSON, isBilling } from '../../npm/kfs-api/src/user-api/schemas/billing';
+import { isPaymentMethod, PaymentMethodJSON } from '../../npm/kfs-api/src/finance-api/schemas/payment-method';
 import PaymentMethod from '../payment-methods/payment-method.model';
 
 /**
  * Defines a new Billing model
- * @version 1.0.0
  */
 export default class Billing {
     /**

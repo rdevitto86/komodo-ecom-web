@@ -1,10 +1,8 @@
-import { CatalogItemJSON, isCatalogItem } from '../../npm/kfs-api/catalog-api/schemas/catalog-item';
-import { isPromotion } from '../../npm/kfs-api/promotion-api/schemas/promotion';
+import { CatalogItemJSON, isCatalogItem } from '../../npm/kfs-api/src/catalog-api/types/catalog-item';
 import Promotion from '../promotions/promotion.model';
 
 /**
  * Defines a new Catalog Item model
- * @version 1.0.0
  */
 export default class CatalogItem {
     /**
@@ -50,7 +48,7 @@ export default class CatalogItem {
     /**
      * @param {CatalogItemJSON | CatalogItem} [props] item details object
      */
-    constructor(props?: CatalogItemJSON | CatalogItem) {
+    constructor(props?: CatalogItemJSON | CatalogItem | null) {
         if (isCatalogItem(props)) {
             const {
                 catalogID,
@@ -59,8 +57,8 @@ export default class CatalogItem {
                 tags,
                 title,
                 description,
-                enablePromotions,
-                promotion,
+                // enablePromotions,
+                // promotion,
             } = props;
 
             // set catalog items
@@ -81,9 +79,9 @@ export default class CatalogItem {
             this.description = description;
 
             // set promotion data
-            if (enablePromotions === true && isPromotion(promotion)) {
-                this.promotion = new Promotion(promotion);
-            }
+            // if (enablePromotions === true && isPromotion(promotion)) {
+            //     this.promotion = new Promotion(promotion);
+            // }
         }
     }
 }

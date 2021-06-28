@@ -1,10 +1,9 @@
-import { isAddress } from '../../npm/kfs-api/user-api/schemas/address';
-import { isPaymentMethod, PaymentMethodJSON } from '../../npm/kfs-api/finance-api/schemas/payment-method';
+import { isAddress } from '../../npm/kfs-api/src/user-api/schemas/address';
+import { isPaymentMethod, PaymentMethodJSON } from '../../npm/kfs-api/src/finance-api/schemas/payment-method';
 import Address from '../address/address.model';
 
 /**
  * Defines a new Payment Method model
- * @version 1.0.0
  */
 export default class PaymentMethod {
     /**

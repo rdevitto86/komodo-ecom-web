@@ -18,7 +18,6 @@ import './App.scss';
 
 /**
  * Boostraps the React application and renders UI components
- * @version 1.0.0
  */
 export default function App() {
   return (

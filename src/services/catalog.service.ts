@@ -1,35 +1,21 @@
-import HTTP from '../npm/kfs-util/web/network/http/rest';
-import ServiceException from '../npm/kfs-api/exceptions/service.exception';
-import { KEY_SESH_ACCESS_TOKEN } from '../config/session-storage-config';
-import CatalogItem from '../models/catalog-items/catalog-item.model';
-import UserReview from '../models/user-reviews/user-review.model';
+import HTTP from '../npm/kfs-web/http';
+import HttpException from '../npm/kfs-web/http-exceptions';
 import { isString } from '../npm/kfs-util/validations/primitives/strings';
-import { isNumber } from '../npm/kfs-util/validations/primitives/numbers';
-import { CatalogItemJSON } from '../npm/kfs-api/catalog-api/schemas/catalog-item';
-import CatalogSearchAPIHeaders from '../npm/kfs-api/catalog-api/headers';
-import { 
-    GetCategoryItemsResponse, 
-    GetItemResponse, 
-    GetReviewsResponse, 
-    SubmitReviewResponse,
-} from '../npm/kfs-api/catalog-api/responses';
-import { isUserReview, UserReviewJSON } from '../npm/kfs-api/catalog-api/schemas/user-review';
+import CatalogItem from '../models/catalog-items/catalog-item.model';
+import { GetItemResponse } from '../npm/kfs-api/src/catalog-api/responses/get-item';
+import { GetCategoryItemsResponse } from '../npm/kfs-api/src/catalog-api/responses/get-items';
+import { CatalogItemJSON } from '../npm/kfs-api/src/catalog-api/types/catalog-item';
 
-// /**
-//  * @private
-//  * @constant {string} BASE_URL
-//  * @description Catalog API endpoint
-//  */
-// const API_URL = `${process.env.CATALOG_API_URL || ''}/${process.env.CATALOG_API_VER || ''}`;
-
-const API_URL = '';
+// TODO - move to api lib under requests
+// TODO - move query param appendage logic to request object
 
 /**
  * Handles requests and responses for the Catalog API
- * @version 1.0.0
  * @extends HTTP
  */
 export default class CatalogService extends HTTP {
+    readonly API_URL = process.env.CATALOG_API_URL || '';
+
     /**
      * Fetches a catalog item's information (i.e. product/service)
      * @async
@@ -39,16 +25,24 @@ export default class CatalogService extends HTTP {
      */
     async getItem(id: string): Promise<CatalogItem> {
         if (!isString(id)) {
-            throw new ServiceException(400, 'invalid id param');
+            throw new HttpException(400, 'invalid id param');
         }
 
-        const response = await this.GET(`${API_URL}/item/${id}`);
+        const request = new Request(
+            `${this.API_URL}/item/${id}`, 
+            {
+                method: 'GET',
+                // TODO other params
+            },
+        );
+
+        const response = await this.GET(request);
         const body = response.json() as unknown as GetItemResponse;
 
         if (response.ok) {
             return new CatalogItem(body.item);
         }
-        throw new ServiceException(response.status, body.message);
+        throw new HttpException(response.status, response.statusText);
     }
 
     /**
@@ -60,10 +54,18 @@ export default class CatalogService extends HTTP {
      */
     async getCategoryItems(catID: string | number): Promise<CatalogItem[]> {
         if (!isString(catID)) {
-            throw new ServiceException(400, 'invalid category id param');
+            throw new HttpException(400, 'invalid category id param');
         }
 
-        const response = await this.GET(`${API_URL}/category?id=${catID}`);
+        const request = new Request(
+            `${this.API_URL}/category?id=${catID}`, 
+            {
+                method: 'GET',
+                // TODO other params
+            },
+        );
+        
+        const response = await this.GET(request);
         const body = response.json() as unknown as GetCategoryItemsResponse;
 
         if (response.ok) {
@@ -83,9 +85,9 @@ export default class CatalogService extends HTTP {
                 }
                 return categoryItems;
             }
-            throw new ServiceException(500, 'item details missing from response');
+            throw new HttpException(500, 'item details missing from response');
         }
-        throw new ServiceException(response.status, body.message);
+        throw new HttpException(response.status, response.statusText);
     }
 
     /**
@@ -96,75 +98,31 @@ export default class CatalogService extends HTTP {
      * @returns {Promise<CatalogItem[]>} category list
      * @throws {ServiceException} service exception
      */
-    async search(keyword: string, category?: string): Promise<CatalogItem[]> {
-        if (!isString(keyword)) {
-            throw new ServiceException(400, 'invalid search keyword param');
-        }
+    // async search(keyword: string, category?: string): Promise<CatalogItem[]> {
+    //     if (!isString(keyword)) {
+    //         throw new HttpException(400, 'invalid search keyword param');
+    //     }
 
-        let url = `${API_URL}?keyword=${keyword}`;
+    //     // TODO move this code to Request lib
 
-        // add optional params
-        if (typeof category === 'string') {
-            url += `&category=${category}`;
-        }
+    //     let url = `${this.API_URL}?keyword=${keyword}`;
 
-        const response = await this.GET(url);
-        const body = response.json() as unknown as GetCategoryItemsResponse;
+    //     // add optional params
+    //     if (typeof category === 'string') {
+    //         url += `&category=${category}`;
+    //     }
 
-        if (response.ok && (body.items instanceof Array)) {
-            return body.items.map((item) => new CatalogItem(item));
-        }
-        throw new ServiceException(response.status, body.message);
-    }
+    //     const request = new Request(url, {
+    //         method: 'GET',
+    //         // TODO other params
+    //     });
 
-    /**
-     * Fetches a catalog item's review history
-     * @async
-     * @param {string | number} id catalog ID
-     * @returns {Promise<UserReview[]>} item details
-     * @throws {ServiceException} service exception
-     */
-    async getReviews(id: string | number): Promise<UserReview[]> {
-        if (!isString(id) || !isNumber(id)) {
-            throw new ServiceException(400, 'invalid id param');
-        }
+    //     const response = await this.GET(request);
+    //     const body = response.json() as unknown as GetCategoryItemsResponse;
 
-        const response = await this.GET(`${API_URL}/reviews/${id}`);
-        const body = response.json() as unknown as GetReviewsResponse;
-
-        if (response.ok && (body.reviews instanceof Array)) {
-            return body.reviews.map((review) => new UserReview(review));
-        }
-        throw new ServiceException(response.status, body.message);
-    }
-
-    /**
-     * Fetches a catalog item's review history
-     * @async
-     * @param {UserReview | UserReviewJSON} review user review
-     * @throws {ServiceException} service exception
-     */
-    async submitReview(review: UserReview | UserReviewJSON) {
-        if (!isUserReview(review)) {
-            throw new ServiceException(400, 'invalid user review');
-        }
-
-        const response = await this.POST(
-            new Request(`${API_URL}/submitReview`, {
-                method: 'POST',
-                headers: new CatalogSearchAPIHeaders(
-                    sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN),
-                    null, // TODO
-                ),
-                body: JSON.stringify({
-                    review,
-                }),
-            }),
-        );
-
-        if (!response.ok) {
-            const body = response.json() as unknown as SubmitReviewResponse;
-            throw new ServiceException(response.status, body.message);
-        }
-    }
+    //     if (response.ok && (body.items instanceof Array)) {
+    //         return body.items.map((item) => new CatalogItem(item));
+    //     }
+    //     throw new HttpException(response.status, response.statusText);
+    // }
 }

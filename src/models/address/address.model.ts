@@ -1,8 +1,7 @@
-import { AddressJSON, isAddress } from '../../npm/kfs-api/user-api/schemas/address';
+import { AddressJSON, isAddress } from '../../npm/kfs-api/src/user-api/schemas/address';
 
 /**
  * Defines a new Address model
- * @version 1.0.0
  */
 export default class Address {
     /**

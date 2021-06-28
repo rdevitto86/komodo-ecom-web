@@ -1,0 +1,9 @@
+{
+    "name": "kfs-web",
+    "version": "1.0.0",
+    "description": "TODO",
+    "license": "",
+    "private": true,
+    "peerDependencies": {},
+    "devDependencies": {}
+}

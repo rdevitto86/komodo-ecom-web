@@ -1,10 +1,9 @@
-import { OrderLineItemJSON } from '../../npm/kfs-api/order-api/schemas/order-line-item';
+import { OrderLineItemJSON } from '../../npm/kfs-api/src/order-api/schemas/order-line-item';
 import CatalogItem from '../catalog-items/catalog-item.model';
 import Promotion from '../promotions/promotion.model';
 
 /**
  * Defines a new OrderLineItem model
- * @version 1.0.0
  */
 export default class OrderLineItem {
     /**
@@ -44,11 +43,11 @@ export default class OrderLineItem {
         if (props) {
             const {
                 id,
-                details,
-                quantity,
-                basePrice,
-                netCost,
-                promotion,
+                // details,
+                // quantity,
+                // basePrice,
+                // netCost,
+                // promotion,
             } = props;
 
             this.id = id;

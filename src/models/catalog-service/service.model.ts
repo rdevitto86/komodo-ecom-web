@@ -1,10 +1,9 @@
-import { isService, ServiceJSON } from '../../npm/kfs-api/catalog-api/schemas/catalog-service';
+import { isService, ServiceJSON } from '../../npm/kfs-api/src/catalog-api/schemas/catalog-service';
 import CatalogItem from '../catalog-items/catalog-item.model';
 import CatalogProduct from '../catalog-product/product.model';
 
 /**
  * A schedulable, catalog service.
- * @version 1.0.0
  * @extends {CatalogItem}
  */
 export default class CatalogService extends CatalogItem {

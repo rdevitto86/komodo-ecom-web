@@ -1,12 +1,10 @@
 import Promotion from '../promotions/promotion.model';
 import OrderLineItem from '../order-line-item/order-line-item.model';
-import { InvoiceStates, isOrder, OrderJSON } from '../../npm/kfs-api/order-api/schemas/order';
-import { CatalogItem } from '../../npm/kfs-api/catalog-api/schemas/catalog-item';
-import { isPromotion, PromotionJSON } from '../../npm/kfs-api/promotion-api/schemas/promotion';
+import { InvoiceStates, isOrder, OrderJSON } from '../../npm/kfs-api/src/order-api/schemas/order';
+// import { CatalogItem } from '../../npm/kfs-api/catalog-api/types/catalog-item';
 
 /**
  * Defines a new Order model
- * @version 1.0.0
  */
 export default class Order {
     /**
@@ -162,30 +160,30 @@ export default class Order {
         }
     }
 
-    /**
-     * Adds a new line item to the invoice
-     * @param {CatalogItem} item new invoice line item
-     * @param {number} quantity total quantity added
-     */
-    addLineItem(item: CatalogItem, quantity: number) {
-        // TODO
-    }
+    // /**
+    //  * Adds a new line item to the invoice
+    //  * @param {CatalogItem} item new invoice line item
+    //  * @param {number} quantity total quantity added
+    //  */
+    // addLineItem(item: CatalogItem, quantity: number) {
+    //     // TODO
+    // }
 
-    /**
-     * Increases line item quantity by 1
-     * @param {string} id line-item identifier
-     */
-    incramentLineItem(id: string) {
-        // TODO
-    }
+    // /**
+    //  * Increases line item quantity by 1
+    //  * @param {string} id line-item identifier
+    //  */
+    // incramentLineItem(id: string) {
+    //     // TODO
+    // }
 
-    /**
-     * Decreases line item quantity by 1
-     * @param {string} id line-item identifier
-     */
-    decramentLineItem(id: string) {
-        // TODO
-    }
+    // /**
+    //  * Decreases line item quantity by 1
+    //  * @param {string} id line-item identifier
+    //  */
+    // decramentLineItem(id: string) {
+    //     // TODO
+    // }
 
     /**
      * Removes a line item from the invoice
@@ -210,34 +208,34 @@ export default class Order {
         return this.lineItems.has(id);
     }
 
-    /**
-     * Adds a promotion to the order or an order line-item
-     * @param {Promotion | PromotionJSON} promo promotion details
-     * @param {string} [id] line item identifier
-     */
-    addPromotion(promo: Promotion | PromotionJSON, id?: string) {
-        if (isPromotion(promo)) {
-            if (!(promo instanceof Promotion)) {
-                promo = new Promotion(promo);
-            }
-            // add line-item promotion
-            if (typeof id === 'string') {
-                const item = this.lineItems.get(id);
-                if (!item) {
-                    return;
-                }
-                item.promotion = promo;
-            } else {
-                // add order promotion
-                this.promotion = promo;
-            }
+    // /**
+    //  * Adds a promotion to the order or an order line-item
+    //  * @param {Promotion | PromotionJSON} promo promotion details
+    //  * @param {string} [id] line item identifier
+    //  */
+    // addPromotion(promo: Promotion | PromotionJSON, id?: string) {
+    //     if (isPromotion(promo)) {
+    //         if (!(promo instanceof Promotion)) {
+    //             promo = new Promotion(promo);
+    //         }
+    //         // add line-item promotion
+    //         if (typeof id === 'string') {
+    //             const item = this.lineItems.get(id);
+    //             if (!item) {
+    //                 return;
+    //             }
+    //             item.promotion = promo;
+    //         } else {
+    //             // add order promotion
+    //             this.promotion = promo;
+    //         }
 
-            this._rebalance(promo);
-            // this.hasEdits = true;
-        } else {
-            // TODO - logger
-        }
-    }
+    //         this._rebalance(promo);
+    //         // this.hasEdits = true;
+    //     } else {
+    //         // TODO - logger
+    //     }
+    // }
 
     /**
      * Adds a tracking number to a line item

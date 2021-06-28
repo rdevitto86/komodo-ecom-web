@@ -2,16 +2,15 @@ import Address from '../address/address.model';
 import Billing from '../billing/billing.model';
 import Company from '../company/company.model';
 import Order from '../orders/order.model';
-import { isUser, UserJSON, UserTypes } from '../../npm/kfs-api/user-api/schemas/user';
-import { isOrder, OrderJSON } from '../../npm/kfs-api/order-api/schemas/order';
-import PriorityQueue from '../../npm/kfs-util/data/data-structures/priority-queue';
-import { isAddress } from '../../npm/kfs-api/user-api/schemas/address';
-import { isBilling } from '../../npm/kfs-api/user-api/schemas/billing';
-import { isCompany } from '../../npm/kfs-api/user-api/schemas/company';
+import { isUser, UserJSON, UserTypes } from '../../npm/kfs-api/src/user-api/schemas/user';
+import { isOrder, OrderJSON } from '../../npm/kfs-api/src/order-api/schemas/order';
+import PriorityQueue from '../../npm/kfs-util/data-structures/priority-queue';
+import { isAddress } from '../../npm/kfs-api/src/user-api/schemas/address';
+import { isBilling } from '../../npm/kfs-api/src/user-api/schemas/billing';
+import { isCompany } from '../../npm/kfs-api/src/user-api/schemas/company';
 
 /**
  * Defines a User object
- * @version 1.0.0
  */
 export default class User {
     /**

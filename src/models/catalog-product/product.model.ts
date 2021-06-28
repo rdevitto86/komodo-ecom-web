@@ -1,10 +1,9 @@
-import { isProduct, ProductJSON } from '../../npm/kfs-api/catalog-api/schemas/catalog-product';
+import { isProduct, ProductJSON } from '../../npm/kfs-api/src/catalog-api/schemas/catalog-product';
 import CatalogItem from '../catalog-items/catalog-item.model';
 import UserReview from '../user-reviews/user-review.model';
 
 /**
  * An orderable, catalog product
- * @version 1.0.0
  * @extends {CatalogItem}
  */
 export default class CatalogProduct extends CatalogItem {

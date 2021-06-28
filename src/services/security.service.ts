@@ -1,33 +1,25 @@
-import HTTP from '../npm/kfs-util/web/network/http/rest';
-import {
-    KEY_SESH_ID_TOKEN,
-    KEY_SESH_ACCESS_TOKEN,
-    KEY_SESH_REFRESH_TOKEN,
-} from '../config/session-storage-config';
-import ServiceException from '../npm/kfs-api/exceptions/service.exception';
-import { isString } from '../npm/kfs-util/validations/primitives/strings';
-import { LoginResponse } from '../npm/kfs-api/security-api/responses';
-import { 
-    LoginHeaders, 
-    LogoutHeaders, 
-    ValidateSessionHeaders
-} from '../npm/kfs-api/security-api/headers';
-
-// /**
-//  * @private
-//  * @constant {string} BASE_URL
-//  * @description Security API endpoint
-//  */
-// const API_URL = `${process.env.SECURITY_API_URL || ''}/${process.env.SECURITY_API_VER || ''}`;
-
-const API_URL = '';
+import HTTP from '../npm/kfs-web/http';
+// import {
+//     KEY_SESH_ID_TOKEN,
+//     KEY_SESH_ACCESS_TOKEN,
+//     KEY_SESH_REFRESH_TOKEN,
+// } from '../config/session-storage.config';
+// import HttpException from '../npm/kfs-web/http-exceptions';
+// import { isString } from '../npm/kfs-util/validations/primitives/strings';
+// import { LoginResponse } from '../npm/kfs-api/security-api/responses';
+// import { 
+//     LoginHeaders, 
+//     LogoutHeaders, 
+//     ValidateSessionHeaders,
+// } from '../npm/kfs-api/security-api/headers';
 
 /**
  * Handles requests/responses for the Security API
- * @version 1.0.0
  * @extends HTTP
  */
 export default class SecurityService extends HTTP {
+    readonly URL = process.env.AUTH_API_URL || '';
+
     /**
      * Logs a user into the current session
      * @async
@@ -36,39 +28,39 @@ export default class SecurityService extends HTTP {
      * @returns {Promise<void>} success/failure
      * @throws {ServiceException} service exception
      */
-    async login(username: string, password: string): Promise<void> {
-        if (isString([username, password])) {
-            const response = await this.POST(
-                new Request(API_URL, {
-                    method: 'POST',
-                    headers: new LoginHeaders(null),
-                    body: JSON.stringify({
-                        username,
-                        password,
-                    }),
-                }),
-            );
-            const body = response.json() as unknown as LoginResponse;
+    // async login(username: string, password: string): Promise<void> {
+    //     if (isString([username, password])) {
+    //         const request = new Request(this.URL, {
+    //             method: 'POST',
+    //             headers: new LoginHeaders(null),
+    //             body: JSON.stringify({
+    //                 username,
+    //                 password,
+    //             }),
+    //         });
 
-            if (response.ok) {
-                const {
-                    idToken,
-                    accessToken,
-                    refreshToken,
-                } = body;
+    //         const response = await this.POST(request);
+    //         const body = response.json() as unknown as LoginResponse;
 
-                // validate tokens exsist and place in session storage
-                if (idToken && accessToken && refreshToken) {
-                    sessionStorage.setItem(KEY_SESH_ID_TOKEN, idToken);
-                    sessionStorage.setItem(KEY_SESH_ACCESS_TOKEN, accessToken);
-                    sessionStorage.setItem(KEY_SESH_REFRESH_TOKEN, refreshToken);
-                    return;
-                }
-            }
-            throw new ServiceException(response.status, body.message);
-        }
-        throw new ServiceException(400, 'invalid username/password param');
-    }
+    //         if (response.ok) {
+    //             const {
+    //                 idToken,
+    //                 accessToken,
+    //                 refreshToken,
+    //             } = body;
+
+    //             // validate tokens exsist and place in session storage
+    //             if (idToken && accessToken && refreshToken) {
+    //                 sessionStorage.setItem(KEY_SESH_ID_TOKEN, idToken);
+    //                 sessionStorage.setItem(KEY_SESH_ACCESS_TOKEN, accessToken);
+    //                 sessionStorage.setItem(KEY_SESH_REFRESH_TOKEN, refreshToken);
+    //                 return;
+    //             }
+    //         }
+    //         throw new HttpException(response.status, body.message);
+    //     }
+    //     throw new HttpException(400, 'invalid username/password param');
+    // }
 
     /**
      * Logs-out a user and invalidates session token
@@ -77,25 +69,25 @@ export default class SecurityService extends HTTP {
      * @returns {Promise<void>} log-out status (true/false)
      * @throws {ServiceException} service exception
      */
-    async logout(username: string): Promise<void> {
-        if (isString(username) && !sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN)) {
-            const response = await this.POST(
-                new Request(API_URL, {
-                    method: 'POST',
-                    headers: new LogoutHeaders(null),
-                    body: JSON.stringify({
-                        username,
-                    }),
-                }),
-            );
+    // async logout(username: string): Promise<void> {
+    //     if (isString(username) && !sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN)) {
+    //         const request = new Request(this.URL, {
+    //             method: 'POST',
+    //             headers: new LogoutHeaders(null),
+    //             body: JSON.stringify({
+    //                 username,
+    //             }),
+    //         });
 
-            if (response.ok) {
-                sessionStorage.removeItem(KEY_SESH_ACCESS_TOKEN);
-                return;
-            }
-        }
-        throw new ServiceException(400, 'invalid username param');
-    }
+    //         const response = await this.POST(request);
+
+    //         if (response.ok) {
+    //             sessionStorage.removeItem(KEY_SESH_ACCESS_TOKEN);
+    //             return;
+    //         }
+    //     }
+    //     throw new HttpException(400, 'invalid username param');
+    // }
 
     /**
      * Checks if a session token is valid
@@ -103,18 +95,19 @@ export default class SecurityService extends HTTP {
      * @returns {Promise<boolean>} session validity (true/false/undefined)
      * @throws {ServiceException} service exception
      */
-    async valididateSession(): Promise<boolean> {
-        return (await this.POST(
-            new Request(API_URL, {
-                method: 'POST',
-                headers: new ValidateSessionHeaders(
-                    sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN),
-                    null, // TODO
-                ),
-                body: JSON.stringify({
-                    session: sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN),
-                }),
-            }),
-        )).ok;
-    }
+    // async valididateSession(): Promise<boolean> {
+    //     const request = new Request(this.URL, {
+    //         method: 'POST',
+    //         headers: new ValidateSessionHeaders(
+    //             sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN),
+    //             null, // TODO
+    //         ),
+    //         body: JSON.stringify({
+    //             session: sessionStorage.getItem(KEY_SESH_ACCESS_TOKEN),
+    //         }),
+    //     });
+
+    //     const response = await this.POST(request);
+    //     return response.ok;
+    // }
 }
