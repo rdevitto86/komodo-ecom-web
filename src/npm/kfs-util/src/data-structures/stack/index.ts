@@ -9,17 +9,51 @@
  */
  export default class Stack<T> {
     /**
+     * Number of items allowed in history
+     * @readonly
+     */
+    readonly MAX_HISTORY = 10;
+
+    /**
+     * Collective stack history
+     */
+    history: T[] = [];
+
+    /**
+     * History of added items
+     */
+    historyAdded: T[] = [];
+
+    /**
+     * History of removed items
+     */
+    historyRemoved: T[] = [];
+
+    /**
+     * Enables/disables stack history
+     */
+    private historyFlag = false;
+
+    /**
      * Queues items based on FILO
      * @private
      */
-    private _stack: T[] = [];
+    private stack: T[] = [];
+
+    /**
+     * @param {boolean} [historyFlag] flag for history feature
+     */
+    constructor(historyFlag: boolean = false) {
+        this.historyFlag = historyFlag;
+    }
 
     /**
      * Adds item to top of the stack
      * @param {T} item item to add
      */
     push(item: T) {
-        this._stack.push(item);
+        this.stack.push(item);
+        this.updateHistory(true, item);
     }
 
     /**
@@ -27,10 +61,9 @@
      * @returns {T | undefined} stack item
      */
     pop() {
-        if (this._stack.length > 0) {
-            this._stack.pop();
-        }
-        return undefined;
+        const top = this.stack.pop();
+        this.updateHistory(false, top);
+        return top;
     }
 
     /**
@@ -38,8 +71,8 @@
      * @returns {T | undefined} stack item
      */
     peek() {
-        if (this._stack.length > 0) {
-            return this._stack[this._stack.length - 1];
+        if (this.stack.length > 0) {
+            return this.stack[this.stack.length - 1];
         }
         return undefined;
     }
@@ -50,7 +83,7 @@
      * @returns {number} first index of item, -1 if not found
      */
     seek(item: any) {
-        return this._stack.indexOf(item);
+        return this.stack.indexOf(item);
     }
 
     /**
@@ -58,27 +91,73 @@
      * @returns {string} string print-out
      */
     print() {
-        return JSON.stringify(this._stack);
+        return JSON.stringify(this.stack);
     }
 
     /**
      * Removes all elements from stack
      */
     clear() {
-        this._stack = [];
+        this.stack = [];
+        this.clearHistory();
+    }
+
+    /**
+     * Clears stack history
+     */
+    clearHistory() {
+        this.historyAdded = [];
+        this.historyRemoved = [];
+    }
+
+    /**
+     * Enables history tracking
+     */
+    enableHistory() {
+        this.historyFlag = true;
+    }
+
+    /**
+     * Disables history tracking
+     */
+    disableHistory() {
+        this.historyFlag = false;
     }
 
     /**
      * Current size of the stack
      */
     get size() {
-        return this._stack.length;
+        return this.stack.length;
     }
 
     /**
      * Determines if stack is empty (no items)
      */
     get isEmpty() {
-        return this._stack.length === 0;
+        return this.stack.length === 0;
+    }
+
+    /**
+     * Updates added/removed history
+     */
+    private updateHistory(isAdded: boolean, item?: T) {
+        if (item && this.historyFlag) {
+            const { history, MAX_HISTORY } = this;
+
+            if (history.length >= MAX_HISTORY) {
+                // TODO - remove last element and adjust array
+            }
+            history.push(item);
+
+            // update action (add/remove) history
+            const actionHistory = (isAdded === true) 
+                ? this.historyAdded : this.historyRemoved;
+
+            if (actionHistory.length >= MAX_HISTORY) {
+                // TODO - remove last element and adjust array
+            }
+            actionHistory.push(item);
+        }
     }
 }

@@ -9,17 +9,51 @@
  */
  export default class Queue<T> {
     /**
+     * Number of items allowed in history
+     * @readonly
+     */
+    readonly MAX_HISTORY = 10;
+
+    /**
+     * Collective queue history
+     */
+    history: T[] = [];
+
+    /**
+     * History of added items
+     */
+    historyAdded: T[] = [];
+
+    /**
+     * History of removed items
+     */
+    historyRemoved: T[] = [];
+
+    /**
+     * Enables/disables queue history
+     */
+    private historyFlag = false;
+
+    /**
      * Queues items based on FIFO
      * @private
      */
-    private _queue: T[] = [];
+    private queue: T[] = [];
+
+    /**
+     * @param {boolean} [historyFlag] flag for history feature
+     */
+     constructor(historyFlag: boolean = false) {
+        this.historyFlag = historyFlag;
+    }
 
     /**
      * Adds item to the queue and sorts priority
      * @param {T} item item to add
      */
     enqueue(item: T) {
-        this._queue.push(item);
+        this.queue.push(item);
+        this.updateHistory(true, item);
     }
 
     /**
@@ -30,7 +64,9 @@
         if (this.isEmpty) {
             return undefined;
         }
-        return this._queue.shift();
+        const item = this.queue.shift();
+        this.updateHistory(false, item);
+        return item;
     }
 
     /**
@@ -41,7 +77,7 @@
         if (this.isEmpty) {
             return undefined;
         }
-        return this._queue[0];
+        return this.queue[0];
     }
 
     /**
@@ -52,7 +88,7 @@
         if (this.isEmpty) {
             return undefined;
         }
-        return this._queue[this._queue.length - 1];
+        return this.queue[this.queue.length - 1];
     }
 
     /**
@@ -61,14 +97,7 @@
      * @returns {number} first index of item, -1 if not found
      */
     seek(item: T) {
-        return this._queue.indexOf(item);
-    }
-
-    /**
-     * Removes all elements from queue
-     */
-    clear() {
-        this._queue = [];
+        return this.queue.indexOf(item);
     }
 
     /**
@@ -76,20 +105,73 @@
      * @returns {string} string print-out
      */
     print() {
-        return JSON.stringify(this._queue);
+        return JSON.stringify(this.queue);
+    }
+
+    /**
+     * Removes all elements from queue
+     */
+    clear() {
+        this.queue = [];
+        this.clearHistory();
+    }
+
+    /**
+     * Clears queue history
+     */
+    clearHistory() {
+        this.historyAdded = [];
+        this.historyRemoved = [];
+    }
+
+    /**
+     * Enables history tracking
+     */
+    enableHistory() {
+        this.historyFlag = true;
+    }
+
+    /**
+     * Disables history tracking
+     */
+    disableHistory() {
+        this.historyFlag = false;
     }
 
     /**
      * Current size of the queue
      */
     get size() {
-        return this._queue.length;
+        return this.queue.length;
     }
 
     /**
      * Determines if queue is empty (no items)
      */
     get isEmpty() {
-        return this._queue.length === 0;
+        return this.queue.length === 0;
+    }
+
+    /**
+     * Updates added/removed history
+     */
+    private updateHistory(isAdded: boolean, item?: T) {
+        if (item && this.historyFlag) {
+            const { history, MAX_HISTORY } = this;
+
+            if (history.length >= MAX_HISTORY) {
+                // TODO - remove last element and adjust array
+            }
+            history.push(item);
+
+            // update action (add/remove) history
+            const actionHistory = (isAdded === true) 
+                ? this.historyAdded : this.historyRemoved;
+
+            if (actionHistory.length >= MAX_HISTORY) {
+                // TODO - remove last element and adjust array
+            }
+            actionHistory.push(item);
+        }
     }
 }

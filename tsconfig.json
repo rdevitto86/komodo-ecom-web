@@ -1,27 +1,41 @@
 {
-    "compilerOptions": {
-      "target": "es5",
-      "lib": [
-        "dom",
-        "dom.iterable",
-        "esnext"
-      ],
-      "allowJs": true,
-      "skipLibCheck": true,
-      "esModuleInterop": true,
-      "allowSyntheticDefaultImports": true,
-      "strict": true,
-      "forceConsistentCasingInFileNames": true,
-      "noFallthroughCasesInSwitch": true,
-      "module": "esnext",
-      "moduleResolution": "node",
-      "resolveJsonModule": true,
-      "isolatedModules": true,
-      "noEmit": true,
-      "jsx": "react-jsx"
-    },
-    "include": [ 
-      "src", 
-      "global.d.ts" 
-    ]
-  }
+  "compileOnSave": false,
+  "compilerOptions": {
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "alwaysStrict": true,
+    "baseUrl": "./",
+    "checkJs": true,
+    "declaration": true,
+    "downlevelIteration": true,                         /* TODO - any benefit? */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,           /* TODO - any benefit? */
+    "importHelpers": true,                              /* TODO - any benefit? */
+    "incremental": true,                                /* TODO - any benefit? */
+    "isolatedModules": true,
+    "jsx": "react",                                     /* TODO - check which format works best for client + server */
+    "lib": [                                            /* TODO - check which format works best for client + server */
+      "DOM",
+      "ES2020"
+    ],
+    "module": "ES2020",                                 /* TODO - check which format works best for client + server */
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "outDir": "./dist",
+    "removeComments": true,
+    "resolveJsonModule": true,            
+    "sourceMap": true,                                  /* TODO - any benefit? */                            
+    "target": "ES2020"                                  /* TODO - check which format works best for client + server */
+  },
+  "include": [
+    "src",
+    "global.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
