@@ -10,46 +10,50 @@
     "start:dev": "",
     "start:debug": "",
     "start:prod": "",
-    "test": "react-scripts test",
-    "test:cov": "",
-    "lint": "",
+    "test": "jest",
+    "test:cov": "jest --coverage",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "eject": "react-scripts eject"
   },
   "dependencies": {
     "class-validator": "*",
     "react": "*",
     "react-dom": "*",
+    "react-router-dom": "*",
     "react-scripts": "*",
     "webpack": "*"
   },
   "devDependencies": {
+    "@babel/preset-env": "*",
+    "@babel/preset-react": "*",
+    "@babel/preset-typescript": "*",
     "@testing-library/jest-dom": "*",
     "@testing-library/react": "*",
     "@testing-library/user-event": "*",
+    "@types/jest": "*",
     "@types/react": "*",
     "@types/react-dom": "*",
+    "@types/react-router-dom": "*",
     "@typescript-eslint/eslint-plugin": "*",
     "@typescript-eslint/parser": "*",
     "@typescript-eslint/types": "*",
+    "babel-jest": "*",
     "eslint": "*",
     "eslint-config-airbnb": "*",
     "eslint-plugin-import": "*",
     "eslint-plugin-jsx-a11y": "*",
     "eslint-plugin-react": "*",
     "eslint-plugin-react-hooks": "*",
+    "jest": "*",
     "node-sass": "*",
+    "react-test-renderer": "*",
     "typescript": "*"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
       ">0.2%",
       "not dead",
+      "not ie <= 11",
       "not op_mini all"
     ],
     "development": [

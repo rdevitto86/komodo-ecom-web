@@ -7,5 +7,5 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root'), // invoked from index.html using Webpack
+  document.getElementById('root'),
 );

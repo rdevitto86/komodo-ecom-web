@@ -1,6 +1,6 @@
 import { isProduct, ProductJSON } from '../../npm/kfs-api/src/catalog-api/schemas/catalog-product';
 import CatalogItem from '../catalog-items/catalog-item.model';
-import UserReview from '../user-reviews/user-review.model';
+import { UserReview } from '../user-reviews/user-review.model';
 
 /**
  * An orderable, catalog product
@@ -11,11 +11,6 @@ export default class CatalogProduct extends CatalogItem {
      * Item SKU number
      */
     sku: string | null = null;
-
-    /**
-     * Item price
-     */
-    price: number | null = null;
 
     /**
      * Item quantity
@@ -76,7 +71,6 @@ export default class CatalogProduct extends CatalogItem {
         if (isProduct(props)) {
             const {
                 sku,
-                price,
                 quantity,
                 stock,
                 features,
@@ -91,7 +85,6 @@ export default class CatalogProduct extends CatalogItem {
 
             // set product data
             this.sku = sku;
-            this.price = price;
 
             if (quantity) {
                 this.quantity = quantity;

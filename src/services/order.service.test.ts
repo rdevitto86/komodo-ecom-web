@@ -1,7 +1,17 @@
-// import OrderService from './order.service';
+import OrderService from './order.service';
 
-// test('Order Service Tests', () => {
-//     //
-// });
+describe('Order Service tests', () => {
+    const service = new OrderService();
 
-export {};
+    // TODO - mocks/spies/stubs
+
+    test('API endpoint is correct', () => {
+        expect(service.API_URL).toBe('');
+    });
+
+    // test('getOrder returns correct response', () => {
+    //     const response = service.getOrder('');
+
+    //     expect(response).toBe({});
+    // });
+});

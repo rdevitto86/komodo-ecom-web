@@ -1,5 +1,4 @@
 import { CatalogItemJSON, isCatalogItem } from '../../types/catalog-item';
-import { UserReviewJSON } from '../user-review';
 
 /**
  * Defines an abstract Catalog Product object

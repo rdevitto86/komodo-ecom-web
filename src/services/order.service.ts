@@ -1,4 +1,4 @@
-import HTTP from '../npm/kfs-web/http';
+// import HTTP from '../npm/kfs-web/http';
 // import Order from '../models/orders/order.model';
 // import HttpException from '../npm/kfs-web/http-exceptions';
 // import { GetOrderResponse } from '../npm/kfs-api/order-api/responses';
@@ -8,10 +8,9 @@ import HTTP from '../npm/kfs-web/http';
 
 /**
  * Handles requests/responses for the Order service
- * @extends HTTP
  */
-export default class OrderService extends HTTP {
-    readonly URL = process.env.ORDER_API_URL || '';
+export default class OrderService {
+    readonly API_URL = process.env.ORDER_API_URL || '';
 
     /**
      * Fetches information for a specified order

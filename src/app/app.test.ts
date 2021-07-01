@@ -1,5 +1,6 @@
-// test('React Boostraper Tests', () => {
-
-// });
-
 export {};
+
+// TODO
+test('react app boostrapper', () => {
+
+});

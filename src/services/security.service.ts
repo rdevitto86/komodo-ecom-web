@@ -1,4 +1,4 @@
-import HTTP from '../npm/kfs-web/http';
+// import HTTP from '../npm/kfs-web/http';
 // import {
 //     KEY_SESH_ID_TOKEN,
 //     KEY_SESH_ACCESS_TOKEN,
@@ -15,10 +15,9 @@ import HTTP from '../npm/kfs-web/http';
 
 /**
  * Handles requests/responses for the Security API
- * @extends HTTP
  */
-export default class SecurityService extends HTTP {
-    readonly URL = process.env.AUTH_API_URL || '';
+export default class SecurityService {
+    readonly API_URL = process.env.AUTH_API_URL || '';
 
     /**
      * Logs a user into the current session

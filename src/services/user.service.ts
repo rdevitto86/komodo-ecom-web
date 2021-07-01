@@ -1,4 +1,4 @@
-import HTTP from '../npm/kfs-web/http';
+// import HTTP from '../npm/kfs-web/http';
 // import HttpException from '../npm/kfs-web/http-exceptions';
 // import { UserAPIHeaders } from '../npm/kfs-api/user-api/headers';
 // import { GetAccountInfoResponse } from '../npm/kfs-api/user-api/responses';
@@ -12,10 +12,9 @@ import HTTP from '../npm/kfs-web/http';
 
 /**
  * Handles requests/responses for the User API
- * @extends HTTP
  */
-export default class UserService extends HTTP {
-    readonly URL = process.env.USER_API_URL || '';
+export default class UserService {
+    readonly API_URL = process.env.USER_API_URL || '';
 
     /**
      * Fetches a user's account information

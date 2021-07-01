@@ -4,11 +4,11 @@
 export interface AddressJSON {
     line1: string;
     line2?: string;
-    line3?: string;
+    // line3?: string;
     city: string;
-    region: string;
-    subRegion?: string;
-    mailingCode: string;
+    state: string;
+    county?: string;
+    zipcode: string;
     country: string;
 }
 
@@ -18,6 +18,6 @@ export interface AddressJSON {
  * @returns {boolean} true/false
  */
 export function isAddress(obj: any): obj is AddressJSON {
-    return 'line1' in obj && 'city' in obj && 'region' in obj
-        && 'mailingCode' in obj && 'country' in obj;
+    return 'line1' in obj && 'city' in obj && 'state' in obj
+        && 'zipcode' in obj && 'country' in obj;
 }

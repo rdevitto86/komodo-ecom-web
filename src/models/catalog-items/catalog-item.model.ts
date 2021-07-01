@@ -21,6 +21,11 @@ export default class CatalogItem {
     classifcation: string | null = null;
 
     /**
+     * Cost of item
+     */
+    price: number | null = null;
+
+    /**
      * Quick-access tags
      */
     tags: string[] = [];
@@ -54,15 +59,17 @@ export default class CatalogItem {
                 catalogID,
                 categoryID,
                 classifcation,
+                price,
                 tags,
                 title,
                 description,
-                // enablePromotions,
-                // promotion,
+                enablePromotions,
+                promotion,
             } = props;
 
             // set catalog items
             this.catalogID = catalogID;
+            this.price = price;
 
             if (categoryID) {
                 this.categoryID = categoryID;
@@ -79,9 +86,9 @@ export default class CatalogItem {
             this.description = description;
 
             // set promotion data
-            // if (enablePromotions === true && isPromotion(promotion)) {
-            //     this.promotion = new Promotion(promotion);
-            // }
+            if (enablePromotions === true && isPromotion(promotion)) {
+                this.promotion = new Promotion(promotion);
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ export default class Address {
     /**
      * Tertiary street address
      */
-    line3: string | null = null;
+    // line3: string | null = null;
 
     /**
      * Address city
@@ -55,28 +55,28 @@ export default class Address {
             const {
                 line1,
                 line2,
-                line3,
+                // line3,
                 city,
-                region,
-                subRegion,
-                mailingCode,
+                state,
+                county,
+                zipcode,
                 country,
             } = props;
 
             this.line1 = line1;
             this.city = city;
-            this.state = region;
-            this.zipcode = mailingCode;
+            this.state = state;
+            this.zipcode = zipcode;
             this.country = country;
 
             if (line2) {
                 this.line2 = line2;
             }
-            if (line3) {
-                this.line3 = line3;
-            }
-            if (subRegion) {
-                this.county = subRegion;
+            // if (line3) {
+            //     this.line3 = line3;
+            // }
+            if (county) {
+                this.county = county;
             }
         }
     }
@@ -86,7 +86,7 @@ export default class Address {
      * @returns {string} address
      * @example 'One Apple Park Way, Cupertino, CA 95014 US'
      */
-    print(): string {
+    print() {
         const {
             line1,
             line2,
@@ -98,8 +98,9 @@ export default class Address {
             country,
         } = this;
 
-        const fullAddress = `${line1 || ''}${((line2) ? ` ${line2}` : '')}`;
-        const fullRegion = `, ${state || ''}${(county) ? `, ${county}` : ''}`;
-        return `${fullAddress}, ${city || ''}, ${fullRegion} ${zipcode || ''} ${country || ''}`;
+        const streetAddress = `${line1 || ''}${((line2) ? ` ${line2}` : '')}`;
+        const regionalAddress = `, ${state || ''}${(county) ? `, ${county}` : ''}`;
+
+        return `${streetAddress}, ${city || ''}, ${regionalAddress} ${zipcode || ''} ${country || ''}`;
     }
 }

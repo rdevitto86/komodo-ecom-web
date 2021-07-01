@@ -1,6 +1,6 @@
-import HTTP from '../npm/kfs-web/http';
-import HttpException from '../npm/kfs-web/http-exceptions';
-import { isString } from '../npm/kfs-util/validations/primitives/strings';
+import { isString } from 'class-validator';
+import HTTP from 'src/npm/kfs-web/src/http';
+import HttpException from 'src/npm/kfs-web/src/http-exceptions';
 import CatalogItem from '../models/catalog-items/catalog-item.model';
 import { GetItemResponse } from '../npm/kfs-api/src/catalog-api/responses/get-item';
 import { GetCategoryItemsResponse } from '../npm/kfs-api/src/catalog-api/responses/get-items';
@@ -11,9 +11,8 @@ import { CatalogItemJSON } from '../npm/kfs-api/src/catalog-api/types/catalog-it
 
 /**
  * Handles requests and responses for the Catalog API
- * @extends HTTP
  */
-export default class CatalogService extends HTTP {
+export default class CatalogService {
     readonly API_URL = process.env.CATALOG_API_URL || '';
 
     /**
@@ -36,7 +35,7 @@ export default class CatalogService extends HTTP {
             },
         );
 
-        const response = await this.GET(request);
+        const response = await HTTP.GET(request);
         const body = response.json() as unknown as GetItemResponse;
 
         if (response.ok) {
@@ -65,7 +64,7 @@ export default class CatalogService extends HTTP {
             },
         );
         
-        const response = await this.GET(request);
+        const response = await HTTP.GET(request);
         const body = response.json() as unknown as GetCategoryItemsResponse;
 
         if (response.ok) {
