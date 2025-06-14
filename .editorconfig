@@ -1,9 +1,0 @@
-# Documentation: https://editorconfig.org
-
-root = true
-
-[*]
-charset = utf-8
-
-[*.ts]
-quote_type = single

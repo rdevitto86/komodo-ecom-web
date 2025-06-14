@@ -22,7 +22,7 @@
     "plugin:react/recommended",
     "react-app",
     "react-app/jest",
-    "airbnb"                              /* TODO - use own template */
+    "airbnb"
   ],
   "rules": {
     // -- js-off ----

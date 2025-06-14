@@ -1,7 +1,7 @@
 {
-  "name": "ecw-desktop-react",
-  "version": "1.0.0",
-  "description": "Ecommerce web application that handles online ordering, order management, and customer support",
+  "name": "komodo-ecom-desktop",
+  "version": "0.1.0",
+  "description": "ecommerce web application",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -16,7 +16,6 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "class-validator": "*",
     "react": "*",
     "react-dom": "*",
     "react-router-dom": "*",
