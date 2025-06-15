@@ -1,1 +1,0 @@
-export const KEY_LOCAL_AUTH_TOKEN = 'ECW_LOCAL_AUTH_TOKEN';
