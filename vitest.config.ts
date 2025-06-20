@@ -1,32 +1,28 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vitest/config';
 import path from 'path';
 
 export default defineConfig({
-  plugins: [react()],
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
+    setupFiles: ['./vitest-setup.ts'],
     include: [
-      'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
+      'src/**/*.{test,spec}.{js,ts,jsx,tsx}'
     ],
     exclude: [
       'node_modules',
       'dist',
       'build',
       'release',
-      'src/main/**/*'
+      '*/src/assets/'
     ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       exclude: [
         'node_modules/',
-        'src/test/',
-        'src/main/',
-        '**/*.d.ts',
-        '**/*.config.{js,ts}',
+        './**/*.d.ts',
+        './src/config/*.{js,ts}',
         'coverage/**'
       ],
       thresholds: {
@@ -48,11 +44,14 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@/pages': path.resolve(__dirname, './src/pages'),
       '@/components': path.resolve(__dirname, './src/components'),
+      '@/modules': path.resolve(__dirname, './src/modules'),
       '@/hooks': path.resolve(__dirname, './src/hooks'),
+      '@/services': path.resolve(__dirname, './src/services'),
       '@/utils': path.resolve(__dirname, './src/utils'),
-      '@/types': path.resolve(__dirname, './src/types'),
-      '@/assets': path.resolve(__dirname, './src/assets')
+      '@/models': path.resolve(__dirname, './src/models'),
+      '@/assets': path.resolve(__dirname, './src/assets'),
     }
   }
 });

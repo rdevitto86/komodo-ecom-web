@@ -24,24 +24,28 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "exactOptionalPropertyTypes": true,
+    "exactOptionalPropertyTypes": false,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": false,
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@/pages/*": ["./src/pages/*"],
       "@/components/*": ["./src/components/*"],
+      "@/modules/*": ["./src/modules/*"],
       "@/hooks/*": ["./src/hooks/*"],
+      "@/services/*": ["src/models/*"],
       "@/utils/*": ["./src/utils/*"],
-      "@/types/*": ["./src/types/*"],
+      "@/models/*": ["src/models/*"],
       "@/assets/*": ["./src/assets/*"]
     }
   },
   "include": [
     "src/**/*",
     "*.config.ts",
-    "vite.config.ts"
+    "vite.config.ts",
+    "vitest-setup.ts",
   ],
   "exclude": [
     "node_modules",

@@ -1,4 +1,4 @@
-(async () => {
+async function cleanDeps() {
     let rimraf;
     try {
         ({ rimraf } = require('rimraf')); // Dynamically require rimraf
@@ -7,9 +7,8 @@
         process.exit(1);
     }
 
-    const dirsToClean = ['node_modules', 'dist', '.vite'];
-
     try {
+        const dirsToClean = ['node_modules', 'dist', '.vite'];
         await Promise.all(
             dirsToClean.map(async (dir) => {
                 await rimraf(dir);
@@ -20,4 +19,6 @@
         console.error(`❌ Cleanup failed: ${err.message}`);
         process.exit(1);
     }
-})();
+};
+
+export default cleanDeps();

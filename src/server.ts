@@ -1,5 +1,10 @@
 import { createServer } from 'vite';
+import setupCountriesISO from './i18n/setupCountries';
 
+// Initialize global resources
+setupCountriesISO();
+
+// Vite server config
 async function startServer() {
   const server = await createServer({
     root: './src',
@@ -17,4 +22,5 @@ async function startServer() {
   server.printUrls();
 }
 
+// Start app
 startServer();
