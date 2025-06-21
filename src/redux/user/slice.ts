@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-// === Interfaces ===
 export interface UserState {
   id: string | null;
   name: string | null;
@@ -13,7 +12,7 @@ export interface UserState {
   };
 }
 
-// === State ===
+// State
 const initialState: UserState = {
   id: null,
   name: null,
@@ -26,7 +25,7 @@ const initialState: UserState = {
   },
 };
 
-// === Slice ===
+// Slice
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -56,7 +55,7 @@ export const userSlice = createSlice({
   },
 });
 
-// === Actions ===
+// Actions
 export const {
   setUser,
   login,

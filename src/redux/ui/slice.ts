@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-// === Interface ===
 export interface UIState {
   isLoading: boolean;
   modals: {
@@ -23,7 +21,7 @@ export interface UIState {
   } | null;
 }
 
-// === State ===
+// State
 const initialState: UIState = {
   isLoading: false,
   modals: {},
@@ -35,7 +33,7 @@ const initialState: UIState = {
   toast: null,
 };
 
-// === Slice ===
+// Slice
 export const uiSlice = createSlice({
   name: 'ui',
   initialState,
@@ -91,7 +89,7 @@ export const uiSlice = createSlice({
   },
 });
 
-// === Actions ===
+// Actions
 export const {
   setLoading,
   toggleModal,

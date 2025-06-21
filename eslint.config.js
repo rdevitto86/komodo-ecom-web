@@ -1,78 +1,66 @@
-import js from "@eslint/js";
-import globals from "globals";
-import tseslint from "typescript-eslint";
-import pluginReact from "eslint-plugin-react";
-import pluginReactHooks from "eslint-plugin-react-hooks"; // Import the hooks plugin separately
-import { defineConfig } from "eslint/config";
+import js from '@eslint/js';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
+import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
-  // Base configuration for all relevant files
+  // Base JS rules
+  js.configs.recommended,
+
+  // Base TS rules
+  ...tseslint.configs.recommended,
+
+  // Custom rules for all files
   {
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: "module",
-      ecmaFeatures: { jsx: true },
+      sourceType: 'module',
       globals: { ...globals.browser, ...globals.node },
-    },
-    // No 'plugins' section here for @typescript-eslint or react,
-    // as their configs will handle that.
-    rules: {
-      // General best practices
-      "no-console": "warn",
-      "prefer-const": "error",
-      "no-var": "error",
-      "eol-last": ["error", "always"],
-    },
-  },
-
-  // ESLint core recommended rules
-  {
-    files: ["**/*.{js,mjs,cjs,jsx}"], // Apply to JS/JSX files
-    ...js.configs.recommended, // Spreads rules from @eslint/js recommended
-  },
-
-  // TypeScript specific configuration
-  {
-    files: ["**/*.{ts,mts,cts,tsx}"], // Apply to TS/TSX files
-    // The tseslint.configs will set up the parser and plugin correctly
-    ...tseslint.configs.recommended, // Includes @typescript-eslint plugin and recommended rules
-    languageOptions: {
       parserOptions: {
-        project: "./tsconfig.json", // Essential for type-aware rules
+        project: './tsconfig.json',
       },
     },
     rules: {
-      // Common TypeScript rules (overrides or additions)
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-      "@typescript-eslint/explicit-function-return-type": "off",
-      "@typescript-eslint/explicit-module-boundary-types": "off",
-      "@typescript-eslint/no-explicit-any": "warn",
+      'no-console': 'warn',
+      'prefer-const': 'error',
+      'no-var': 'error',
+      'eol-last': ['error', 'always'],
+      'quotes': ['error', 'single', { avoidEscape: false, allowTemplateLiterals: false }],
+      'indent': ['error', 2, { SwitchCase: 1 }],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-trailing-spaces': 'error',
+      'no-irregular-whitespace': 'error',
+      'no-mixed-spaces-and-tabs': 'error',
+      'no-multi-spaces': 'error'
     },
   },
-
-  // React specific configuration
+  // React-specific rules
   {
-    files: ["**/*.{jsx,tsx}"], // Apply to JSX/TSX files
-    ...pluginReact.configs.flat.recommended, // Includes react plugin and recommended rules
+    ...pluginReact.configs.flat.recommended,
+    files: ['**/*.{jsx,tsx}'],
     plugins: {
-      "react-hooks": pluginReactHooks, // Manually add react-hooks plugin if not bundled with pluginReact
+      'react-hooks': pluginReactHooks,
     },
     rules: {
-      // React-specific rules (overrides or additions)
-      "react/react-in-jsx-scope": "off", // Not needed with new JSX transform
-      "react/prop-types": "off", // Using TS for prop types
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
     },
     settings: {
       react: {
-        version: "detect", // Automatically detect React version
+        version: 'detect',
       },
     },
   },
+  // Ignored paths
   {
-    // Ignore files (similar to .eslintignore)
-    ignores: ["node_modules/", "dist/", ".vscode/", ".idea/", "build/"],
+    ignores: ['eslint.config.js', 'node_modules/', 'dist/', '.vscode/', '.idea/', 'build/'],
   },
 ]);

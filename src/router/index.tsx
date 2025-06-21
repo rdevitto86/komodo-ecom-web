@@ -8,26 +8,26 @@ const ContactUs = lazy(() => import('./pages/contact-us/contact-us'));
 const Checkout = lazy(() => import('./pages/checkout/checkout'));
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Home />,
-    },
-    {
-        path: '/about',
-        element: <About />,
-    },
-    {
-        path: '/contact-us',
-        element: <ContactUs />,
-    },
-    {
-        path: '/checkout',
-        element: <Checkout />,
-    },
-    {
-        path: '*',
-        element: <NotFound />,
-    },
+  {
+    path: '/',
+    element: <Home />,
+  },
+  {
+    path: '/about',
+    element: <About />,
+  },
+  {
+    path: '/contact-us',
+    element: <ContactUs />,
+  },
+  {
+    path: '/checkout',
+    element: <Checkout />,
+  },
+  {
+    path: '*',
+    element: <NotFound />,
+  },
 ]);
 
 export function AppRouter() {

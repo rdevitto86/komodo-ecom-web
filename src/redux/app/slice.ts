@@ -18,7 +18,7 @@ export interface AppState {
   };
 }
 
-// ===== STATE =====
+// State 
 const initialState: AppState = {
   version: '1.0.0',
   isOnline: navigator.onLine,
@@ -35,7 +35,7 @@ const initialState: AppState = {
   },
 };
 
-// ===== SLICE =====
+// Slice 
 export const appSlice = createSlice({
   name: 'app',
   initialState,
@@ -83,7 +83,7 @@ export const appSlice = createSlice({
   },
 });
 
-// ===== ACTIONS =====
+// Actions 
 export const {
   setOnlineStatus,
   updateLastUpdated,

@@ -1,6 +1,0 @@
-{
-  "eslint.useFlatConfig": true,
-  "eslint.validate": ["javascript", "typescript", "typescriptreact", "javascriptreact"],
-  "eslint.workingDirectories": [{ "mode": "auto" }],
-  "editor.tabSize": 4
-}

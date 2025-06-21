@@ -1,6 +1,6 @@
 import type { RootState } from '../global';
 
-// ===== BASE =====
+// Base 
 export const selectApp = (state: RootState) => state.app;
 export const selectIsOnline = (state: RootState) => state.app.isOnline;
 export const selectFeatures = (state: RootState) => state.app.features;
@@ -9,19 +9,19 @@ export const selectConfig = (state: RootState) => state.app.config;
 export const selectPerformance = (state: RootState) => state.app.performance;
 export const selectLastUpdated = (state: RootState) => state.app.lastUpdated;
 
-// ===== CONFIG =====
+// Config 
 export const selectEnvironment = (state: RootState) => state.app.config.environment;
 export const selectDebugMode = (state: RootState) => state.app.config.debugMode;
 export const selectApiUrl = (state: RootState) => state.app.config.apiUrl;
 
-// ===== UTILITY =====
+// Utils 
 export const isFeatureEnabled = (state: RootState, feature: string): boolean => state.app.features[feature] ?? false;
 export const selectFeatureFlag = (feature: string) => (state: RootState): boolean => state.app.features[feature] ?? false;
 export const selectIsProduction = (state: RootState): boolean => state.app.config.environment === 'production';
 export const selectIsDevelopment = (state: RootState): boolean => state.app.config.environment === 'development';
 export const selectIsStaging = (state: RootState): boolean => state.app.config.environment === 'staging';
 
-// ===== COMPUTED =====
+// Computed 
 export const selectAppHealth = (state: RootState) => ({
   isOnline: state.app.isOnline,
   version: state.app.version,

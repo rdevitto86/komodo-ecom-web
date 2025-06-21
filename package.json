@@ -5,6 +5,7 @@
   "description": "React + TypeScript Ecommerce App",
   "homepage": "./",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "start": "vite --mode qa",
     "start:mock": "vite --mode mock",

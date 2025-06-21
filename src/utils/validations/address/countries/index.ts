@@ -1,6 +1,6 @@
 import { getName, getNames } from "i18n-iso-countries";
 
-// ===== COUNTRY CODE UTILS =====
+//  COUNTRY CODE UTILS 
 /**
  * Checks if a country code is valid
  * @param code iso country code
