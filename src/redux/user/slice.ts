@@ -12,7 +12,6 @@ export interface UserState {
   };
 }
 
-// State
 const initialState: UserState = {
   id: null,
   name: null,
@@ -25,7 +24,6 @@ const initialState: UserState = {
   },
 };
 
-// Slice
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -55,13 +53,7 @@ export const userSlice = createSlice({
   },
 });
 
-// Actions
-export const {
-  setUser,
-  login,
-  logout,
-  updatePreferences,
-  updateProfile,
-} = userSlice.actions;
-
-export default userSlice.reducer;
+export const userReducer = userSlice.reducer;
+export const userActions = userSlice.actions;
+export * as userSelectors from './selectors'
+export * as userHooks from './hooks';

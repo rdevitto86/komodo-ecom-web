@@ -5,6 +5,8 @@ import setupCountriesISO from './src/i18n/setupCountries';
 
 beforeAll(() => {
   setupCountriesISO();
+
+  process.env.BASE_API_URL = 'https://api.example.com';
 });
 
 beforeEach(() => {

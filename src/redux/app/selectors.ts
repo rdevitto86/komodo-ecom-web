@@ -1,59 +1,50 @@
-import type { RootState } from '../global';
+import type { AppState } from './slice';
 
-// Base 
-export const selectApp = (state: RootState) => state.app;
-export const selectIsOnline = (state: RootState) => state.app.isOnline;
-export const selectFeatures = (state: RootState) => state.app.features;
-export const selectVersion = (state: RootState) => state.app.version;
-export const selectConfig = (state: RootState) => state.app.config;
-export const selectPerformance = (state: RootState) => state.app.performance;
-export const selectLastUpdated = (state: RootState) => state.app.lastUpdated;
+// Application
+export const selectApp = (state: AppState) => state;
+export const selectIsOnline = (state: AppState) => state.isOnline;
+export const selectVersion = (state: AppState) => state.version;
+export const selectLastUpdated = (state: AppState) => state.lastUpdated;
 
-// Config 
-export const selectEnvironment = (state: RootState) => state.app.config.environment;
-export const selectDebugMode = (state: RootState) => state.app.config.debugMode;
-export const selectApiUrl = (state: RootState) => state.app.config.apiUrl;
+// Config
+export const selectConfig = (state: AppState) => state.config;
+export const selectDebugMode = (state: AppState) => state.config.debugMode;
+export const selectApiUrl = (state: AppState) => state.config.apiUrl;
 
-// Utils 
-export const isFeatureEnabled = (state: RootState, feature: string): boolean => state.app.features[feature] ?? false;
-export const selectFeatureFlag = (feature: string) => (state: RootState): boolean => state.app.features[feature] ?? false;
-export const selectIsProduction = (state: RootState): boolean => state.app.config.environment === 'production';
-export const selectIsDevelopment = (state: RootState): boolean => state.app.config.environment === 'development';
-export const selectIsStaging = (state: RootState): boolean => state.app.config.environment === 'staging';
+// Environment
+export const selectEnvironment = (state: AppState) => state.config.environment;
+export const selectIsProduction = (state: AppState): boolean => state.config.environment === 'production';
+export const selectIsQA = (state: AppState): boolean => state.config.environment === 'qa';
+export const selectIsDevelopment = (state: AppState): boolean => state.config.environment === 'development';
 
-// Computed 
-export const selectAppHealth = (state: RootState) => ({
-  isOnline: state.app.isOnline,
-  version: state.app.version,
-  lastUpdated: state.app.lastUpdated,
-  performance: state.app.performance,
-  environment: state.app.config.environment,
-});
-
-export const selectEnabledFeatures = (state: RootState): string[] => {
-  return Object.entries(state.app.features)
+// Features
+export const selectFeatures = (state: AppState) => state.features;
+export const isFeatureEnabled = (state: AppState, feature: string): boolean => state.features[feature] ?? false;
+export const selectFeatureFlag = (feature: string) => (state: AppState): boolean => state.features[feature] ?? false;
+export const selectEnabledFeatures = (state: AppState): string[] => {
+  return Object.entries(state.features)
     .filter(([_, enabled]) => enabled)
     .map(([feature]) => feature);
 };
-
-export const selectDisabledFeatures = (state: RootState): string[] => {
-  return Object.entries(state.app.features)
+export const selectDisabledFeatures = (state: AppState): string[] => {
+  return Object.entries(state.features)
     .filter(([_, enabled]) => !enabled)
     .map(([feature]) => feature);
 };
 
-export const selectAppStatus = (state: RootState) => ({
-  version: state.app.version,
-  isOnline: state.app.isOnline,
-  environment: state.app.config.environment,
-  debugMode: state.app.config.debugMode,
-  lastUpdated: new Date(state.app.lastUpdated).toISOString(),
-  featureCount: Object.keys(state.app.features).length,
-  enabledFeatureCount: Object.values(state.app.features).filter(Boolean).length,
+// Metrics
+export const selectPerformance = (state: AppState) => state.performance;
+export const selectAppStatus = (state: AppState) => ({
+  version: state.version,
+  isOnline: state.isOnline,
+  environment: state.config.environment,
+  debugMode: state.config.debugMode,
+  lastUpdated: new Date(state.lastUpdated).toISOString(),
+  featureCount: Object.keys(state.features).length,
+  enabledFeatureCount: Object.values(state.features).filter(Boolean).length,
 });
-
-export const selectPerformanceMetrics = (state: RootState) => {
-  const perf = state.app.performance;
+export const selectPerformanceMetrics = (state: AppState) => {
+  const perf = state.performance;
   return {
     loadTime: perf.loadTime,
     lastNavigationTime: perf.lastNavigationTime,

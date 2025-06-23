@@ -9,7 +9,7 @@ export interface AppState {
   };
   config: {
     apiUrl: string;
-    environment: 'development' | 'staging' | 'production';
+    environment: 'development' | 'qa' | 'production';
     debugMode: boolean;
   };
   performance: {
@@ -18,7 +18,6 @@ export interface AppState {
   };
 }
 
-// State 
 const initialState: AppState = {
   version: '1.0.0',
   isOnline: navigator.onLine,
@@ -35,7 +34,6 @@ const initialState: AppState = {
   },
 };
 
-// Slice 
 export const appSlice = createSlice({
   name: 'app',
   initialState,
@@ -83,18 +81,7 @@ export const appSlice = createSlice({
   },
 });
 
-// Actions 
-export const {
-  setOnlineStatus,
-  updateLastUpdated,
-  setFeatureFlag,
-  setMultipleFeatureFlags,
-  setVersion,
-  updateConfig,
-  setLoadTime,
-  setNavigationTime,
-  resetPerformanceMetrics,
-  initializeApp,
-} = appSlice.actions;
-
-export default appSlice.reducer;
+export const appReducer = appSlice.reducer;
+export const appActions = appSlice.actions;
+export * as appSelectors from './selectors';
+// export * as appHooks from './hooks';

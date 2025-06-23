@@ -1,46 +1,44 @@
-import type { RootState } from '../global';
+import type { UIState } from './slice';
 
-// Base
-export const selectUI = (state: RootState) => state.ui;
-export const selectIsLoading = (state: RootState) => state.ui.isLoading;
-export const selectModals = (state: RootState) => state.ui.modals;
-export const selectSidebar = (state: RootState) => state.ui.sidebar;
-export const selectNotifications = (state: RootState) => state.ui.notifications;
-export const selectToast = (state: RootState) => state.ui.toast;
+// UI
+export const selectUI = (state: UIState) => state;
+export const selectIsLoading = (state: UIState) => state.isLoading;
+export const selectUIState = (state: UIState) => ({
+  isLoading: state.isLoading,
+  hasActiveModals: Object.values(state.modals).some(isOpen => isOpen),
+  notificationCount: state.notifications.length,
+  hasToast: !!state.toast,
+  sidebarOpen: state.sidebar.isOpen,
+});
 
-// Computed
-export const selectHasActiveModals = (state: RootState): boolean => {
-  return Object.values(state.ui.modals).some(isOpen => isOpen);
-};
-
-export const selectActiveModalIds = (state: RootState): string[] => {
-  return Object.entries(state.ui.modals)
+// Modals
+export const selectModals = (state: UIState) => state.modals;
+export const getModalState = (state: UIState, modalId: string): boolean => state.modals[modalId] ?? false;
+export const selectModalState = (modalId: string) => (state: UIState): boolean => state.modals[modalId] ?? false;
+export const selectHasActiveModals = (state: UIState): boolean => Object.values(state.modals).some(isOpen => isOpen);
+export const selectActiveModalIds = (state: UIState): string[] => {
+  return Object.entries(state.modals)
     .filter(([_, isOpen]) => isOpen)
     .map(([modalId]) => modalId);
 };
 
-export const selectSidebarState = (state: RootState) => ({
-  isOpen: state.ui.sidebar.isOpen,
-  activeTab: state.ui.sidebar.activeTab,
-  hasActiveTab: !!state.ui.sidebar.activeTab,
+// Toast
+export const selectToast = (state: UIState) => state.toast;
+
+// Sidebar
+export const selectSidebar = (state: UIState) => state.sidebar;
+export const selectSidebarState = (state: UIState) => ({
+  isOpen: state.sidebar.isOpen,
+  activeTab: state.sidebar.activeTab,
+  hasActiveTab: !!state.sidebar.activeTab,
 });
 
-export const selectUIState = (state: RootState) => ({
-  isLoading: state.ui.isLoading,
-  hasActiveModals: Object.values(state.ui.modals).some(isOpen => isOpen),
-  notificationCount: state.ui.notifications.length,
-  hasToast: !!state.ui.toast,
-  sidebarOpen: state.ui.sidebar.isOpen,
-});
-
-// Utils
-export const getModalState = (state: RootState, modalId: string): boolean => state.ui.modals[modalId] ?? false;
-export const selectModalState = (modalId: string) => (state: RootState): boolean => state.ui.modals[modalId] ?? false;
-export const selectNotificationCount = (state: RootState): number => state.ui.notifications.length;
-export const selectUnreadNotifications = (state: RootState) => state.ui.notifications.filter(n => Date.now() - n.timestamp < 300000);
-export const selectRecentNotifications = (state: RootState) => state.ui.notifications
+// Notifications
+export const selectNotifications = (state: UIState) => state.notifications;
+export const selectNotificationCount = (state: UIState): number => state.notifications.length;
+// export const selectUnreadNotifications = (state: UIState) => state.notifications.filter(n => Date.now() - n.timestamp < 300000);
+export const selectRecentNotifications = (state: UIState) => state.notifications
   .slice(-5) // Last 5 notifications
   .reverse(); // Most recent first
-
-export const selectNotificationsByType = (type: 'success' | 'error' | 'warning' | 'info') => 
-  (state: RootState) => { return state.ui.notifications.filter(n => n.type === type); };
+export const selectNotificationsByType = (type: 'success' | 'error' | 'warning' | 'info') =>
+  (state: UIState) => { return state.notifications.filter(n => n.type === type); };

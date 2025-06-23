@@ -34,8 +34,9 @@
       "@/pages/*": ["./src/pages/*"],
       "@/components/*": ["./src/components/*"],
       "@/modules/*": ["./src/modules/*"],
+      "@/redux/*": ["./src/redux/*"],
       "@/hooks/*": ["./src/hooks/*"],
-      "@/services/*": ["src/models/*"],
+      "@/services/*": ["src/services/*"],
       "@/utils/*": ["./src/utils/*"],
       "@/models/*": ["src/models/*"],
       "@/assets/*": ["./src/assets/*"]

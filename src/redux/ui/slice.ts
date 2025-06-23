@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 export interface UIState {
   isLoading: boolean;
   modals: {
@@ -21,7 +22,6 @@ export interface UIState {
   } | null;
 }
 
-// State
 const initialState: UIState = {
   isLoading: false,
   modals: {},
@@ -33,7 +33,6 @@ const initialState: UIState = {
   toast: null,
 };
 
-// Slice
 export const uiSlice = createSlice({
   name: 'ui',
   initialState,
@@ -76,7 +75,10 @@ export const uiSlice = createSlice({
     clearNotifications: (state) => {
       state.notifications = [];
     },
-    showToast: (state, action: PayloadAction<{ message: string; type: UIState['toast']['type'] }>) => {
+    showToast: (
+      state,
+      action: PayloadAction<{ message: string; type: 'success' | 'error' | 'warning' | 'info' }>
+    ) => {
       state.toast = {
         isVisible: true,
         message: action.payload.message,
@@ -89,20 +91,7 @@ export const uiSlice = createSlice({
   },
 });
 
-// Actions
-export const {
-  setLoading,
-  toggleModal,
-  openModal,
-  closeModal,
-  closeAllModals,
-  setSidebar,
-  toggleSidebar,
-  addNotification,
-  removeNotification,
-  clearNotifications,
-  showToast,
-  hideToast,
-} = uiSlice.actions;
-
-export default uiSlice.reducer;
+export const uiReducer = uiSlice.reducer;
+export const uiActions = uiSlice.actions;
+export * as uiSelectors from './selectors';
+// export * as uiHooks from './hooks';

@@ -1,29 +1,22 @@
+import type { UserState } from './slice';
 
-import type { RootState } from '../global';
+// User
+export const selectUser = (state: UserState) => state;
 
-// Base Selectors
-export const selectUser = (state: RootState) => state.user;
-export const selectIsAuthenticated = (state: RootState) => state.user.isAuthenticated;
-export const selectUserPreferences = (state: RootState) => state.user.preferences;
+// User Authentication
+export const selectIsAuthenticated = (state: UserState) => state.isAuthenticated;
 
-// Derived Selectors
-export const selectUserProfile = (state: RootState) => ({
-  id: state.user.id,
-  name: state.user.name,
-  email: state.user.email,
+// User Profile
+export const selectUserProfile = (state: UserState) => ({
+  id: state.id,
+  name: state.name,
+  email: state.email,
 });
+export const selectUserDisplayName = (state: UserState): string => state.name || state.email || 'Anonymous User';
+export const selectIsUserProfileComplete = (state: UserState): boolean => !!(state.id && state.name && state.email);
 
-export const selectTheme = (state: RootState) => state.user.preferences.theme;
-export const selectLanguage = (state: RootState) => state.user.preferences.language;
-export const selectNotificationSettings = (state: RootState) => state.user.preferences.notifications;
-
-// Computed Selectors
-export const selectUserDisplayName = (state: RootState): string => {
-  const user = state.user;
-  return user.name || user.email || 'Anonymous User';
-};
-
-export const selectIsUserProfileComplete = (state: RootState): boolean => {
-  const user = state.user;
-  return !!(user.id && user.name && user.email);
-};
+// Personalization Settings
+export const selectUserPreferences = (state: UserState) => state.preferences;
+export const selectTheme = (state: UserState) => state.preferences.theme;
+export const selectLanguage = (state: UserState) => state.preferences.language;
+export const selectNotificationSettings = (state: UserState) => state.preferences.notifications;

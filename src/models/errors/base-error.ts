@@ -6,10 +6,10 @@ interface BaseErrorOptions {
 export default abstract class BaseError extends Error {
   override name: string;
   override cause?: unknown;
-  code: string | number;
+  code?: string | number;
   timestamp: Date;
 
-  constructor(message: string, code: string, options?: BaseErrorOptions) {
+  constructor(message: string, code?: string, options?: BaseErrorOptions) {
     super(message, { cause: options?.cause });
     this.name = options?.name || 'BaseError';
     this.code = code;
@@ -20,7 +20,6 @@ export default abstract class BaseError extends Error {
 
   abstract toJSON(): {
     message: string;
-    code: string | number;
     timestamp: Date;
   };
 }
