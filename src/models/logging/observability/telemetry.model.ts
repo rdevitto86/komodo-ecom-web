@@ -1,4 +1,4 @@
-import { BaseLog, TraceContext } from '../logging.model';
+import { BaseLog, TraceContext } from '../logging-base';
 
 export interface TelemetrySpan {
   spanId: string;

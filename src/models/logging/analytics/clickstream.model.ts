@@ -1,4 +1,4 @@
-import { BaseLog } from '../logging.model';
+import { BaseLog } from '../logging-base';
 
 export interface ClickstreamLog extends BaseLog {
   type: 'clickstream';

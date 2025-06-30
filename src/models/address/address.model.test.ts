@@ -20,6 +20,7 @@ describe('Address Model', () => {
       isResidential: true,
       isDefaultBilling: true,
       isNew: true,
+      hasEdits: false,
       geo: [ -87.623177, 41.883 ],
     }
 

@@ -1,4 +1,4 @@
-import { HttpMethod, HttpResponseType, StatusCode } from '@/models/http/';
+import { HttpMethod, HttpResponseType, StatusCode } from '@/models/http/http.model';
 import BaseError from '../base-error';
 
 export default class APIError extends BaseError {
@@ -19,16 +19,5 @@ export default class APIError extends BaseError {
     this.correlationId = req?.headers?.correlationId;
   }
 
-  toJSON() {
-    return {
-      message: this.message,
-      status: this.status,
-      code: this.code,
-      apiName: this.apiName,
-      method: this.method,
-      correlationId: this.correlationId,
-      timestamp: this.timestamp,
-      cause: this.cause,
-    }
-  }
+  toJSON() { return { ...this }; }
 }

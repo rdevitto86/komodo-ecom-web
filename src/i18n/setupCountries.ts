@@ -8,6 +8,7 @@ function setupCountriesISO() {
     countries.registerLocale(esLocale);
     return true;
   } catch (err) {
+    // TODO replace with logger
     console.error('Failed to import local countries i18n', err);
     return false;
   }

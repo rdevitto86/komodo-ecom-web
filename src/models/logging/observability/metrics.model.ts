@@ -1,4 +1,4 @@
-import { BaseLog } from '../logging.model';
+import { BaseLog } from '../logging-base';
 
 export interface MetricsLog extends BaseLog {
   type: 'metrics';

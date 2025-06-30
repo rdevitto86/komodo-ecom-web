@@ -1,6 +1,15 @@
+import { v4 as uuid } from 'uuid';
+import {
+  hasValidCountryCode,
+  normalizePostalCode,
+  normalizeRegion,
+  normalizeAddressLine,
+} from '@/utils/validations/address';
+import RuntimeError from '../errors/runtime/runtime.model';
+
 export interface AddressType {
     addressId: string;
-    name?: string;
+    alias?: string;
     line1: string;
     line2?: string;
     line3?: string;
@@ -8,47 +17,51 @@ export interface AddressType {
     city: string;
     region: string; // states, provinces, etc.
     postalCode: string; // zip, etc.
-    country: string;
-    territory?: string; // counties, districts, etc.
+    countryCode: string;
     isResidential?: boolean;
     isDefaultBilling?: boolean;
     isNew: boolean;
-    geo?: [number, number];
+    hasEdits: boolean;
+    geo?: [number, number]; // geo coordinates
 }
 
 export default class Address implements AddressType {
   addressId: string;
-  name?: string;
+  alias?: string;
   line1: string;
   line2?: string;
   line3?: string;
   company?: string;
-  city: string;
+  city!: string;
   region: string;
   postalCode: string;
-  country: string;
-  territory?: string;
+  countryCode: string;
   isResidential: boolean = false;
   isDefaultBilling: boolean = false;
   isNew: boolean = false;
+  hasEdits: boolean = false;
   geo?: [number, number];
 
-  constructor(props: AddressType) {
-    this.addressId = props?.addressId || ''; // TODO generate new token
-    this.name = props.name;
-    this.line1 = props.line1;
-    this.line2 = props.line2;
-    this.line3 = props.line3;
-    this.company = props.company;
-    this.city = props.city;
-    this.region = props.region;
-    this.postalCode = props.postalCode;
-    this.country = props.country;
-    this.territory = props.territory;
-    this.isResidential = props.isResidential || false;
-    this.isDefaultBilling = props.isDefaultBilling || false;
-    this.isNew = props?.isNew || false;
-    this.geo = props.geo;
+  constructor(data: AddressType) {
+    if (!hasValidCountryCode(data.countryCode, window?.navigator?.language)) {
+      throw new RuntimeError('Failed to create new address - invalid country');
+    }
+
+    Object.assign(this, data);
+
+    const country = data.countryCode.toUpperCase();
+
+    this.addressId = (data.isNew) ? uuid() : data.addressId || '';
+    this.line1 = normalizeAddressLine(data.line1);
+    this.line2 = normalizeAddressLine(data.line2 || '');
+    this.line3 = normalizeAddressLine(data.line3 || '');
+    this.region = normalizeRegion(data.region, country);
+    this.postalCode = normalizePostalCode(data.postalCode, country);
+    this.countryCode = country
+    this.isResidential = data.isResidential || false;
+    this.isDefaultBilling = data.isDefaultBilling || false;
+    this.isNew = data?.isNew || false;
+    this.hasEdits = data?.hasEdits || false;
   }
 
   isValid() {
@@ -57,7 +70,7 @@ export default class Address implements AddressType {
       this.city &&
       this.region &&
       this.postalCode &&
-      this.country
+      this.countryCode
     );
   }
 
@@ -73,9 +86,10 @@ export default class Address implements AddressType {
     if (this.region) cityLine += (cityLine ? ', ' : '') + this.region;
     if (this.postalCode) cityLine += (cityLine ? ' ' : '') + this.postalCode;
     if (cityLine) lines.push(cityLine);
-
-    if (this.country) lines.push(this.country);
+    if (this.countryCode) lines.push(this.countryCode);
 
     return useNewLines ? lines.join('\n') : lines.join(', ');
   }
+
+  toJSON() { return { ...this }; }
 }

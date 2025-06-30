@@ -12,7 +12,7 @@ export default defineConfig([
   // Base TS rules
   ...tseslint.configs.recommended,
 
-  // Custom rules for all files
+  // Global rules
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     languageOptions: {
@@ -37,7 +37,8 @@ export default defineConfig([
       'no-trailing-spaces': 'error',
       'no-irregular-whitespace': 'error',
       'no-mixed-spaces-and-tabs': 'error',
-      'no-multi-spaces': 'error'
+      'no-multi-spaces': 'error',
+      'no-case-declarations': 'off',
     },
   },
   // React-specific rules

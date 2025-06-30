@@ -35,14 +35,5 @@ export default class RuntimeError<T> extends BaseError {
     Object.setPrototypeOf(this, new.target.prototype); // redefine instanceof
   }
 
-  toJSON() {
-    return {
-      message: this.message,
-      status: this.status,
-      code: this.code,
-      details: this.details,
-      timestamp: this.timestamp,
-      cause: this.cause,
-    }
-  }
+  toJSON() { return { ...this }; }
 }
