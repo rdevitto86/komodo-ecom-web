@@ -30,7 +30,7 @@ export interface OfferingType {
   description: string;
   slug: string;
   status: 'Draft' | 'Active' | 'Inactive' | 'Archived' | 'Discontinued';
-  price: PriceDetails;
+  pricing: PriceDetails;
   media: MediaAsset[];
   categories: string[];
   tags: string[];
@@ -99,13 +99,13 @@ export interface OfferingType {
 }
 export default class Offering implements OfferingType {
   // --- Common Properties ---
-  id!: string;
+  id!: string; // aka sku
   name!: string;
   shortDescription?: string;
   description!: string;
   slug!: string;
   status!: 'Draft' | 'Active' | 'Inactive' | 'Archived' | 'Discontinued';
-  price!: PriceDetails;
+  pricing!: PriceDetails;
   media!: MediaAsset[];
   categories!: string[];
   tags!: string[];
@@ -119,7 +119,6 @@ export default class Offering implements OfferingType {
   type!: 'PRODUCT' | 'SERVICE';
 
   // --- Product-Specific Properties (Optional) ---
-  sku?: string;
   manufacturer?: string;
   brand?: string;
   inventory?: {
@@ -183,7 +182,7 @@ export default class Offering implements OfferingType {
   }
 
   getFormattedPrice() {
-    const { amount, currency, type, recurringInterval } = this.price;
+    const { amount, currency, type, recurringInterval } = this.pricing;
     const symbol = currency === 'USD' ? '$' : currency;
 
     let priceString = `${symbol}${amount.toFixed(2)}`;
@@ -194,12 +193,12 @@ export default class Offering implements OfferingType {
         break;
       case 'Recurring':
         priceString += recurringInterval ? ` / ${recurringInterval.toLowerCase()}` : ' (recurring)';
-        if (this.price.recurringIntervalCount && this.price.recurringIntervalCount > 1) {
-          priceString = `${symbol}${amount.toFixed(2)} / every ${this.price.recurringIntervalCount} ${this.price.recurringInterval?.toLowerCase()}s`;
+        if (this.pricing.recurringIntervalCount && this.pricing.recurringIntervalCount > 1) {
+          priceString = `${symbol}${amount.toFixed(2)} / every ${this.pricing.recurringIntervalCount} ${this.pricing.recurringInterval?.toLowerCase()}s`;
         }
         break;
       case 'Custom':
-        priceString = this.price.customPriceDescription || 'Price Varies';
+        priceString = this.pricing.customPriceDescription || 'Price Varies';
         break;
     }
     return priceString;
@@ -218,6 +217,6 @@ export default class Offering implements OfferingType {
           return 'N/A';
       }
     }
-    return null;
+    return undefined;
   }
 }

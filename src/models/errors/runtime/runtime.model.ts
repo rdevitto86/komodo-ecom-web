@@ -17,23 +17,30 @@ export enum RuntimeErrors {
   RateLimited = 1013,
   Conflict = 1014,
 }
+export type RuntimeErrorCodes = 1000 | 1001 | 1002 | 1003 | 1004 | 1005
+  | 1006 | 1007 | 1008 | 1009 | 1010 | 1011 | 1012 | 1013 | 1014;
 
-type RuntimeErrorOptions<T> = {
-  status?: number,
-  details?: T,
+type ErrorType = 'fatal' | 'error' | 'warn';
+
+type RuntimeErrorOptions = {
+  status?: RuntimeErrorCodes,
+  details?: string,
   cause?: Error
 };
 
-export default class RuntimeError<T> extends BaseError {
-  status?: number;
-  details?: T;
+export default class RuntimeError<T extends ErrorType> extends BaseError {
+  type: T = 'error' as T;
+  status?: RuntimeErrorCodes = 1000;
+  details?: string;
 
-  constructor(message: string, code?: string, options?: RuntimeErrorOptions<T>) {
+  constructor(message: string, code?: string, options?: RuntimeErrorOptions) {
     super(message, code, { name: 'RuntimeError', cause: options?.cause });
-    this.status = options?.status;
-    this.details = options?.details;
+    if (options?.status) this.status = options.status;
+    if (options?.details) this.details = options.details;
     Object.setPrototypeOf(this, new.target.prototype); // redefine instanceof
   }
+
+  // TODO - use logger instance to log errors
 
   toJSON() { return { ...this }; }
 }

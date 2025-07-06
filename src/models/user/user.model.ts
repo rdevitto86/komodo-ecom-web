@@ -1,4 +1,4 @@
-import { AddressType } from '../address/address.model';
+import Address from '../address/address.model';
 
 interface AdminPermissions {
   canViewAllOrders: boolean;
@@ -8,7 +8,7 @@ interface AdminPermissions {
 
 export interface UserType {
   // --- Common Properties ---
-  id: string;
+  id: string; // userId
   email: string;
   firstName: string;
   lastName: string;
@@ -17,9 +17,10 @@ export interface UserType {
   creationDate: Date;
   lastLoginDate?: Date;
   lastUpdateDate: Date;
-  address?: AddressType;
+  mailingAddress?: Address;
+  billingAddress?: Address;
 
-  userType: 'CUSTOMER' | 'ADMIN' | 'SUPPORT';
+  userType: 'GUEST' | 'CUSTOMER' | 'ADMIN' | 'SUPPORT';
 
   // --- Customer-Specific Properties (optional, present if userType is 'CUSTOMER') ---
   loyaltyPoints?: number;
@@ -39,8 +40,8 @@ export interface UserType {
   specializations?: string[]; // E.g., ['Billing', 'Technical', 'Returns']
 }
 
-export default class User implements UserType {
-  id!: string;
+export default class User {
+  id!: string; // userId
   email!: string;
   firstName!: string;
   lastName!: string;
@@ -49,8 +50,9 @@ export default class User implements UserType {
   creationDate: Date;
   lastLoginDate?: Date;
   lastUpdateDate: Date;
-  address?: AddressType;
-  userType!: 'CUSTOMER' | 'ADMIN' | 'SUPPORT';
+  mailingAddress?: Address;
+  billingAddress?: Address;
+  userType!: 'GUEST' | 'CUSTOMER' | 'ADMIN' | 'SUPPORT';
   loyaltyPoints?: number;
   purchaseHistoryIds?: string[];
   marketingOptIn?: boolean;
@@ -68,15 +70,11 @@ export default class User implements UserType {
 
     this.creationDate = new Date(data.creationDate);
     this.lastUpdateDate = new Date(data.lastUpdateDate);
-    if (data.lastLoginDate) {
-      this.lastLoginDate = new Date(data.lastLoginDate);
-    }
-    if (this.shiftEndTime) {
-      this.shiftEndTime = new Date(this.shiftEndTime);
-    }
+    if (data.lastLoginDate) this.lastLoginDate = new Date(data.lastLoginDate);
+    if (this.shiftEndTime) this.shiftEndTime = new Date(this.shiftEndTime);
   }
 
-  getFullName() { return `${this.firstName} ${this.lastName}`; }
+  get fullName() { return `${this.firstName} ${this.lastName}`; }
 
   toJSON() { return { ...this }; }
 }

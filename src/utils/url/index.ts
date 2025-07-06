@@ -1,3 +1,18 @@
+/**
+ * Validates a URL
+ */
+export const isValidURL = (url: string) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+/**
+ * Builds a URL
+ */
 export function buildURL(
   apiPath: string,
   pathParams: Record<string, string | number> = {},

@@ -26,7 +26,7 @@ export const getAllCountries = (lang: string) => getNames(lang);
 /**
  * Normalizes an address line item
  */
-export const normalizeAddressLine = (str: string) => str?.trim().replace(/\s+/g, ' ') || '';
+export const normalizeAddressLine = (str: string = '') => str?.trim()?.replace(/\s+/g, ' ') || '';
 
 /**
  * Normalizes region (aka state) formatting

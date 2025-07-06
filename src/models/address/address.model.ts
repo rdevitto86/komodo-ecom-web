@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import {
   hasValidCountryCode,
   normalizePostalCode,
@@ -6,9 +5,10 @@ import {
   normalizeAddressLine,
 } from '@/utils/validations/address';
 import RuntimeError from '../errors/runtime/runtime.model';
+import { uuid } from '@/utils/uuid';
 
 export interface AddressType {
-    addressId: string;
+    addressId?: string;
     alias?: string;
     line1: string;
     line2?: string;
@@ -20,13 +20,13 @@ export interface AddressType {
     countryCode: string;
     isResidential?: boolean;
     isDefaultBilling?: boolean;
-    isNew: boolean;
-    hasEdits: boolean;
+    isNew?: boolean;
+    hasEdits?: boolean;
     geo?: [number, number]; // geo coordinates
 }
 
 export default class Address implements AddressType {
-  addressId: string;
+  addressId: string = '';
   alias?: string;
   line1: string;
   line2?: string;
@@ -42,7 +42,7 @@ export default class Address implements AddressType {
   hasEdits: boolean = false;
   geo?: [number, number];
 
-  constructor(data: AddressType) {
+  constructor(data: AddressType, isResidential?: boolean, isDefaultBilling?: boolean, isNew?: boolean, hasEdits?: boolean) {
     if (!hasValidCountryCode(data.countryCode, window?.navigator?.language)) {
       throw new RuntimeError('Failed to create new address - invalid country');
     }
@@ -51,17 +51,17 @@ export default class Address implements AddressType {
 
     const country = data.countryCode.toUpperCase();
 
-    this.addressId = (data.isNew) ? uuid() : data.addressId || '';
+    this.addressId = (isNew || data.isNew) ? uuid() : data.addressId ?? '';
     this.line1 = normalizeAddressLine(data.line1);
-    this.line2 = normalizeAddressLine(data.line2 || '');
-    this.line3 = normalizeAddressLine(data.line3 || '');
+    this.line2 = normalizeAddressLine(data.line2);
+    this.line3 = normalizeAddressLine(data.line3);
     this.region = normalizeRegion(data.region, country);
     this.postalCode = normalizePostalCode(data.postalCode, country);
     this.countryCode = country
-    this.isResidential = data.isResidential || false;
-    this.isDefaultBilling = data.isDefaultBilling || false;
-    this.isNew = data?.isNew || false;
-    this.hasEdits = data?.hasEdits || false;
+    this.isResidential = isResidential || !!data.isResidential;
+    this.isDefaultBilling = isDefaultBilling || !!data.isDefaultBilling;
+    this.isNew = isNew || !!data.isNew;
+    this.hasEdits = hasEdits || !!data.hasEdits;
   }
 
   isValid() {

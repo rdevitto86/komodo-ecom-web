@@ -24,7 +24,7 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-console': 'warn',
+      'no-console': 'off',
       'prefer-const': 'error',
       'no-var': 'error',
       'eol-last': ['error', 'always'],
