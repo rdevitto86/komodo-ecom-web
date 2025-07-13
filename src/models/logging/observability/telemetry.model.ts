@@ -1,6 +1,6 @@
-import { BaseLog, TraceContext } from '../logging-base';
+import { BaseLog, TraceContext } from '../types.';
 
-export interface TelemetrySpan {
+export type TelemetrySpan = {
   spanId: string;
   traceId?: string;
   parentSpanId?: string;
@@ -9,13 +9,10 @@ export interface TelemetrySpan {
   endTime?: string;
   duration?: number;
   tags?: Record<string, string>;
-  logs?: Array<{
-    timestamp: string;
-    fields: Record<string, any>;
-  }>;
+  logs?: Array<{ timestamp: string; fields: Record<string, any>; }>;
 }
 
-export interface TelemetryLog extends BaseLog {
+export type TelemetryLog = BaseLog & {
   type: 'telemetry';
   eventType: 'system' | 'performance' | 'api_call' | 'database' | 'cache' | 'network' | 'service';
   eventName: string;

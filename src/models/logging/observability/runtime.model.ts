@@ -1,6 +1,6 @@
-import { BaseLog, TraceContext } from '../logging-base';
+import { BaseLog, TraceContext } from '../types.';
 
-export interface RuntimeLog extends BaseLog {
+export type RuntimeLog = BaseLog & {
   type: 'runtime';
   message: string;
   component?: string;

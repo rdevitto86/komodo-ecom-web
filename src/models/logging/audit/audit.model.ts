@@ -1,6 +1,6 @@
-import { BaseLog } from '../logging-base';
+import { BaseLog } from '../types.';
 
-export interface AuditLog extends BaseLog {
+export type AuditLog = BaseLog & {
   type: 'audit';
   eventType: 'authentication' | 'authorization' | 'data_access' | 'configuration' | 'security';
   eventName: string;

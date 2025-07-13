@@ -1,4 +1,3 @@
-import { uuid } from '@/utils/uuid';
 import { Currency } from '../payment/types';
 import {
   DiscountType,
@@ -11,7 +10,7 @@ import {
 export * from './types';
 
 export default class Discount {
-  id: string;
+  id?: string; // discountId, assigned in backend
   name: string;
   description: string;
   code: string;
@@ -34,7 +33,7 @@ export default class Discount {
   lastUpdateDate: Date;
 
   constructor(data: DiscountType) {
-    this.id = data.id || uuid();
+    this.id = data.id;
     this.name = data.name;
     this.description = data.description || '';
     this.code = data.code || '';

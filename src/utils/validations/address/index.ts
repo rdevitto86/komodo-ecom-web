@@ -1,7 +1,11 @@
 import { getName, getNames } from 'i18n-iso-countries';
-import { USState, USTerritories } from '@/models/address/enums/us-regions';
-import { CANProvinces, CANTerritories } from '@/models/address/enums/can-regions';
-import { MEXState } from '@/models/address/enums/mex-regions';
+import {
+  USState,
+  USTerritories,
+  CANProvinces,
+  CANTerritories,
+  MEXState,
+} from '@/models/address/address.model';
 
 /**
  * Checks if a country code is valid

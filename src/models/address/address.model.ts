@@ -1,32 +1,17 @@
+import { uuid } from '@/utils/uuid';
 import {
   hasValidCountryCode,
   normalizePostalCode,
   normalizeRegion,
   normalizeAddressLine,
 } from '@/utils/validations/address';
+import { AddressType } from './types';
 import RuntimeError from '../errors/runtime/runtime.model';
-import { uuid } from '@/utils/uuid';
 
-export interface AddressType {
-    addressId?: string;
-    alias?: string;
-    line1: string;
-    line2?: string;
-    line3?: string;
-    company?: string;
-    city: string;
-    region: string; // states, provinces, etc.
-    postalCode: string; // zip, etc.
-    countryCode: string;
-    isResidential?: boolean;
-    isDefaultBilling?: boolean;
-    isNew?: boolean;
-    hasEdits?: boolean;
-    geo?: [number, number]; // geo coordinates
-}
+export * from './types';
 
 export default class Address implements AddressType {
-  addressId: string = '';
+  id: string; // addressId, assigned in backend
   alias?: string;
   line1: string;
   line2?: string;
@@ -36,22 +21,27 @@ export default class Address implements AddressType {
   region: string;
   postalCode: string;
   countryCode: string;
-  isResidential: boolean = false;
-  isDefaultBilling: boolean = false;
-  isNew: boolean = false;
-  hasEdits: boolean = false;
+  isResidential: boolean;
+  isDefaultBilling: boolean;
+  isNew: boolean;
+  hasEdits: boolean;
   geo?: [number, number];
 
-  constructor(data: AddressType, isResidential?: boolean, isDefaultBilling?: boolean, isNew?: boolean, hasEdits?: boolean) {
+  constructor(
+    data: AddressType,
+    isResidential?: boolean,
+    isDefaultBilling?: boolean,
+    isNew?: boolean,
+    hasEdits?: boolean
+  ) {
     if (!hasValidCountryCode(data.countryCode, window?.navigator?.language)) {
       throw new RuntimeError('Failed to create new address - invalid country');
     }
 
-    Object.assign(this, data);
-
     const country = data.countryCode.toUpperCase();
 
-    this.addressId = (isNew || data.isNew) ? uuid() : data.addressId ?? '';
+    this.alias = data.alias;
+    this.id = (isNew || data.isNew) ? uuid() : data.id ?? '';
     this.line1 = normalizeAddressLine(data.line1);
     this.line2 = normalizeAddressLine(data.line2);
     this.line3 = normalizeAddressLine(data.line3);

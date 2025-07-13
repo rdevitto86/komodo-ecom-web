@@ -1,6 +1,6 @@
-import { BaseLog } from '../logging-base';
+import { BaseLog } from '../types.';
 
-export interface MetricsLog extends BaseLog {
+export type MetricsLog = BaseLog & {
   type: 'metrics';
   metricName: string;
   metricType: 'counter' | 'gauge' | 'histogram' | 'timer' | 'distribution';

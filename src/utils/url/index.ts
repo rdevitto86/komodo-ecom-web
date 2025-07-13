@@ -1,7 +1,7 @@
 /**
  * Validates a URL
  */
-export const isValidURL = (url: string) => {
+export const isValidURL = (url: string = '') => {
   try {
     new URL(url);
     return true;

@@ -1,3 +1,5 @@
+import User from '@/models/user/user.model';
+
 export type CardType = 'CREDIT' | 'DEBIT' | 'PREPAID' | 'VCN' | string;
 export type CardNetwork = 'Mastercard' | 'Visa' | 'American Express' | 'Discover' | string;
 export type Currency = 'USD' | 'CAD' | 'MXN' | string;
@@ -30,3 +32,22 @@ export enum CardIssuersUS {
   USAA = 'USAA',
 }
 export type CardIssuer = keyof typeof CardIssuersUS;
+
+export type PaymentType = {
+  id: string; // paymentId
+  cardholder: User;
+  alias?: string;
+  currency: Currency;
+  issuer: CardIssuer;
+  cardType: CardType;
+  network: CardNetwork;
+  brand?: string;
+  lastFour: string;
+  expiresMonth: string;
+  expiresYear: string;
+  creationDate?: Date;
+  lastUpdateDate?: Date;
+  isDefault?: boolean;
+  isVCN?: boolean;
+  displayIcon?: string;
+}

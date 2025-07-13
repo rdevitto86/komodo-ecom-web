@@ -7,7 +7,7 @@ import { TelemetryLog } from './observability/telemetry.model';
 export type ObservabilityLog = RuntimeLog | MetricsLog | TelemetryLog;
 export type LogEntry = ObservabilityLog | ClickstreamLog | AuditLog;
 
-export interface BaseLog {
+export type BaseLog = {
   timestamp: string;
   level: 'error' | 'warn' | 'info' | 'debug' | 'trace';
   source?: string;
@@ -17,14 +17,14 @@ export interface BaseLog {
   version?: string;
 };
 
-export interface TraceContext {
+export type TraceContext = {
   traceId: string;
   spanId: string;
   parentSpanId?: string;
   flags?: number;
 }
 
-export interface LogBatch {
+export type LogBatch = {
   batchId: string;
   timestamp: string;
   source: string;
@@ -37,7 +37,7 @@ export interface LogBatch {
   };
 }
 
-export interface LoggingConfig {
+export type LoggingConfig = {
   observability: {
     runtime: { enabled: boolean; level: BaseLog['level'] };
     metrics: { enabled: boolean; samplingRate?: number };

@@ -1,6 +1,6 @@
-import { BaseLog } from '../logging-base';
+import { BaseLog } from '../types.';
 
-export interface ClickstreamLog extends BaseLog {
+export type ClickstreamLog = BaseLog & {
   type: 'clickstream';
   eventType: 'page_view' | 'click' | 'scroll' | 'form_submit' | 'download' | 'video_play' | 'custom';
   eventName: string;

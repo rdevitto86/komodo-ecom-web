@@ -1,14 +1,15 @@
 import Offering from '../offering/offering.model';
 import Address from '../address/address.model';
+import { OfferingType } from '../offering/types';
 
 export type OrderItemStatus = 'PENDING' | 'PROCESSING' | 'FULFILLED' | 'CANCELLED';
 export type OrderItemSubType = 'PRODUCT' | 'SERVICE';
 
-export interface OrderItemType {
+export type OrderItemType = {
   id: string; // aka SKU
   type: OrderItemSubType;
   status?: OrderItemStatus;
-  offering: Offering;
+  offering: Offering<OfferingType>;
   quantity: number;
   taxes?: AdditionalCharge[];
   fees?: AdditionalCharge[];
@@ -21,7 +22,7 @@ export interface OrderItemType {
   updatedAt?: Date;
 }
 
-export interface OrderItemShipping {
+export type OrderItemShipping = {
   shippingDate?: Date;
   shippingMethod?: string;
   shippingCharges?: number;
@@ -30,7 +31,7 @@ export interface OrderItemShipping {
   fulfilledAt?: Date;
 }
 
-export interface OrderItemServicing {
+export type OrderItemServicing = {
   serviceType?: string;
   serviceCharges?: number;
   serviceStartDate?: Date;

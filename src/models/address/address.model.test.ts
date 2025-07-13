@@ -6,8 +6,8 @@ describe('Address Model', () => {
     let mockAddress: Address;
 
     const props: AddressType = {
-      addressId: 'test-address-id',
-      name: 'Test Address',
+      id: 'test-address-id',
+      alias: 'Test Address',
       line1: '123 Unknown Lane',
       line2: 'Building A',
       line3: 'Suite 100',
@@ -15,8 +15,7 @@ describe('Address Model', () => {
       city: 'Fakerton',
       region: 'IL',
       postalCode: '60601',
-      country: 'US',
-      territory: 'Cook',
+      countryCode: 'US',
       isResidential: true,
       isDefaultBilling: true,
       isNew: true,
@@ -45,8 +44,4 @@ describe('Address Model', () => {
       expect(mockAddress.printAddress(true)).toBe('123 Unknown Lane\nBuilding A\nSuite 100\nFakerton, IL 60601\nUS'); // new lines
     });
   });
-
-  // describe('For a CAN address', () => {
-  // TODO
-  // });
 });

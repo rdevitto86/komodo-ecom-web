@@ -1,222 +1,76 @@
-interface PriceDetails {
-  amount: number;
-  currency: string;
-  type: 'OneTime' | 'Recurring' | 'Hourly' | 'Custom';
-  recurringInterval?: 'Day' | 'Week' | 'Month' | 'Year';
-  recurringIntervalCount?: number;
-  customPriceDescription?: string;
-}
+import {
+  MediaAsset,
+  OfferingBase,
+  OfferingStatus,
+  OfferingType,
+  PriceDetails
+} from './types';
 
-interface MediaAsset {
-  url: string;
-  altText: string;
-  type: 'Image' | 'Video' | '3DModel';
-  thumbnailUrl?: string;
-  order?: number;
-}
+export * from './types';
 
-interface ServiceDuration {
-  type: 'Hourly' | 'Fixed' | 'Project';
-  value?: number;
-  unit?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
-  description?: string;
-}
-
-export interface OfferingType {
-  // --- Common Properties ---
-  id: string;
-  name: string;
+export default class Offering<T extends OfferingType> implements OfferingBase {
+  id: string; // Unique identifier for the offering.
+  type: 'PRODUCT' | 'SERVICE';
+  title: string;
+  slug: string; // URL-friendly version of the title, e.g., "my-awesome-product"
   shortDescription?: string;
   description: string;
-  slug: string;
-  status: 'Draft' | 'Active' | 'Inactive' | 'Archived' | 'Discontinued';
+  status: OfferingStatus;
+
+  details: T; // sub-data for the offering
+
   pricing: PriceDetails;
+
+  brand?: string; // Brand or manufacturer
+  vendor?: string; // The seller of the offering, if different from the platform owner.
+
   media: MediaAsset[];
   categories: string[];
   tags: string[];
+
   creationDate: Date;
   lastUpdateDate: Date;
-  seo?: {
-    title?: string;
-    description?: string;
-    keywords?: string[];
-  };
 
-  type: 'PRODUCT' | 'SERVICE';
+  // SEO related fields
+  metaTitle?: string;
+  metaDescription?: string;
 
-  // --- Product-Specific Properties (optional) ---
-  sku?: string;
-  manufacturer?: string;
-  brand?: string;
-  inventory?: {
-    current: number;
-    lowStockThreshold?: number;
-    trackInventory: boolean;
-  };
-  physicalAttributes?: {
-    weightKg?: number;
-    dimensionsCm?: { length: number; width: number; height: number; };
-    material?: string;
-    color?: string;
-  };
-  digitalDownload?: {
-    fileUrl: string;
-    fileSizeMb?: number;
-    fileType?: string;
-    downloadLimit?: number;
-    expirationDate?: Date;
-  };
-  warrantyInfo?: string;
-  modelNumber?: string;
-  compatibleOfferings?: string[];
-  requiredServices?: string[];
-
-  // --- Service-Specific Properties (optional) ---
-  serviceCode?: string;
-  duration?: ServiceDuration;
-  bookingRequired?: boolean;
-  schedulingOptions?: {
-    availabilityCalendarId?: string;
-    minNoticeHours?: number;
-    maxBookingDuration?: number;
-    isRecurringService?: boolean;
-  };
-  serviceArea?: {
-    type: 'Local' | 'Remote' | 'Global' | 'OnSite';
-    radiusKm?: number;
-    supportedZipCodes?: string[];
-    countryCodes?: string[];
-  };
-  serviceProviderDetails?: {
-    teamId?: string;
-    individualId?: string;
-    providerType: 'Team' | 'Individual' | 'Company';
-  };
-  deliverables?: string[];
-  customizationOptions?: string[];
-  prerequisites?: string[];
-  includedOfferings?: string[];
-}
-export default class Offering implements OfferingType {
-  // --- Common Properties ---
-  id!: string; // aka sku
-  name!: string;
-  shortDescription?: string;
-  description!: string;
-  slug!: string;
-  status!: 'Draft' | 'Active' | 'Inactive' | 'Archived' | 'Discontinued';
-  pricing!: PriceDetails;
-  media!: MediaAsset[];
-  categories!: string[];
-  tags!: string[];
-  creationDate: Date;
-  lastUpdateDate: Date;
-  seo?: {
-    title?: string;
-    description?: string;
-    keywords?: string[];
-  };
-  type!: 'PRODUCT' | 'SERVICE';
-
-  // --- Product-Specific Properties (Optional) ---
-  manufacturer?: string;
-  brand?: string;
-  inventory?: {
-    current: number;
-    lowStockThreshold?: number;
-    trackInventory: boolean;
-  };
-  physicalAttributes?: {
-    weightKg?: number;
-    dimensionsCm?: { length: number; width: number; height: number; };
-    material?: string;
-    color?: string;
-  };
-  digitalDownload?: {
-    fileUrl: string;
-    fileSizeMb?: number;
-    fileType?: string;
-    downloadLimit?: number;
-    expirationDate?: Date;
-  };
-  warrantyInfo?: string;
-  modelNumber?: string;
-  compatibleOfferings?: string[];
-  requiredServices?: string[];
-
-  // --- Service-Specific Properties (Optional) ---
-  serviceCode?: string;
-  duration?: ServiceDuration;
-  bookingRequired?: boolean;
-  schedulingOptions?: {
-    availabilityCalendarId?: string;
-    minNoticeHours?: number;
-    maxBookingDuration?: number;
-    isRecurringService?: boolean;
-  };
-  serviceArea?: {
-    type: 'Local' | 'Remote' | 'Global' | 'OnSite';
-    radiusKm?: number;
-    supportedZipCodes?: string[];
-    countryCodes?: string[];
-  };
-  serviceProviderDetails?: {
-    teamId?: string;
-    individualId?: string;
-    providerType: 'Team' | 'Individual' | 'Company';
-  };
-  deliverables?: string[];
-  customizationOptions?: string[];
-  prerequisites?: string[];
-  includedOfferings?: string[];
-
-  constructor(data: OfferingType) {
-    Object.assign(this, data);
-
-    this.creationDate = new Date(data.creationDate);
-    this.lastUpdateDate = new Date(data.lastUpdateDate);
-
-    if (this.digitalDownload?.expirationDate) {
-      this.digitalDownload.expirationDate = new Date(this.digitalDownload.expirationDate);
-    }
+  constructor(data: T) {
+    this.id = data.id;
+    this.type = data.type;
+    this.title = data.title;
+    this.slug = data.slug;
+    this.shortDescription = data.shortDescription;
+    this.description = data.description;
+    this.status = data.status;
+    this.details = data;
+    this.pricing = data.pricing;
+    this.brand = data.brand;
+    this.vendor = data.vendor;
+    this.media = data.media || [];
+    this.categories = data.categories = [];
+    this.tags = data.tags || [];
+    this.creationDate = data.creationDate || new Date();
+    this.lastUpdateDate = data.lastUpdateDate || new Date();
+    this.metaTitle = data.metaTitle;
+    this.metaDescription = data.metaDescription;
   }
 
-  getFormattedPrice() {
-    const { amount, currency, type, recurringInterval } = this.pricing;
-    const symbol = currency === 'USD' ? '$' : currency;
-
-    let priceString = `${symbol}${amount.toFixed(2)}`;
-
-    switch (type) {
-      case 'Hourly':
-        priceString += ' / hour';
-        break;
-      case 'Recurring':
-        priceString += recurringInterval ? ` / ${recurringInterval.toLowerCase()}` : ' (recurring)';
-        if (this.pricing.recurringIntervalCount && this.pricing.recurringIntervalCount > 1) {
-          priceString = `${symbol}${amount.toFixed(2)} / every ${this.pricing.recurringIntervalCount} ${this.pricing.recurringInterval?.toLowerCase()}s`;
-        }
-        break;
-      case 'Custom':
-        priceString = this.pricing.customPriceDescription || 'Price Varies';
-        break;
-    }
-    return priceString;
+  formatPricing() {
+    return '';
   }
 
-  getFormattedServiceDuration() {
-    if (this.type === 'SERVICE' && this.duration) {
-      switch (this.duration.type) {
-        case 'Hourly':
-          return `${this.duration.value} ${this.duration.unit || 'hours'}`;
-        case 'Fixed':
-          return `${this.duration.value} ${this.duration.unit || 'time unit'}`;
-        case 'Project':
-          return this.duration.description || 'Project-based';
-        default:
-          return 'N/A';
-      }
+  formatShipping() {
+    if (this.type === 'PRODUCT') {
+      return '';
     }
-    return undefined;
+    return '';
+  }
+
+  formatAvailability() {
+    if (this.type === 'SERVICE') {
+      return '';
+    }
+    return '';
   }
 }

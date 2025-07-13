@@ -12,7 +12,7 @@ import {
 export * from './types';
 
 export default class OrderItem<T extends OrderItemSubType> {
-  id: string;
+  id: string; // orderItemId, assigned in backend
   type: T;
   status: OrderItemStatus;
   offering: Offering;
@@ -27,7 +27,7 @@ export default class OrderItem<T extends OrderItemSubType> {
   createdAt: Date;
   updatedAt: Date;
 
-  constructor(data: OrderItemType) {
+  constructor(data: T) {
     this.id = data.offering.id;
     this.type = data.type as T;
     this.status = data.status || 'PENDING';

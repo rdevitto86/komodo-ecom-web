@@ -1,4 +1,4 @@
-interface BaseErrorOptions {
+type BaseErrorOptions = {
   name?: string;
   cause?: unknown;
 }

@@ -7,12 +7,8 @@ export default class APIError extends BaseError {
   method?: HttpMethod;
   correlationId?: string;
 
-  constructor(message: string, apiName?: string, req?: HttpResponseType, cause?: Error) {
-    super(
-      message,
-      req?.statusText || 'N/A',
-      { name: 'APIError', cause }
-    );
+  constructor(message: string, req?: HttpResponseType, apiName?: string, cause?: Error) {
+    super(message, req?.statusText || 'N/A', { name: 'APIError', cause });
     this.status = req?.status || 500;
     this.apiName = apiName;
     this.method = req?.method;

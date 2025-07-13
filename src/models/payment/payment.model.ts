@@ -1,61 +1,54 @@
 import { uuid } from '@/utils/uuid';
-import Address from '../address/address.model';
+import User from '@/models/user/user.model';
 import { isValidURL } from '@/utils/url';
-import { Currency, CardType, CardNetwork, CardIssuer } from './types';
+import {
+  PaymentType,
+  Currency,
+  CardType,
+  CardNetwork,
+  CardIssuer,
+} from './types';
 
 export * from './types';
 
-export interface PaymentType {
-  id?: string; // paymentId
-  userId?: 'GUEST' | string;
+export default class Payment {
+  id: string; // paymentId
+  cardholder: User;
   alias?: string;
-  currency?: Currency;
-  issuer?: string;
-  cardType?: CardType;
+  currency: Currency;
+  issuer: CardIssuer;
+  cardType: CardType;
   network: CardNetwork;
   brand?: string;
-  displayIcon?: string;
-  cardholderName: string;
-  billingAddress?: Address;
   lastFour: string;
   expiresMonth: string;
   expiresYear: string;
   creationDate: Date;
   lastUpdateDate: Date;
-  isDefault?: boolean;
-  isVCN?: boolean;
-}
+  isDefault: boolean;
+  isVCN: boolean;
+  displayIcon?: string;
 
-export default class Payment implements PaymentType {
-  id!: string; // paymentId
-  userId!: 'GUEST' | string;
-  alias?: string;
-  currency?: Currency;
-  issuer?: CardIssuer;
-  cardType?: CardType;
-  network!: CardNetwork;
-  brand?: string;
-  cardholderName!: string;
-  billingAddress?: Address;
-  lastFour!: string;
-  expiresMonth!: string;
-  expiresYear!: string;
-  creationDate!: Date;
-  lastUpdateDate!: Date;
-  isDefault?: boolean;
-  isVCN?: boolean;
-
-  constructor(data: Partial<PaymentType>, isDefault: boolean = false) {
-    Object.assign(this, data);
-
-    if (!data.creationDate) this.creationDate = new Date();
-    if (!data.lastUpdateDate) this.lastUpdateDate = new Date();
-    if (!data.id) this.id = uuid();
-
-    this.isDefault = isDefault || !!data.isDefault;
+  constructor(data: PaymentType, isDefault: boolean = false) {
+    this.id = data.id || uuid();
+    this.cardholder = data.cardholder;
+    this.alias = data.alias;
+    this.currency = data.currency;
+    this.issuer = data.issuer;
+    this.cardType = data.cardType;
+    this.network = data.network;
+    this.brand = data.brand;
+    this.lastFour = data.lastFour;
+    this.expiresMonth = data.expiresMonth;
+    this.expiresYear = data.expiresYear;
+    this.creationDate = data.creationDate || new Date();
+    this.lastUpdateDate = data.lastUpdateDate || new Date();
+    this.isDefault = isDefault || data.isDefault || false;
+    this.isVCN = data.isVCN || false;
+    this.setDisplayIcon(data.displayIcon);
   }
 
-  set displayIcon(url: string) {
+  setDisplayIcon(url?: string) {
     if (isValidURL(url)) this.displayIcon = url;
   }
 
