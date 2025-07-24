@@ -1,5 +1,5 @@
 import type { BaseQueryFn } from '@reduxjs/toolkit/query';
-import { buildURL } from '@/utils/url';
+import { buildURL } from '@utils/url';
 
 // TODO use custom types in model folder
 type RequestArgs = {

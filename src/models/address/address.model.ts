@@ -1,10 +1,10 @@
-import { uuid } from '@/utils/uuid';
+import { uuid } from '@utils/uuid';
 import {
   hasValidCountryCode,
   normalizePostalCode,
   normalizeRegion,
-  normalizeAddressLine,
-} from '@/utils/validations/address';
+  normalizeAddressLine
+} from '@utils/validations/address';
 import { AddressType } from './types';
 import RuntimeError from '../errors/runtime/runtime.model';
 

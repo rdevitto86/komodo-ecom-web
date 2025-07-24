@@ -1,0 +1,73 @@
+{
+  "success": {
+    "GET": {
+      "user": {
+        "default": {
+          "status": 200,
+          "headers": {},
+          "body": {
+            "id": "1",
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "role": "CUSTOMER",
+            "createdAt": "2025-07-13T10:00:00Z",
+            "updatedAt": "2025-07-13T12:00:00Z"
+          }
+        }
+      }
+    },
+    "POST": {
+      "user": {
+        "default": {
+          "status": 200,
+          "headers": {},
+          "body": {
+            "id": "1",
+            "name": "Jane Doe",
+            "email": "jane.doe@example.com",
+            "role": "CUSTOMER",
+            "createdAt": "2025-07-13T10:00:00Z",
+            "updatedAt": "2025-07-13T12:00:00Z"
+          }
+        }
+      }
+    },
+    "PUT": {},
+    "DELETE": {},
+    "PATCH": {}
+  },
+  "failure": {
+    "GET": {
+      "user": {
+        "500": {
+          "status": 500,
+          "headers": {},
+          "body": {
+            "error": "Internal Server Error",
+            "message": "Unexpected server error occurred"
+          }
+        },
+        "400": {
+          "status": 400,
+          "headers": {},
+          "body": {
+            "error": "Bad Request",
+            "message": "Invalid user ID format"
+          }
+        },
+        "404": {
+          "status": 404,
+          "headers": {},
+          "body": {
+            "error": "Not Found",
+            "message": "User not found"
+          }
+        }
+      }
+    },
+    "POST": {},
+    "PUT": {},
+    "DELETE": {},
+    "PATCH": {}
+  }
+}

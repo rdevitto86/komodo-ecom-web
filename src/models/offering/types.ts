@@ -18,6 +18,7 @@ export type MediaAsset = {
 export type PriceDetails = {
   basePrice: number;
   salePrice?: number; // Optional discounted price
+  isOnSale: boolean;
   currency: Currency;
   currencySymbol: CurrencySymbols;
 }

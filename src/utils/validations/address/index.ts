@@ -4,8 +4,8 @@ import {
   USTerritories,
   CANProvinces,
   CANTerritories,
-  MEXState,
-} from '@/models/address/address.model';
+  MEXState
+} from '@models/address/address.model';
 
 /**
  * Checks if a country code is valid

@@ -4,13 +4,13 @@ import {
   UserStatus,
   ContactMethod,
   CustomerVerificationStatus,
-  MarketingDetails,
+  MarketingSettings,
   UserType,
 } from './types';
 
 export * from './types';
 
-export default class User {
+export default class User implements UserType {
   id?: string; // userId, assigned in backend
   role: UserRoles;
   status: UserStatus;
@@ -28,7 +28,7 @@ export default class User {
   loyaltyId?: string;
   loyaltyPoints: number;
   orderHistoryIds: string[] = [];
-  marketingDetails?: MarketingDetails;
+  marketingSettings?: MarketingSettings;
 
   creationDate: Date;
   lastLoginDate?: Date;
@@ -45,10 +45,11 @@ export default class User {
     this.mailingAddress = data.mailingAddress;
     this.billingAddress = data.billingAddress;
     this.preferredContact = data.contactMethod;
+    this.verificationStatus = data.verificationStatus || 'UNVERIFIED';
     this.loyaltyId = data.loyaltyId;
     this.loyaltyPoints = data.loyaltyPoints || 0;
-    this.orderHistoryIds = data.orderHistoryIds;
-    this.marketingDetails = data.marketingDetails;
+    this.orderHistoryIds = data.orderHistoryIds || [];
+    this.marketingSettings = data.marketingSettings;
     this.creationDate = data.creationDate || new Date();
     this.lastUpdateDate = data.lastUpdateDate || new Date();
     this.lastLoginDate = data.lastLoginDate;

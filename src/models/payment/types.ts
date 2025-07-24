@@ -1,4 +1,4 @@
-import User from '@/models/user/user.model';
+import User from '@models/user/user.model';
 
 export type CardType = 'CREDIT' | 'DEBIT' | 'PREPAID' | 'VCN' | string;
 export type CardNetwork = 'Mastercard' | 'Visa' | 'American Express' | 'Discover' | string;

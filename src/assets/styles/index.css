@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Core Colors */
+  --komodo-light: 255 255 255;
+  --komodo-dark: 28 28 28;
+  --komodo-light-blue: 190 64% 56%;
+  --komodo-dark-blue: 190 64% 36%;
+  --komodo-light-purple: 270 64% 56%;
+  --komodo-dark-purple: 270 64% 36%;
+  --komodo-light-yellow: 50 64% 56%;
+  --komodo-dark-yellow: 50 64% 36%;
+
+  /* Backgrounds */
+  --bg-default: var(--komodo-dark);
+  --bg-light-mode: var(--komodo-light);
+  --bg-dark-mode: var(--komodo-dark);
+}

@@ -1,35 +1,47 @@
-import Offering from '../offering/offering.model';
+import Offering, { OfferingType } from '../offering/offering.model';
 import Address from '../address/address.model';
 import {
-  OrderItemSubType,
+  OrderItemClassification,
   OrderItemType,
   OrderItemStatus,
   AdditionalCharge,
   OrderItemShipping,
-  OrderItemServicing,
+  OrderItemServicing
 } from './types';
+import { uuid } from '@utils/uuid';
 
 export * from './types';
 
-export default class OrderItem<T extends OrderItemSubType> {
-  id: string; // orderItemId, assigned in backend
+export default class OrderItem<T extends OrderItemClassification> implements OrderItemType {
+  id: string; // placeholder, assigned in backend
+  orderId: string; // parent order's ID
   type: T;
+  sequence: number;
   status: OrderItemStatus;
-  offering: Offering;
+
+  offering: Offering<OfferingType>;
+
   quantity: number;
   taxes: AdditionalCharge[];
   fees: AdditionalCharge[];
   shipping: AdditionalCharge[];
   subtotal: number;
+
+  address?: Address;
+
   shippingDetails?: OrderItemShipping;
   servicingDetails?: OrderItemServicing;
-  address?: Address;
+
   createdAt: Date;
   updatedAt: Date;
 
-  constructor(data: T) {
-    this.id = data.offering.id;
+  isTemporary: boolean;
+
+  constructor(data: OrderItemType, isTemporary: boolean = true) {
+    this.id = data.id || uuid();
+    this.orderId = data.orderId;
     this.type = data.type as T;
+    this.sequence = data.sequence || -1;
     this.status = data.status || 'PENDING';
     this.offering = data.offering;
     this.quantity = data.quantity || 0;
@@ -41,7 +53,8 @@ export default class OrderItem<T extends OrderItemSubType> {
     this.createdAt = data.createdAt || new Date();
     this.updatedAt = data.updatedAt || new Date();
     this.address = data.address;
-    this.subtotal = this.offering.pricing.amount * this.quantity;
+    this.subtotal = this.offering.pricing.basePrice * this.quantity;
+    this.isTemporary = (typeof isTemporary === 'boolean') ? isTemporary : true;
   }
 
   addCharge(charge: AdditionalCharge) {

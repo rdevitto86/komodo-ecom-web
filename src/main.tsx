@@ -1,20 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { AppRouter } from './router/routes';
+import { AppRouter } from '@router/routes';
+import '@assets/styles/index.css'; // Global styles
 
-const App = () => {
-  return (
-    <React.StrictMode>
-      <AppRouter />
-    </React.StrictMode>
-  );
-};
+const App = () => ( <AppRouter />);
 
-const rootElement = document.getElementById('root');
-
-if (!rootElement) {
-  throw new Error('Root element not found');
-}
-
-const root = ReactDOM.createRoot(rootElement);
-root.render(<App />);
+const root = ReactDOM.createRoot(document.getElementById('root')!);
+root.render(<React.StrictMode><App /></React.StrictMode>);

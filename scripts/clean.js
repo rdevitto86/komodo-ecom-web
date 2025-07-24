@@ -1,24 +1,19 @@
-async function cleanDeps() {
-    let rimraf;
-    try {
-        ({ rimraf } = require('rimraf')); // Dynamically require rimraf
-    } catch (err) {
-        console.error('❌ Missing dependency: "rimraf". Install it with: npm install or npm install --save-dev rimraf');
-        process.exit(1);
-    }
+import { rm } from 'node:fs/promises';
 
-    try {
-        const dirsToClean = ['node_modules', 'dist', '.vite'];
-        await Promise.all(
-            dirsToClean.map(async (dir) => {
-                await rimraf(dir);
-                console.log(`🧹 Removed: ${dir}`);
-            })
-        );
-    } catch (err) {
-        console.error(`❌ Cleanup failed: ${err.message}`);
-        process.exit(1);
-    }
+// UNIX only script. Sorry Windows.
+async function cleanDeps() {
+  const dirsToClean = ['node_modules', 'dist', '.vite'];
+
+  try {
+    await Promise.all(
+      dirsToClean.map(async (dir) => {
+        await rm(dir, { recursive: true, force: true });
+        console.log(`🧹 Removed: ${dir}`);
+      })
+    );
+  } catch (err) {
+    console.error('❌ Cleanup failed. Ensure you have necessary permissions to delete files in the specified directories.');
+  }
 };
 
 export default cleanDeps();

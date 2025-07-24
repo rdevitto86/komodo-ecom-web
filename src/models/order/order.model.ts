@@ -1,36 +1,10 @@
-import { uuid } from '@/utils/uuid';
-import OrderItem, { OrderItemSubType } from '../order-item/order-item.model';
+import { uuid } from '@utils/uuid';
+import { OrderStatus, OrderHistory, OrderType } from './types';
+import OrderItem, { OrderItemClassification } from '../order-item/order-item.model';
 import User from '../user/user.model';
 import Payment from '../payment/payment.model';
 import Discount, { OrderDiscountScope, OrderDiscountState } from '../discount/discount.model';
 import RuntimeError from '../errors/runtime/runtime.model';
-
-export type OrderStatus = 'PENDING' | 'PAID' | 'SHIPPED' | 'IN-PROGRESS' | 'PARTIAL COMPLETE' | 'COMPLETED' | 'CANCELLED';
-
-type OrderHistory = {
-  status: OrderStatus;
-  timestamp: Date;
-  note?: string;
-};
-
-interface OrderType {
-  id: string; // orderItemId
-  status: OrderStatus;
-  itemsProduct?: OrderItem<'PRODUCT'>[];
-  itemsService?: OrderItem<'SERVICE'>[];
-  billing: Payment;
-  subtotal: number;
-  totalTax: number;
-  totalFees: number;
-  totalShipping: number;
-  discounts: Discount[];
-  totalDiscounts: number
-  finalTotal: number;
-  user: User;
-  createdAt: Date;
-  updatedAt: Date;
-  history: OrderHistory[];
-}
 
 export default class Order {
   id: string = uuid(); // orderItemId
@@ -76,7 +50,7 @@ export default class Order {
     return cloned;
   }
 
-  constructor(items: OrderItem<OrderItemSubType>[], user?: User, billing?: Payment) {
+  constructor(items: OrderItem<OrderItemClassification>[], user?: User, billing?: Payment) {
     if (items?.length) {
       items.forEach(item => {
         if (item.type === 'PRODUCT') {
@@ -116,7 +90,7 @@ export default class Order {
     this.finalTotal = (this.subtotal - this.totalDiscounts) + this.totalTax + this.totalFees + this.totalShipping;
   }
 
-  addItem(item: OrderItem<OrderItemSubType>) {
+  addItem(item: OrderItem<OrderItemClassification>) {
     if (!item?.id || !item?.type) {
       // TODO - warn logger
       return;
@@ -149,20 +123,21 @@ export default class Order {
   addDiscount(discount: Discount, scope: OrderDiscountScope) {
     switch (scope) {
       case 'GLOBAL':
-        this.discount = { type: 'GLOBAL', globalDiscount: discount };
+        this.discount = { type: 'GLOBAL',
+          globalDiscount: discount };
         break;
       case 'PRODUCT':
         this.discount = {
           type: 'SCOPED',
           ...(this.discount?.type === 'SCOPED' ? this.discount : {}),
-          productDiscount: discount
+          productDiscount: discount,
         };
         break;
       case 'SERVICE':
         this.discount = {
           type: 'SCOPED',
           ...(this.discount?.type === 'SCOPED' ? this.discount : {}),
-          serviceDiscount: discount
+          serviceDiscount: discount,
         };
         break;
     }
@@ -196,7 +171,8 @@ export default class Order {
   areDiscountsValid() {
     if (!this.discount) return true;
     if (this.discount.type === 'GLOBAL') return this.discount.globalDiscount.canApply(this.subtotal);
-    return (this.discount.productDiscount?.canApply(this.subtotal) && this.discount.serviceDiscount?.canApply(this.subtotal));
+    return (this.discount.productDiscount?.canApply(this.subtotal)
+      && this.discount.serviceDiscount?.canApply(this.subtotal));
   }
 
   addUser(user: User) {
@@ -271,7 +247,8 @@ export default class Order {
   }
 
   isValid() {
-    return this.numItems > 0 && this.finalTotal > 0 && this.user && this.billing && this.status && this.areDiscountsValid();
+    return this.numItems > 0 && this.finalTotal > 0 && this.user
+      && this.billing && this.status && this.areDiscountsValid();
   }
 
   toJSON() { return { ...this }; }

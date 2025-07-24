@@ -39,6 +39,16 @@ export default defineConfig([
       'no-mixed-spaces-and-tabs': 'error',
       'no-multi-spaces': 'error',
       'no-case-declarations': 'off',
+      'max-len': ['error', { code: 120, ignoreUrls: true }],
+      'array-element-newline': ['error', { multiline: true, minItems: 4 }],
+      'object-property-newline': ['error', { allowAllPropertiesOnSameLine: true, minItems: 3 }],
+      'comma-dangle': ['error', {
+        arrays: 'always-multiline',
+        objects: 'always-multiline',
+        imports: 'never',
+        exports: 'never',
+        functions: 'never'
+      }],
     },
   },
   // React-specific rules
@@ -62,6 +72,14 @@ export default defineConfig([
   },
   // Ignored paths
   {
-    ignores: ['eslint.config.js', 'node_modules/', 'dist/', '.vscode/', '.idea/', 'build/'],
+    ignores: [
+      'eslint.config.js',
+      'node_modules/',
+      'dist/',
+      '.vscode/',
+      '.idea/',
+      'build/',
+      'scripts/',
+    ],
   },
 ]);

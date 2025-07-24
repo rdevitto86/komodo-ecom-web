@@ -1,4 +1,4 @@
-import { HttpMethod, HttpResponseType, StatusCode } from '@/models/http/http.model';
+import { HttpMethod, HttpResponseType, StatusCode } from '@models/http/http.model';
 import BaseError from '../base-error';
 
 export default class APIError extends BaseError {
@@ -8,7 +8,8 @@ export default class APIError extends BaseError {
   correlationId?: string;
 
   constructor(message: string, req?: HttpResponseType, apiName?: string, cause?: Error) {
-    super(message, req?.statusText || 'N/A', { name: 'APIError', cause });
+    super(message, req?.statusText || 'N/A', { name: 'APIError',
+      cause });
     this.status = req?.status || 500;
     this.apiName = apiName;
     this.method = req?.method;

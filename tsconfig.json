@@ -31,15 +31,17 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@/pages/*": ["./src/pages/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/modules/*": ["./src/modules/*"],
-      "@/redux/*": ["./src/redux/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/services/*": ["src/services/*"],
-      "@/utils/*": ["./src/utils/*"],
-      "@/models/*": ["src/models/*"],
-      "@/assets/*": ["./src/assets/*"]
+      "@pages/*": ["./src/pages/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@components/*": ["./src/components/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@redux/*": ["./src/redux/*"],
+      "@router/*": ["./src/router/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@services/*": ["src/services/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@models/*": ["src/models/*"],
+      "@assets/*": ["./src/assets/*"]
     }
   },
   "include": [
@@ -47,6 +49,8 @@
     "*.config.ts",
     "vite.config.ts",
     "vitest-setup.ts",
+    "tailwind.config.js",
+    "postcss.config.js"
   ],
   "exclude": [
     "node_modules",

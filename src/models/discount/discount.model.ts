@@ -4,7 +4,7 @@ import {
   DiscountStatus,
   DiscountSubType,
   DiscountApplicability,
-  BogoDetails,
+  BogoDetails
 } from './types';
 
 export * from './types';

@@ -1,11 +1,11 @@
-import Address from '@/models/address/address.model';
+import Address from '@models/address/address.model';
 
-export type UserRoles = 'GUEST' | 'CUSTOMER' | 'ADMIN' | 'SUPPORT';
+export type UserRoles = 'GUEST' | 'CUSTOMER';
 export type UserStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'PENDING';
 export type CustomerVerificationStatus = 'VERIFIED' | 'UNVERIFIED';
 export type ContactMethod = 'EMAIL' | 'PHONE' | 'SMS';
 
-export type MarketingDetails = {
+export type MarketingSettings = {
   optInEmail: boolean;
   optInSMS: boolean;
   optInPhone: boolean;
@@ -28,8 +28,8 @@ export type UserType = {
 
   loyaltyId?: string;
   loyaltyPoints?: number;
-  orderHistoryIds: string[];
-  marketingDetails?: MarketingDetails;
+  orderHistoryIds?: string[];
+  marketingSettings?: MarketingSettings;
 
   creationDate: Date;
   lastLoginDate?: Date;

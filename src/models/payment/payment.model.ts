@@ -1,17 +1,17 @@
-import { uuid } from '@/utils/uuid';
-import User from '@/models/user/user.model';
-import { isValidURL } from '@/utils/url';
+import { uuid } from '@utils/uuid';
+import User from '@models/user/user.model';
+import { isValidURL } from '@utils/url';
 import {
   PaymentType,
   Currency,
   CardType,
   CardNetwork,
-  CardIssuer,
+  CardIssuer
 } from './types';
 
 export * from './types';
 
-export default class Payment {
+export default class Payment implements PaymentType {
   id: string; // paymentId
   cardholder: User;
   alias?: string;

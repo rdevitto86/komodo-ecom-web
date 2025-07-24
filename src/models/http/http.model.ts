@@ -7,7 +7,7 @@ import {
   HttpRequestType,
   HttpResponseType,
   StatusCode,
-  StatusText,
+  StatusText
 } from './types';
 
 export * from './types';

@@ -1,10 +1,11 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-// import { AuthGuard } from './auth-guard';
-// import { userHooks } from '@/redux/user';
 
-const Homepage = lazy(() => import('./pages/home'));
-const NotFound = lazy(() => import('./pages/not-found'));
+// import AuthGuard from './auth-guard';
+// import { userHooks } from '@redux/user';
+
+const Homepage = lazy(() => import('../pages/home/home.page'));
+// const NotFound = lazy(() => import('./pages/not-found'));
 // const About = lazy(() => import('./pages/about/about'));
 // const ContactUs = lazy(() => import('./pages/contact-us'));
 // const Checkout = lazy(() => import('./pages/checkout'));
@@ -33,10 +34,10 @@ export function AppRouter() {
     //     </AuthGuard>
     //   ),
     // },
-    {
-      path: '*',
-      element: <NotFound />,
-    },
+    // {
+    //   path: '*',
+    //   element: <NotFound />,
+    // },
   ]);
 
   return (

@@ -3,12 +3,14 @@ import Address from '../address/address.model';
 import { OfferingType } from '../offering/types';
 
 export type OrderItemStatus = 'PENDING' | 'PROCESSING' | 'FULFILLED' | 'CANCELLED';
-export type OrderItemSubType = 'PRODUCT' | 'SERVICE';
+export type OrderItemClassification = 'PRODUCT' | 'SERVICE';
 
 export type OrderItemType = {
   id: string; // aka SKU
-  type: OrderItemSubType;
+  orderId: string; // parent order's ID
+  type: OrderItemClassification;
   status?: OrderItemStatus;
+  sequence?: number;
   offering: Offering<OfferingType>;
   quantity: number;
   taxes?: AdditionalCharge[];

@@ -1,5 +1,5 @@
 import { APIClient } from '../http-client/http.service';
-import { CustomerReviewType } from '@/models/customer-review/types';
+import { CustomerReviewType } from '@models/customer-review/types';
 
 const reviewApi = APIClient.injectEndpoints({
   endpoints: (builder) => ({
@@ -7,7 +7,8 @@ const reviewApi = APIClient.injectEndpoints({
     getReviewsForOffering: builder.query<CustomerReviewType[], string>({
       query: (offeringId) => `/api/offerings/${offeringId}/reviews`,
       providesTags: (result, error, offeringId) => [
-        { type: 'Review', id: `LIST-${offeringId}` },
+        { type: 'Review',
+          id: `LIST-${offeringId}` },
       ],
     }),
 
@@ -19,7 +20,8 @@ const reviewApi = APIClient.injectEndpoints({
         data: payload,
       }),
       // After creating a review, invalidate the list for that specific offering
-      invalidatesTags: (result, error, { offeringId }) => [{ type: 'Review', id: `LIST-${offeringId}` }],
+      invalidatesTags: (result, error, { offeringId }) => [{ type: 'Review',
+        id: `LIST-${offeringId}` }],
     }),
   }),
 });

@@ -57,20 +57,16 @@ export default class Offering<T extends OfferingType> implements OfferingBase {
   }
 
   formatPricing() {
-    return '';
+    return `${this.pricing.currencySymbol}${this.pricing.basePrice}`;
   }
 
   formatShipping() {
-    if (this.type === 'PRODUCT') {
-      return '';
-    }
+    if (this.type !== 'PRODUCT') return '';
     return '';
   }
 
   formatAvailability() {
-    if (this.type === 'SERVICE') {
-      return '';
-    }
+    if (this.type !== 'SERVICE') return '';
     return '';
   }
 }
