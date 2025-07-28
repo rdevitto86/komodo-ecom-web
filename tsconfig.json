@@ -30,18 +30,15 @@
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@pages/*": ["./src/pages/*"],
-      "@lib/*": ["./src/lib/*"],
+      "@assets/*": ["./src/assets/*"],
       "@components/*": ["./src/components/*"],
+      "@models/*": ["src/models/*"],
       "@modules/*": ["./src/modules/*"],
+      "@pages/*": ["src/pages/*"],
       "@redux/*": ["./src/redux/*"],
       "@router/*": ["./src/router/*"],
-      "@hooks/*": ["./src/hooks/*"],
       "@services/*": ["src/services/*"],
       "@utils/*": ["./src/utils/*"],
-      "@models/*": ["src/models/*"],
-      "@assets/*": ["./src/assets/*"]
     }
   },
   "include": [

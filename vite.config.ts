@@ -15,17 +15,15 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@pages': path.resolve(__dirname, './src/pages'),
+      '@assets': path.resolve(__dirname, './src/assets'),
       '@components': path.resolve(__dirname, './src/components'),
+      '@models': path.resolve(__dirname, './src/models'),
       '@modules': path.resolve(__dirname, './src/modules'),
+      '@pages': path.resolve(__dirname, './src/pages'),
       '@redux': path.resolve(__dirname, './src/redux'),
       '@router': path.resolve(__dirname, './src/router'),
-      '@hooks': path.resolve(__dirname, './src/hooks'),
       '@services': path.resolve(__dirname, './src/services'),
       '@utils': path.resolve(__dirname, './src/utils'),
-      '@models': path.resolve(__dirname, './src/models'),
-      '@assets': path.resolve(__dirname, './src/assets'),
     },
   },
   server: {

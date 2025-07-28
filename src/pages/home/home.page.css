@@ -1,9 +1,0 @@
-.homeContainer {
-  @apply flex flex-col items-center justify-center min-h-screen gap-4;
-}
-.homeTitle {
-  @apply text-4xl font-bold;
-}
-.homeSubtitle {
-  @apply text-muted-foreground;
-}

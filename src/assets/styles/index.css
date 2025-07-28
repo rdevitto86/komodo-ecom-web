@@ -2,19 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Default: Dark Mode */
 :root {
-  /* Core Colors */
-  --komodo-light: 255 255 255;
-  --komodo-dark: 28 28 28;
-  --komodo-light-blue: 190 64% 56%;
-  --komodo-dark-blue: 190 64% 36%;
-  --komodo-light-purple: 270 64% 56%;
-  --komodo-dark-purple: 270 64% 36%;
-  --komodo-light-yellow: 50 64% 56%;
-  --komodo-dark-yellow: 50 64% 36%;
+  /* Core Color Palette (HSL) */
+  --komodo-ghost-white: 240 60% 98%; /* #F8F8FD */
+  --komodo-smoked-gray: 0 0% 20%; /* #333333 */
+  --komodo-mid-gray: 0 0% 70%; /* #AAAAAA */
+  --komodo-cyber-blue: 240 52% 12%; /* #0F0F2E */
+  --komodo-cyber-green: 140 100% 60%; /* #33FF77 */
+  --komodo-electric-blue: 200 100% 70%; /* #66CCFF */
+  --komodo-electric-purple: 285 80% 31%; /* #6F0F8F */
+  --komodo-electric-cyan: 180 100% 40%; /* #00CCCC */
+  --komodo-fuchsia: 315 85% 49%; /* #E713B1 */
+  --komodo-neon-yellow: 51 100% 50%; /* #FFD800 */
+  --komodo-crimson: 345 100% 40%; /* #CC0033 */
+  --komodo-cyber-orange: 35 100% 50%; /* #FF9500 */
 
-  /* Backgrounds */
-  --bg-default: var(--komodo-dark);
-  --bg-light-mode: var(--komodo-light);
-  --bg-dark-mode: var(--komodo-dark);
+  /* Backgrounds/Foregrounds */
+  --background: var(--komodo-smoked-gray); /* Default background (dark) */
+  --foreground: var(--komodo-ghost-white); /* Default foreground (light) */
+
+  --card: var(--komodo-smoked-gray); /* Card background (same as default bg) */
+  --card-foreground: var(--komodo-ghost-white); /* Text on cards */
+
+  --popover: var(--komodo-smoked-gray); /* Popover background */
+  --popover-foreground: var(--komodo-ghost-white); /* Text on popovers */
+
+  /* Fonts */
+  --font-michroma: 'Michroma', sans-serif; /* header/displays */
+  --font-inter: 'Inter', sans-serif; /* body/primary */
+  --font-pt-sans: 'PT Sans Caption', sans-serif; /* secondary */
+  --font-mono: 'Courier New', monospace; /* code/IDs */
+
+  /* Spacing */
+  --spacing-default: 1.5rem;
+
+  /* Borders */
+  --border: var(--komodo-cyber-blue); /* Borders around elements */
+  --radius: 0.5rem; /* Default border radius for components */
+
+  /* Gradients */
+  --gradient-cyber-twilight: linear-gradient(
+    to bottom,
+    hsl(var(--komodo-cyber-blue)),
+    hsl(var(--komodo-electric-purple))
+  );
+  --gradient-digital-spectrum: linear-gradient(
+    to right,
+    hsl(var(--komodo-cyber-blue)),
+    hsl(var(--komodo-electric-purple)),
+    hsl(var(--komodo-fuchsia))
+  );
+  --gradient-neon-radial: radial-gradient(
+    circle at center,
+    hsl(var(--komodo-neon-yellow)) 0%,
+    hsl(var(--komodo-crimson)) 60%,
+    hsl(var(--komodo-smoked-gray)) 100%
+  );
+  --gradient-techno-aqua: linear-gradient(
+    to top right,
+    hsl(var(--komodo-electric-cyan)),
+    hsl(var(--komodo-electric-blue))
+  );
+  --gradient-faded-glitch: linear-gradient(
+    to top,
+    hsl(var(--komodo-fuchsia) / 0.7),
+    hsl(var(--komodo-electric-purple) / 0.3)
+  );
+
+  /* Light Mode Overrides */
+  .light-mode {
+    --background: var(--komodo-ghost-white);
+    --foreground: var(--komodo-smoked-gray);
+
+    --card: var(--komodo-ghost-white);
+    --card-foreground: var(--komodo-smoked-gray);
+
+    --popover: var(--komodo-ghost-white);
+    --popover-foreground: var(--komodo-smoked-gray);
+
+    --border: var(--komodo-mid-gray);
+    --input: var(--komodo-mid-gray);
+    --ring: var(--komodo-electric-blue);
+  }
 }

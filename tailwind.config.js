@@ -15,52 +15,60 @@ export default {
       center: true,
       padding: '2rem',
       screens: {
-        '2xl': '1400px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
+        '3xl': '1600px',
       },
     },
     extend: {
-      colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--bg-default))',
-        foreground: 'hsl(var(--foreground))',
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+      backgroundImage: {
+        'gradient-cyber-twilight': 'var(--gradient-cyber-twilight)',
+        'gradient-digital-spectrum': 'var(--gradient-digital-spectrum)',
+        'gradient-neon-radial': 'var(--gradient-neon-radial)',
+        'gradient-techno-aqua': 'var(--gradient-techno-aqua)',
+        'gradient-faded-glitch': 'var(--gradient-faded-glitch)',
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      card: {
+        DEFAULT: 'hsl(var(--card))',
+        foreground: 'hsl(var(--card-foreground))',
+      },
+      // Usage: text-white, bg-gray
+      colors: {
+        transparent: 'transparent',
+        white: 'hsl(var(--komodo-ghost-white) / <alpha-value>)',
+        gray: {
+          DEFAULT: 'hsl(var(--komodo-smoked-gray) / <alpha-value>)',
+          light: 'hsl(var(--komodo-mid-gray) / <alpha-value>)',
+        },
+        blue: {
+          DEFAULT: 'hsl(var(--komodo-cyber-blue) / <alpha-value>)',
+          light: 'hsl(var(--komodo-electric-blue) / <alpha-value>)',
+        },
+        green: 'hsl(var(--komodo-cyber-green) / <alpha-value>)',
+        red: 'hsl(var(--komodo-crimson) / <alpha-value>)',
+        yellow: 'hsl(var(--komodo-neon-yellow) / <alpha-value>)',
+        purple: 'hsl(var(--komodo-electric-purple) / <alpha-value>)',
+        pink: 'hsl(var(--komodo-fuchsia) / <alpha-value>)',
+        cyan: 'hsl(var(--komodo-electric-cyan) / <alpha-value>)',
+        orange: 'hsl(var(--komodo-orange) / <alpha-value>)',
+      },
       fontFamily: {
-        'komodo-primary': ['PT Sans Caption', 'sans-serif'],
+        DEFAULT: ['var(--font-inter)', 'sans-serif'], // Primary body font
+        header: ['var(--font-michroma)', 'sans-serif'], // Header and display font
+        accent: ['var(--font-pt-sans)', 'sans-serif'], // Secondary font
+        mono: ['var(--font-mono)', 'monospace'], // Monospace font for code and IDs
       },
       keyframes: {
         'accordion-down': {
@@ -72,13 +80,12 @@ export default {
           to: { height: '0' },
         },
       },
-      animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
+      spacing: {
+        default: 'var(--spacing-default)',
       },
     },
   },
   plugins: [
     TailwindAnimatePlugin,
   ],
-}
+};

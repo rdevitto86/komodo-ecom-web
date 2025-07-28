@@ -1,0 +1,40 @@
+.homeContainer {
+  @apply
+    bg-gray
+    text-white
+    font-sans
+    flex
+    flex-col
+    items-center
+    justify-center
+    min-h-screen
+    gap-4;
+}
+.homeContent {
+  @apply
+    flex
+    flex-col
+    items-center
+    justify-center
+    gap-4;
+}
+.centerLine {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100vh;
+  background: red; /* or any color you like */
+  z-index: 9999;
+  pointer-events: none; /* allows clicks through the line */
+}
+.centerLineHorizontal {
+  position: fixed;
+  left: 0;
+  top: 50%;
+  width: 100vw;
+  height: 1px;
+  background: blue; /* or any color you like */
+  z-index: 9999;
+  pointer-events: none;
+}
