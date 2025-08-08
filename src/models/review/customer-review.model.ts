@@ -1,4 +1,4 @@
-import { MediaAsset } from '../offering/types';
+import { MediaAsset } from '../catalog-item/types';
 import { CustomerReviewType, ReviewStatus } from './types';
 
 export * from './types';

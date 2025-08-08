@@ -1,5 +1,5 @@
 import Header from '@modules/header/header.module';
-import NavigationSidebar from '@modules/nav-sidebar/nav-sidebar.module';
+import Sidebar from '@modules/sidebar/sidebar.module';
 import Footer from '@modules/footer/footer.module';
 import styles from './home.page.module.css';
 
@@ -10,7 +10,7 @@ export default function HomePage() {
       <div className={styles.centerLineHorizontal} />
 
       <Header />
-      <NavigationSidebar />
+      <Sidebar />
 
       <main className={styles.homeContent}>
         <h2>Home Page Content</h2>

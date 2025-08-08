@@ -1,6 +1,6 @@
-import Offering from '../offering/offering.model';
+import Offering from '../catalog-item/catalog-item.model';
 import Address from '../address/address.model';
-import { OfferingType } from '../offering/types';
+import { OfferingType } from '../catalog-item/types';
 
 export type OrderItemStatus = 'PENDING' | 'PROCESSING' | 'FULFILLED' | 'CANCELLED';
 export type OrderItemClassification = 'PRODUCT' | 'SERVICE';

@@ -1,4 +1,4 @@
-import { MediaAsset } from '../offering/types';
+import { MediaAsset } from '../catalog-item/types';
 
 export type ReviewStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 

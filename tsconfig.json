@@ -39,7 +39,8 @@
       "@router/*": ["./src/router/*"],
       "@services/*": ["src/services/*"],
       "@utils/*": ["./src/utils/*"],
-    }
+    },
+    "types": ["vitest/globals", "node"],
   },
   "include": [
     "src/**/*",

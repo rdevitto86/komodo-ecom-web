@@ -1,5 +1,5 @@
 import { APIClient } from '../http-client/http.service';
-import { CustomerReviewType } from '@models/customer-review/types';
+import { CustomerReviewType } from '@models/review/types';
 
 const reviewApi = APIClient.injectEndpoints({
   endpoints: (builder) => ({

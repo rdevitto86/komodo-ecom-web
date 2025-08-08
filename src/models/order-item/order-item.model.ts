@@ -1,4 +1,4 @@
-import Offering, { OfferingType } from '../offering/offering.model';
+import Offering, { OfferingType } from '../catalog-item/catalog-item.model';
 import Address from '../address/address.model';
 import {
   OrderItemClassification,

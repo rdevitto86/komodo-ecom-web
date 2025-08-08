@@ -1,5 +1,5 @@
 import { APIClient } from '../http-client/http.service';
-import { OfferingType } from '../../models/offering/types';
+import { OfferingType } from '../../models/catalog-item/types';
 
 // TODO GET offerings, GET Offering Details, GET Offering Categories
 
