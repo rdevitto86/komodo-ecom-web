@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '@components/helpers/utils';
+import { cn } from '@components/utils/shadcn';
 
 function Textarea({ className, ...props }: React.ComponentProps<'textarea'>) {
   return (

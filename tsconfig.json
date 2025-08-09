@@ -43,7 +43,12 @@
       "@services/*": ["src/services/*"],
       "@utils/*": ["./src/utils/*"],
     },
-    "types": ["vitest/globals", "node", "vite/client"],
+    "types": [
+      "node",
+      "vite/client",
+      "vitest/globals",
+      "@testing-library/jest-dom",
+    ],
   },
   "include": [
     "src/**/*",

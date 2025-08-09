@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '@components/helpers/utils';
+import { cn } from '@components/utils/shadcn';
 
 function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
   return (

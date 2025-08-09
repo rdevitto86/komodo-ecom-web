@@ -10,6 +10,7 @@ export default defineConfig({
     outDir: '../../dist/renderer',
     emptyOutDir: true,
     sourcemap: true,
+    manifest: true, // ssr support
     rollupOptions: {
       input: path.resolve(__dirname, 'src/renderer/index.html'),
     },

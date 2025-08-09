@@ -1,22 +1,27 @@
+import { createSelector } from '@reduxjs/toolkit';
+import type { RootState } from '../store';
 import type { UserState } from './slice';
 
-// User
-export const selectUser = (state: UserState) => state;
+// Base slice selector
+export const selectUserState = (state: RootState): UserState => state.user;
 
-// User Authentication
-export const selectIsAuthenticated = (state: UserState) => state.isAuthenticated;
+// Auth
+export const selectIsAuthenticated = createSelector(
+  selectUserState,
+  (u) => (u as any).isAuthenticated ?? (u as any).status === 'authenticated'
+);
 
-// User Profile
-export const selectUserProfile = (state: UserState) => ({
-  id: state.id,
-  name: state.name,
-  email: state.email,
-});
-export const selectUserDisplayName = (state: UserState): string => state.name || state.email || 'Anonymous User';
-export const selectIsUserProfileComplete = (state: UserState): boolean => !!(state.id && state.name && state.email);
+// Profile (memoized to avoid rerenders)
+export const selectUserProfile = createSelector(selectUserState, (u) => ({
+  id: u.id,
+  name: u.name,
+  email: u.email,
+}));
+export const selectUserDisplayName = createSelector(selectUserState, (u) => u.name || u.email || 'Anonymous User');
+export const selectIsUserProfileComplete = createSelector(selectUserState, (u) => Boolean(u.id && u.name && u.email));
 
-// Personalization Settings
-export const selectUserPreferences = (state: UserState) => state.preferences;
-export const selectTheme = (state: UserState) => state.preferences.theme;
-export const selectLanguage = (state: UserState) => state.preferences.language;
-export const selectNotificationSettings = (state: UserState) => state.preferences.notifications;
+// Preferences
+export const selectUserPreferences = createSelector(selectUserState, (u) => u.preferences);
+export const selectTheme = createSelector(selectUserPreferences, (p) => p.theme);
+export const selectLanguage = createSelector(selectUserPreferences, (p) => p.language);
+export const selectNotificationSettings = createSelector(selectUserPreferences, (p) => p.notifications);
