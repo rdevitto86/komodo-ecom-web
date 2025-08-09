@@ -1,3 +1,5 @@
+// declare module '@tailwindcss/vite';
+
 declare module '*.css' {
   const classes: { [key: string]: string };
   export default classes;
