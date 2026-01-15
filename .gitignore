@@ -1,17 +1,16 @@
 # Dependencies
 node_modules/
-package-lock.json
 npm-debug.log*
 
 # Build outputs
 dist/
-build/
-release/
 out/
+.svelte-kit
 
 # Environment variables
-# .env
-# .env.local
+.env
+.env.*
+env/*
 
 # IDE/Editor files
 .vscode/

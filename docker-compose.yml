@@ -1,40 +1,33 @@
-version: '3.8'
 services:
-  # Local (DEV) build
-  komodo-local:
+  komodo-web-dev:
     build:
       context: .
-      dockerfile: Dockerfile
-      args:
-        BUILD_ENV: development
-    ports:
-      - "3000:80"
-    container_name: komodo-dev
-    profiles:
-      - dev
+      target: dev
+    profiles: ["dev"]
+    ports: ["3000:3000"]
+    environment:
+      - ENV=local
+      - PUBLIC_API_URL=http://api-dev:8080
+    volumes:
+      - .:/app
+      - /app/node_modules
 
-  # QA build
-  komodo-qa:
+  komodo-web-staging:
     build:
       context: .
-      dockerfile: Dockerfile
-      args:
-        BUILD_ENV: qa
-    ports:
-      - "3001:80"
-    container_name: komodo-qa
-    profiles:
-      - qa
+      target: prod
+    profiles: ["staging"]
+    ports: ["3001:3000"]
+    environment:
+      - ENV=staging
+      - PUBLIC_API_URL=https://staging-api.komodo.com
+      - ORIGIN=https://staging.komodo.com
 
-  # Production build
-  komodo-prod:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        BUILD_ENV: production
-    ports:
-      - "3002:80"
-    container_name: komodo-prod
-    profiles:
-      - prod
+  komodo-web-prod:
+    image: komodo-ecom-web:latest # Usually pulled from a registry in prod
+    profiles: ["prod"]
+    ports: ["80:3000"]
+    environment:
+      - ENV=prod
+      - PUBLIC_API_URL=https://api.komodo.com
+      - ORIGIN=https://www.komodo.com

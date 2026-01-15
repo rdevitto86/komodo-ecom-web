@@ -1,6 +1,6 @@
 # Komodo E-Commerce Platform
 
-Welcome to the Komodo E-Commerce Platform! This project is a modern e-commerce web application built with React and TypeScript, designed to provide a seamless shopping experience.
+Welcome to the Komodo E-Commerce Platform! This project is a modern e-commerce web application built with Svelte and TypeScript, designed to provide a seamless shopping experience.
 
 ## Features
 
@@ -41,7 +41,7 @@ Welcome to the Komodo E-Commerce Platform! This project is a modern e-commerce w
 ---
 
 ## 🚀 Deployment Guide
-This guide covers deploying your React TypeScript application across three environments: Local Development, On-Premises Server, and AWS Production.
+This guide covers deploying your Svelte TypeScript application across three environments: Local Development, DEV, STG (Staging), and PROD.
 
 📋 Prerequisites
 - Docker and Docker Compose installed

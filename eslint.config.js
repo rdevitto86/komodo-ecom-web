@@ -1,8 +1,8 @@
 import globals from 'globals';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import parser from '@typescript-eslint/parser';
-import pluginReact from 'eslint-plugin-react';
-import pluginReactHooks from 'eslint-plugin-react-hooks';
+import pluginSvelte from 'eslint-plugin-svelte';
+import svelteParser from 'svelte-eslint-parser';
 import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
@@ -76,25 +76,27 @@ export default defineConfig([
     },
   },
 
-  // React and React Hooks
+  // Svelte
   {
-    files: ['**/*.{jsx,tsx}'],
+    files: ['**/*.svelte'],
+    languageOptions: {
+      parser: svelteParser,
+      parserOptions: {
+        parser,
+        extraFileExtensions: ['.svelte'],
+      },
+      globals: { ...globals.browser },
+    },
     plugins: {
-      '@typescript-eslint': tseslint,
-      react: pluginReact,
-      'react-hooks': pluginReactHooks,
+      svelte: pluginSvelte,
     },
     rules: {
-      'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'off',
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
+      ...pluginSvelte.configs.recommended.rules,
     },
-    settings: { react: { version: 'detect' } },
   },
 
   // Ignore
   {
-    ignores: ['eslint.config.js', 'node_modules/', 'dist/', '.vscode/', '.idea/', 'build/', 'scripts/'],
+    ignores: ['eslint.config.js', 'node_modules/', 'dist/', '.vscode/', '.idea/', 'build/', 'scripts/', '.svelte-kit/'],
   },
 ]);
