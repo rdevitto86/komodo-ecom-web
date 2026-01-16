@@ -10,11 +10,13 @@ class AppState {
   #sidebarMin = $state(false);
   #isLoading = $state(false);
   #showAnimations = $state(true);
-  #isAuthenticated = $state(false);
+
+  #sessionId = $state<string | null>(null);
   #screenSize = $state<'mobile' | 'tablet' | 'desktop'>('desktop');
   #theme = $state<'light' | 'dark'>('light');
   #language = $state('en');
   #currency = $state('USD');
+
   #landingSlotSeed = $state<string | null>(null);
   #breadcrumbs = $state<PageSnapshot[]>([]);
   
@@ -31,9 +33,9 @@ class AppState {
         mobile: '(max-width: 767px)',
         tablet: '(min-width: 768px) and (max-width: 1024px)',
         desktop: '(min-width: 1025px)'
-      }).forEach(([size, query]) => {
+      }).forEach(([platform, query]) => {
         const media = window.matchMedia(query);
-        const handler = () => media.matches && (this.#screenSize = size as any);
+        const handler = () => media.matches && (this.#screenSize = platform as any);
         media.addEventListener('change', handler);
         handler();
       });
@@ -66,8 +68,8 @@ class AppState {
   get sidebarMin() { return this.#sidebarMin; }
   get isLoading() { return this.#isLoading; }
   get showAnimations() { return this.#showAnimations; }
-  get isAuthenticated() { return this.#isAuthenticated; }
   get screenSize() { return this.#screenSize; }
+  get sessionId() { return this.#sessionId; }
   get theme() { return this.#theme; }
   get language() { return this.#language; }
   get currency() { return this.#currency; }
@@ -77,10 +79,10 @@ class AppState {
   // Setters
   setIsLoading = (loading: boolean) => this.#isLoading = loading;
   setShowAnimations = (show: boolean) => this.#showAnimations = show;
-  setIsAuthenticated = (authenticated: boolean) => this.#isAuthenticated = authenticated;
   setTheme = (theme: 'light' | 'dark') => this.#theme = theme;
   setLanguage = (language: string) => this.#language = language;
   setCurrency = (currency: string) => this.#currency = currency;
+  setSessionId = (sessionId: string) => this.#sessionId = sessionId;
   setLandingSlotSeed = (seed: string) => this.#landingSlotSeed = seed;
 
   // Actions

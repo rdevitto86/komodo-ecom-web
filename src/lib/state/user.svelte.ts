@@ -33,20 +33,19 @@ export interface UserProfile {
 }
 
 class UserState {
-  #data = $state({
-    profile: null as UserProfile | null,
-    isAuthorized: false,
-  })
+  #profile = $state<UserProfile | null>(null);
+  #isAuthorized = $state(false);
   
-  get profile() { return this.#data.profile; }
-  get isAuthorized() { return this.#data.isAuthorized; }
+  get profile() { return this.#profile; }
+  get isAuthorized() { return this.#isAuthorized; }
 
   login() {
-    // TODO: Implement login logic
+    this.#isAuthorized = true;
   }
 
   logout() {
-    // TODO: Implement logout logic
+    this.#isAuthorized = false;
+    this.#profile = null;
   }
 }
 
