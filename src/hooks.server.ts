@@ -1,17 +1,18 @@
-import { env } from '$env/dynamic/private';
 import { error, type Handle } from '@sveltejs/kit';
+import { getSecrets } from '$lib/server/secrets';
+
+let secrets: Record<string, string> | null = null;
 
 export const handle: Handle = async ({ event, resolve }) => {
-  const requiredSecrets = ['ENV'] as const;
-  
-  for (const secret of requiredSecrets) {
-    const value = (env as Record<string, string>)[secret];
-
-    if (!value) {
-      console.error(`❌ MISSING SECRET: ${secret} from AWS Secrets Manager`);
-      error(500, `Internal Server Configuration Error`);
-    }
+  try {
+    console.log('☁️  Fetching secrets from AWS Secrets Manager');
+    secrets = await getSecrets();
+    console.log('✅ Secrets loaded successfully');
+    event.locals.secrets = secrets;
+  } catch (err) {
+    console.error('❌ Failed to load secrets:', err);
+    error(500, 'Internal Server Configuration Error');
+  } finally {
+    return await resolve(event);
   }
-
-  return await resolve(event);
 };

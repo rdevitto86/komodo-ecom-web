@@ -3,7 +3,9 @@ import 'vitest';
 declare global {
   namespace App {
     // interface Error {}
-    // interface Locals {}
+    interface Locals {
+      secrets: Record<string, string>;
+    }
     // interface PageData {}
     // interface Platform {}
   }

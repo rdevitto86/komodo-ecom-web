@@ -1,9 +1,10 @@
 const ENV = import.meta.env.ENV;
-const app = Object.freeze({
-  name: import.meta.env.APP_NAME,
-  version: import.meta.env.VERSION
-});
+const app = Object.freeze({ name: import.meta.env.APP_NAME, version: import.meta.env.VERSION });
 const SOURCETYPE = import.meta.env.SPLUNK_SOURCETYPE || `webapp:frontend:log:${ENV}`;
+
+enum LoggerLevelWeight {
+  off = 0, debug = 1, info = 2, warn = 3, error = 4, panic = 5
+}
 
 class Logger {
   #level: LoggerLevel;
@@ -13,18 +14,18 @@ class Logger {
   constructor() {
     switch (String(import.meta.env.LOG_LEVEL).toLowerCase()) {
       case 'debug':
-        this.#level = 'DEBUG';
+        this.#level = 'debug';
         break;
       case 'info':
       case 'verbose':
-        this.#level = 'INFO';
+        this.#level = 'info';
         break;
       case 'warn':
       case 'warning':
-        this.#level = 'WARN';
+        this.#level = 'warn';
         break;
       default:
-        this.#level = 'ERROR';
+        this.#level = 'error';
     }
 
     this.#enableRemote = import.meta.env.ENABLE_REMOTE_LOGGING === 'true';
@@ -34,28 +35,28 @@ class Logger {
   // TODO might comnsider an array of args for details
 
   debug(message: string, details?: any) {
-    this.#printConsole(message, 'DEBUG');
-    this.traceSplunk(message, 'DEBUG', details);
+    this.#printConsole(message, 'debug');
+    this.traceSplunk(message, 'debug', details);
   }
   
   info(message: string, details?: any) {
-    this.#printConsole(message, 'INFO');
-    this.traceSplunk(message, 'INFO', details);
+    this.#printConsole(message, 'info');
+    this.traceSplunk(message, 'info', details);
   }
   
   warn(message: string, details?: any) {
-    this.#printConsole(message, 'WARN');
-    this.traceSplunk(message, 'WARN', details);
+    this.#printConsole(message, 'warn');
+    this.traceSplunk(message, 'warn', details);
   }
   
   error(message: string, error?: Error, details?: any) {
-    this.#printConsole(message, 'ERROR', { ...details, error });
-    this.traceSplunk(message, 'ERROR', { ...details, error });
+    this.#printConsole(message, 'error', { ...details, error });
+    this.traceSplunk(message, 'error', { ...details, error });
   }
 
   panic(message: string, error?: Error, details?: any) {
-    this.#printConsole(message, 'PANIC', { ...details, error });
-    this.traceSplunk(message, 'PANIC', { ...details, error });
+    this.#printConsole(message, 'panic', { ...details, error });
+    this.traceSplunk(message, 'panic', { ...details, error });
   }
 
   stop() {
@@ -102,16 +103,16 @@ class Logger {
 
         switch (type) {
           case 'POLO':
-            this.#printConsole('Remote logging healthy', 'INFO');
+            this.#printConsole('Remote logging healthy', 'info');
             break;
           case 'REMAINING':
-            this.#printConsole(`Remote logging remaining: ${data as number}`, 'INFO');
+            this.#printConsole(`Remote logging remaining: ${data as number}`, 'info');
             break;
           case 'ERROR':
-            this.#printConsole(`Remote logging error`, 'ERROR', data as Error);
+            this.#printConsole(`Remote logging error`, 'error', data as Error);
             break;
           case 'STOP':
-            this.#printConsole(`Remote logging stopped with ${data as number} logs remaining`, 'INFO');
+            this.#printConsole(`Remote logging stopped with ${data as number} logs remaining`, 'info');
             // TODO - store logs in localStorage
             this.#worker = null;
             break;
@@ -120,7 +121,7 @@ class Logger {
       
       this.#worker.postMessage({ type: 'MARCO' });
     } else {
-      this.#printConsole(`skipping remote logging`, 'WARN');
+      this.#printConsole(`skipping remote logging`, 'warn');
     }
   }
 
@@ -129,11 +130,11 @@ class Logger {
       const log = `[${level}] ${msg}`;
 
       switch (level) {
-        case 'DEBUG': console.debug(log, details); break;
-        case 'INFO': console.info(log, details); break;
-        case 'WARN': console.warn(log, details); break;
-        case 'ERROR':
-        case 'PANIC': console.error(log, details); break;
+        case 'debug': console.debug(log, details); break;
+        case 'info': console.info(log, details); break;
+        case 'warn': console.warn(log, details); break;
+        case 'error':
+        case 'panic': console.error(log, details); break;
         default: console.log(log, details); break;
       }
     }
@@ -146,4 +147,5 @@ class Logger {
   }
 }
 
-export const logger = new Logger();
+const logger = new Logger();
+export default logger;

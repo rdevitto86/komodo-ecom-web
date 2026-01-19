@@ -1,13 +1,5 @@
-type LoggerLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'PANIC';
+type LoggerLevel = 'off' | 'debug' | 'info' | 'warn' | 'error' | 'panic';
 type ProviderType = 'splunk' | 'otel' | 'clickstream';
-
-enum LoggerLevelWeight {
-  DEBUG = 1,
-  INFO = 2,
-  WARN = 3,
-  ERROR = 4,
-  PANIC = 5
-}
 
 interface SplunkPayload {
   sourcetype: string;
@@ -17,7 +9,7 @@ interface SplunkPayload {
   };
   event: {
     message: string;
-    severity: LogLevel;
+    severity: LoggerLevel;
     env: string;
     sessionId?: string;
     url: string;
