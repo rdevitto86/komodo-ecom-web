@@ -1,14 +1,15 @@
 import 'vitest';
-
+import type { Logger } from '$lib/logger/splunk';
 declare global {
   namespace App {
-    // interface Error {}
     interface Locals {
       secrets: Record<string, string>;
     }
+    // interface Error {}
     // interface PageData {}
     // interface Platform {}
   }
+  var logger: Logger;
 }
 
 declare module '$env/dynamic/private' {

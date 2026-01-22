@@ -1,6 +1,5 @@
 <script lang="ts">
 	import '$lib/styles/index.css';
-	import logger from '$lib/logger/logger';
 	import Header from '$lib/components/layout/header.svelte';
 
 	interface Props {

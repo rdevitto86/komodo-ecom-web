@@ -1,16 +1,13 @@
-import logger from '$lib/logger/logger';
 import { isRequestValid } from '$lib/server/utils/http';
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
-const BASE_URL = import.meta.env.API_BASE_URL;
+export abstract class APIClient {
+  #baseURL: string = import.meta.env.API_BASE_URL;
 
-export abstract class BaseAPI {
-  protected constructor() {}
-
-  protected async send<T>(method: Method, path: string, body?: any, headers?: any): Promise<T> {
+  async send<T>(method: Method, path: string, body?: any, headers?: any): Promise<T> {
     try {
-      const url = `${BASE_URL}${path}`;
+      const url = `${this.#baseURL}${path}`;
       const req: RequestInit = {
         method,
         body: typeof body !== 'string' ? JSON.stringify(body) : body,
