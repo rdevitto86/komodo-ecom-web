@@ -19,19 +19,23 @@ interface SplunkPayload {
 }
 
 export class SplunkLogger extends LoggingAdapter {
-  #sourcetype = import.meta.env.SPLUNK_SOURCETYPE || `webapp:frontend:log:${import.meta.env.ENV || 'unknown'}`;
-  #app = { name: import.meta.env.APP_NAME, version: import.meta.env.VERSION };
+  #sourcetype = import.meta.env.SPLUNK_SOURCETYPE || import.meta.env.APP_NAME || 'unknown';
+  #app = { name: import.meta.env.APP_NAME || 'unknown', version: import.meta.env.VERSION || 'unknown' };
 
   constructor() {
     super({ 
       provider: 'splunk', 
-      limit: 10, 
-      interval: 5000,
-      endpoint: '/api/logging/splunk'
+      limit: import.meta.env.SPLUNK_LIMIT || 10,
+      interval: import.meta.env.SPLUNK_INTERVAL || 5000,
+      endpoint: import.meta.env.SPLUNK_ENDPOINT
     });
   }
 
-  message(payload: SplunkPayload): void {
-    this.send({ sourcetype: this.#sourcetype, app: this.#app, event: payload });
+  message(payload: SplunkPayload) {
+    this.send({
+      sourcetype: this.#sourcetype,
+      app: this.#app,
+      event: payload,
+    });
   }
 }

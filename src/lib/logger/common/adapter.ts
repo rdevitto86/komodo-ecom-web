@@ -1,5 +1,6 @@
 import { WorkerHandler } from './handler';
 import type { LogProviderType } from './handler';
+import { redact } from './redaction';
 
 export type LoggingAdapterConfig = {
   provider: LogProviderType;
@@ -32,6 +33,6 @@ export abstract class LoggingAdapter {
   }
 
   send(payload: any): void {
-    WorkerHandler.send(this.provider, payload);
+    WorkerHandler.send(this.provider, redact(payload));
   }
 }

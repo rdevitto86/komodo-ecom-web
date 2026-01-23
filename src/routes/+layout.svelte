@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '$lib/styles/index.css';
-	import Header from '$lib/components/layout/header.svelte';
+	import Header from '$lib/components/navigation/Header.svelte';
 
 	interface Props {
 		children: import('svelte').Snippet;

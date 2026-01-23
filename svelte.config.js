@@ -12,11 +12,14 @@ const config = {
       '$styles': 'src/lib/styles',
       '$routes': 'src/routes',
       '$static': 'static',
+    },
+    csrf: {
+      checkOrigin: true,
     }
   },
   compilerOptions: {
     runes: true,
-  }
+  },
 };
 
 export default config;
