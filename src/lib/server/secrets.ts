@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/private';
-import { APIClient } from './common/api-client';
+import { APIClient } from './common/client';
 
 interface SecretsResponse {
 	ENV: string;
