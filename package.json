@@ -22,7 +22,7 @@
     "prepare": "svelte-kit sync"
   },
   "dependencies": {
-    "@sveltejs/kit": "^2.49.5",
+    "@sveltejs/kit": "^2.52.2",
     "@tailwindcss/vite": "^4.1.18",
     "@threlte/core": "^8.3.1",
     "@threlte/extras": "^9.7.1",
