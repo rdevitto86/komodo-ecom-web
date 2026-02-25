@@ -91,7 +91,7 @@ importers:
         specifier: ^5.3.1
         version: 5.3.1(svelte@5.46.4)(vite@5.4.21(@types/node@25.0.9)(lightningcss@1.30.2))(vitest@4.0.17)
       '@types/fast-redact':
-        specifier: 3.0.4
+        specifier: ^3.0.4
         version: 3.0.4
       '@types/node':
         specifier: ^25.0.9
